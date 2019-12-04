@@ -91,21 +91,21 @@ def nf_req(req, method, token=None):
     return handle
 
 
-# Get Netfoundry API operation
+# Get NetFoundry API operation
 def get_data(url, token):
     req = url
     data = nf_req(req, 'get', token)
     return data
 
 
-# Delete Netfoundry API operation
+# Delete NetFoundry API operation
 def delete_nf(url, token):
     req = url
     data = nf_req(req, 'delete', token)
     return data
 
 
-# Update Netfoundry API operation
+# Update NetFoundry API operation
 def put_data(url, values, token):
     data = json.dumps(values)
     # print data
@@ -115,7 +115,7 @@ def put_data(url, values, token):
     return put_return
 
 
-# Create Netfoundry API operation
+# Create NetFoundry API operation
 def post_data(url, values, token):
     data = json.dumps(values)
     # print data

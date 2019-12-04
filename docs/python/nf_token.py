@@ -35,5 +35,5 @@ def get_token(env, client_id=None, client_secret=None):
 
 
 if __name__ == '__main__':
-    # Get Netfoundry Console token
+    # Get NetFoundry Console token
     print(get_token('sandbox'))

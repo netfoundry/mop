@@ -7,7 +7,7 @@ nav:
       - azure/intro.md
       - azure/connectUser2App.md
       - azure/connectApp2App.md
-    - Netfoundry:
+    - NetFoundry:
       - Overview: netfoundry/intro.md
       - Fabric: netfoundry/fabric.md
       - Clients: netfoundry/client.md

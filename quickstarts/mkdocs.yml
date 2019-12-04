@@ -1,0 +1,46 @@
+site_name: QuickStart Guides
+nav:
+    - Home: index.md
+    - AWS:
+      - aws/intro.md  
+    - Azure:
+      - azure/intro.md
+      - azure/connectUser2App.md
+      - azure/connectApp2App.md
+    - Netfoundry:
+      - Overview: netfoundry/intro.md
+      - Fabric: netfoundry/fabric.md
+      - Clients: netfoundry/client.md
+      - Gateways: netfoundry/gateway.md
+# Theme Configuration
+theme:
+    name: material
+    primary: indigo
+    accent: indigo
+    font:
+      text: Ubuntu
+      code: Ubuntu Mono
+    logo: images/logo.png
+    language: en
+    favicon: images/fav.png
+    feature:
+      tabs: true
+# Site Customization
+extra:
+  social:
+    - type: github
+      link: https://github.com/netfoundry
+    - type: twitter
+      link: https://twitter.com/netfoundry
+    - type: linkedin
+      link: https://linkedin.com/company/netfoundry
+site_dir: ../docs 
+# MD Extensions
+markdown_extensions:
+  - toc:
+      permalink: "@"
+      baselevel: 2
+      separator: "_"
+  - admonition
+  - pymdownx.superfences:
+      preserve_tabs: true

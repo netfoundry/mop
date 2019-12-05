@@ -1,5 +1,4 @@
-
-## Create a new network fabric
+# Overview
 This section will show how to do that through [NF Console](https://nfconsole.io), and programatically  using NF Orchestration's APIs
 
 # via Console UI
@@ -9,6 +8,7 @@ This section will show how to do that through [NF Console](https://nfconsole.io)
 ![Image](../images/NetworkMopMenu.png)
 1. Wait until the icon network turns green.
 ![Image](../images/NetworkMopMenuGreen.png)
+1. Done
 
 # via REST API (Python)
 
@@ -18,23 +18,27 @@ This section will show how to do that through [NF Console](https://nfconsole.io)
     1. [NF REST CRUD (Create,Read, Update and Delete) operations](../../python/nf_requests.py)
     1. [Get MOP Session Token](../../python/nf_token.py)
     1. [Create NF Network](../../python/nf_network.py)
-    1. [Wrapper Script to Create NF Resources based on Resource yml file](../../python/nf_resources.py)
+    1. [Wrapper Script to Create NF Resources based on Resource yaml file](../../python/nf_resources.py)
 
-Updated the Resource yaml file with the options need to run the wrapper script.
+    To obtain a session token, the [MOP Session Token](../../python/nf_token.py) script parses a configuration file
+    for clientId, and secretId if they are not passed to it through the positional arguments
+    (env, clientId, secretId). It must be located in the home directory under [~/.env](../../python/.env).
+
+1. Clone this repo
+1. Update [Resource yaml](../../python/nf_resources.yml) file with the desired options to feed into the wrapper script as described
+in the following code snippet.
+1. Run this from the root folder
+``` python
+python3 quickstarts/docs/python/nf_resources.py --file quickstarts/docs/python/nf_resources.yml
+```
+Required Configuration Paramters
 ``` yaml
 
-environment: production
-gateway_list:
-- action: [create, get, delete]
-  ami: {{ NF Azure Gateway AMI }}
-  cloud: azure
-  count: 1
-  names: []
-  private_subnet: 10.0.11.0/24
-  public_subnet: 10.0.10.0/24
-  region: ca-central-1
-  regkeys: []
-  tag: null
-network_action: [create, get, delete]
+environment: {NF Console Environment, e.g. Production}
+network_action: { e.g. create, get, delete}
 network_name: { e.g. DemoNet01 }
 ```
+1. Done
+
+!!! Note
+    The logs will be outputted to the log file named logoutput.txt under the home directory ~/.

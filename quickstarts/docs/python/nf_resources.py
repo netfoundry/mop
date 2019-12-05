@@ -15,7 +15,6 @@ import nf_token as nftn
 import nf_network as nfnk
 import nf_gateway as nfgw
 import nf_tf_main_file as nftmf
-import nf_terraform as nftf
 
 
 def clear_log():
@@ -65,6 +64,8 @@ def main(filename):
             config = yaml.load(f, Loader=yaml.FullLoader)
     except Exception as e:
         writelog(str(e))
+
+
     netName = config['network_name']
     env =  config['environment']
     netAction = config['network_action']
@@ -83,51 +84,69 @@ def main(filename):
         token = nftn.get_token(env)
         netUrl = nfnk.find_network(env, netName, token)
         nfnk.delete_network(netUrl, token)
+
+
     # manage gateways (list of gateways)
-    if config['gateway_list'] and netAction != 'delete':
-        for gateway in config['gateway_list']:
-            if gateway['action'] == 'create':
-                index = 0
-                while index < gateway['count']:
-                    name, regkey = nfgw.create_gateway(env, netUrl, gateway['region'],
-                                                                          gateway['cloud'], index, token)
-                    index += 1
-                    gateway['names'] = gateway['names'] + [name]
-                    gateway['regkeys'] = gateway['regkeys'] + [regkey]
-            if gateway['action'] == 'delete' and gateway['names']:
-                for name in gateway['names']:
-                    try :
-                        gwUrl = nfgw.find_gateway(netUrl, name, token)
-                        nfgw.delete_gateway(gwUrl, token)
-                    except Exception as e:
-                        writelog(str(e))
-                gateway['names'] = []
-                gateway['regkeys'] = []
-        if list(filter(lambda gateway: gateway['action'] == 'create' or
-                  gateway['action'] == 'create-terraform', config['gateway_list'])):
-            # update config file
-            update_config_file(filename, config)
+    if config.get('gateway_list'):
+        # if gateway options are enabled, the following code will be run
+        if config['gateway_list'] and netAction != 'delete':
+            for gateway in config['gateway_list']:
+                if gateway['action'] == 'create':
+                    index = 0
+                    while index < gateway['count']:
+                        name, regkey = nfgw.create_gateway(env, netUrl, gateway['region'],
+                                                                              gateway['cloud'], index, token)
+                        index += 1
+                        gateway['names'] = gateway['names'] + [name]
+                        gateway['regkeys'] = gateway['regkeys'] + [regkey]
+                if gateway['action'] == 'delete' and gateway['names']:
+                    for name in gateway['names']:
+                        try :
+                            gwUrl = nfgw.find_gateway(netUrl, name, token)
+                            nfgw.delete_gateway(gwUrl, token)
+                        except Exception as e:
+                            writelog(str(e))
+                    gateway['names'] = []
+                    gateway['regkeys'] = []
+            if list(filter(lambda gateway: gateway['action'] == 'create' or
+                      gateway['action'] == 'create-terraform', config['gateway_list'])):
+                # update config file
+                update_config_file(filename, config)
 
-            # create template for terraform
-            nftmf.create_file(config)
+                # create template for terraform
+                nftmf.create_file(config)
 
-            command = "terraform init -no-color %s" % os.path.expanduser(config['terraform']['work_dir'])
-            terraform_command(command)
+                command = "terraform init -no-color %s" % os.path.expanduser(config['terraform']['work_dir'])
+                terraform_command(command)
 
-            command = "terraform workspace new -state=%s %s" % (os.path.expanduser(config['terraform']['work_dir']), env)
-            sout, serr = terraform_command(command)
-            newSerr = ansi_escape.sub('', serr).rstrip().lower().replace('\"', '')
-            if newSerr == ('workspace %s already exists' % env):
+                command = "terraform workspace new -state=%s %s" % (os.path.expanduser(config['terraform']['work_dir']), env)
+                sout, serr = terraform_command(command)
+                newSerr = ansi_escape.sub('', serr).rstrip().lower().replace('\"', '')
+                if newSerr == ('workspace %s already exists' % env):
+                    command = "terraform workspace select %s" % env
+                    terraform_command(command)
+
+                command = "terraform apply --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
+                terraform_command(command)
+
+            if list(filter(lambda gateway: gateway['action'] == 'delete' or
+                      gateway['action'] == 'delete-terraform', config['gateway_list'])):
+                # update config file
+                update_config_file(filename, config)
+
+                command = "terraform init -no-color %s" % os.path.expanduser(config['terraform']['work_dir'])
+                terraform_command(command)
+
                 command = "terraform workspace select %s" % env
                 terraform_command(command)
 
-            command = "terraform apply --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
-            terraform_command(command)
+                command = "terraform destroy --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
+                terraform_command(command)
 
-        if list(filter(lambda gateway: gateway['action'] == 'delete' or
-                  gateway['action'] == 'delete-terraform', config['gateway_list'])):
-            # update config file
-            update_config_file(filename, config)
+
+    if config.get('terraform'):
+        #if options for terraform are configured, execute the following conditional statements
+        if config['terraform']['output'] == "yes":
 
             command = "terraform init -no-color %s" % os.path.expanduser(config['terraform']['work_dir'])
             terraform_command(command)
@@ -135,23 +154,10 @@ def main(filename):
             command = "terraform workspace select %s" % env
             terraform_command(command)
 
-            command = "terraform destroy --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
-            terraform_command(command)
-
-        #nftf.nf_terraform(config['terraform']['work_dir']+'/').create(env)
-        #nftf.nf_terraform(config['terraform']['work_dir']+'/').output()
-    if config['terraform']['output'] == "yes":
-
-        command = "terraform init -no-color %s" % os.path.expanduser(config['terraform']['work_dir'])
-        terraform_command(command)
-
-        command = "terraform workspace select %s" % env
-        terraform_command(command)
-
-        #command = "terraform output -state=%s" % os.path.expanduser(config['terraform']['work_dir'])
-        command = "terraform output -json"
-        outs, errs = terraform_command(command)
-        print(outs)
+            #command = "terraform output -state=%s" % os.path.expanduser(config['terraform']['work_dir'])
+            command = "terraform output -json"
+            outs, errs = terraform_command(command)
+            print(outs)
 
 
 if __name__ == '__main__':

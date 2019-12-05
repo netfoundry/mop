@@ -23,7 +23,7 @@ def get_token(env, client_id=None, client_secret=None):
         config.sections()
         config.read(os.path.expanduser('~/.env'))
         client_id = config[env]['clientId']
-        client_secret = config[env]['secret']
+        client_secret = config[env]['secretId']
     data = {"client_id": client_id,
             "client_secret": client_secret,
             "audience": "https://gateway." + env + ".netfoundry.io/",

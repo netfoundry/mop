@@ -1,0 +1,3 @@
+environment: sandbox
+network_action: delete
+network_name: DariuszTest

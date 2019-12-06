@@ -25,7 +25,7 @@ def create_network(env, name, token):
     writelog('\nCreating new Network! \n')
     url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/networks'
     start = datetime.datetime.now()
-    network_id = nfreq.post_data(url, {"name": net_name, "productFamily": "DVN", "productVersion" : "5.2.0-57299266"}, token)
+    network_id = nfreq.post_data(url, {"name": net_name, "productFamily": "DVN"}, token)
     #, "productVersion" : "4.19.0-57168534"
     end = datetime.datetime.now()
     diff = end - start

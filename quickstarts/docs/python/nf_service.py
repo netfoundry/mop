@@ -101,7 +101,7 @@ def find_service(netUrl, name, token):
         if gateway['name'] == name:
             gwUrl = gateway['_links']['self']['href']
     return gwUrl
-    
+
 
 def delete_service(gwUrl, token):
     data = nfreq.delete_nf(gwUrl, token)

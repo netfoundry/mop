@@ -14,4 +14,4 @@ We will provide series of quickstart guides on how to quickly deploy and configu
 
 !!! note
     Regardless of where Applications Users are trying to reach reside, NetFoundry (NF) Network Fabric needs to be provisioned and deployed first.
-    Click [NetFoundry Network](netfoundry/intro.md) to find more information on how to stand up the NF Network Fabric.
+    Navigate to [NetFoundry/NF Fabric](netfoundry/intro.md) to find more information on how to stand up the NF Network Fabric.

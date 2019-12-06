@@ -1,3 +1,3 @@
-environment: sandbox
-network_action: delete
-network_name: DariuszTest
+environment:
+network_action:
+network_name: 

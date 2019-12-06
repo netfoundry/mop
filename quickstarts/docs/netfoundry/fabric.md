@@ -24,7 +24,7 @@ This section will show how to do that through [NF Console](https://nfconsole.io)
     for clientId, and secretId if they are not passed to it through the positional arguments
     (env, clientId, secretId). It must be located in the home directory under ['~/.env'](../../python/env)
 
-1. Clone this repo
+1. Clone this repo (git clone https://github.com/netfoundry/mop.git)
 1. Update [Resource yaml](../../python/nf_resources.yml) file with the desired options to feed into the wrapper script as described
 in the following code snippet.
 1. Run this from the root folder

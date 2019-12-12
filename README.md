@@ -8,5 +8,4 @@ To get started, follow these simple steps.
 1. Once ready to share you changes, push the changes up to github
 1. Create  a pull request to merge it to the master branch.
 
-!!! note
-    The content changes can be viewed as it is updated, by running "mkdocs serve". It would be displayed at http://localhost:8000 by default.
+The content changes can be viewed as it is updated, by running "mkdocs serve". It would be displayed at http://localhost:8000 by default.

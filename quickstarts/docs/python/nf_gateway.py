@@ -31,6 +31,8 @@ def create_gateway(env, netUrl, loc, type, index, token):
     gwUrl = netUrl + '/endpoints'
     if type == 'aws':
         gwType = 'AWSCPEGW'
+    if type == 'azure':
+        gwType = 'AZCPEGW'
     new_gw = nfreq.post_data(gwUrl, {"name": gwType +'-'+ str(index) +'-'+ loc.upper(),
                              "endpointType": gwType,
                              "geoRegionId": None,
@@ -64,7 +66,7 @@ def find_gateway(netUrl, name, token):
         if gateway['name'] == name:
             gwUrl = gateway['_links']['self']['href']
     return gwUrl
-    
+
 
 def delete_gateway(gwUrl, token):
     data = nfreq.delete_nf(gwUrl, token)

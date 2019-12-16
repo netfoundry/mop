@@ -95,7 +95,7 @@ def main(filename):
                 if gateway['action'] == 'create':
                     index = 0
                     while index < gateway['count']:
-                        name, regkey, url = nfgw.create_gateway(env, netUrl, gateway['region'],
+                        name, regkey = nfgw.create_gateway(env, netUrl, gateway['region'],
                                                                               gateway['cloud'], index, token)
                         index += 1
                         gateway['names'] = gateway['names'] + [name]
@@ -197,13 +197,13 @@ def main(filename):
                     writelog('Searching for Service Urls')
                     for service in appwan['services']:
                         serviceUrls = serviceUrls + [nfsrv.find_service(netUrl, service, token)]
-                    writelog('Adding endpoints and services to appwan')
                     if appwan['action'] == 'create':
+                        writelog('Adding endpoints and services to appwan')
                         items = gwUrls + serviceUrls
                         for item in items:
                             nfaw.add_item2appwan(appwanUrl, item, token)
-                    writelog('Deleting endpoints and services from appwan')
                     if appwan['action'] == 'delete' and appwan['name']:
+                        writelog('Deleting appwan')
                         nfaw.delete_appwan(appwanUrl, token)
                         appwan['name'] = None
                 else:

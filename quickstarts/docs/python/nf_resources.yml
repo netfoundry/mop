@@ -1,32 +1,3 @@
-appwans:
-- action: null
-  endpoints: null
-  name: null
-  services: null
-environment: sandbox
-gateway_list:
-- action:
-  cloud: azure
-  count: 1
-  names: []
-  region:
-  regionalCidr: []
-  regkeys: []
-  resourceGroup:
-    name:
-    region:
-  tag: TerraformDemo
-network_action: 
-network_name: Demo01
-services:
-- action: null
-  gateway:
-  ip:
-  name: null
-  port:
-  type: host
-terraform:
-  bin: terraform
-  output: 'no'
-  source: ./quickstarts/docs/terraform
-  work_dir: .
+environment:
+network_action:
+network_name: 

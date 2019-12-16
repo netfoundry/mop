@@ -46,7 +46,7 @@ def create_gateway(env, netUrl, loc, type, index, token):
     while not gwstatus:
         try:
             result = nfreq.get_data(gwUrl, token)
-            if gw['status'] == 300:
+            if result['status'] == 300:
                 writelog('\ngw is ready to assign service!\n')
                 gwstatus = True
         except Exception as e:

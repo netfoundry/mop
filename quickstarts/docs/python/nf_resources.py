@@ -15,6 +15,8 @@ import nf_token as nftn
 import nf_network as nfnk
 import nf_gateway as nfgw
 import nf_tf_main_file as nftmf
+import nf_service as nfsrv
+import nf_appwan as nfaw
 
 
 def clear_log():
@@ -58,14 +60,14 @@ def update_config_file(filename, new_config):
 def main(filename):
     # when processing string from POPEN need to strip escape characters
     ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
-    # get network resources to configure from file
+    # get resources to configure from file
     try:
         with open(filename, 'r') as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
     except Exception as e:
         writelog(str(e))
 
-
+    # deploy network if not already completed
     netName = config['network_name']
     env =  config['environment']
     netAction = config['network_action']
@@ -84,7 +86,6 @@ def main(filename):
         token = nftn.get_token(env)
         netUrl = nfnk.find_network(env, netName, token)
         nfnk.delete_network(netUrl, token)
-
 
     # manage gateways (list of gateways)
     if config.get('gateway_list'):
@@ -143,7 +144,7 @@ def main(filename):
                 command = "terraform destroy --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
                 terraform_command(command)
 
-
+    # manage deployment of gateways with terraform
     if config.get('terraform'):
         #if options for terraform are configured, execute the following conditional statements
         if config['terraform']['output'] == "yes":
@@ -159,7 +160,56 @@ def main(filename):
             outs, errs = terraform_command(command)
             print(outs)
 
+    # configure service(s)
+    if config.get('services'):
+        # if gateway options are enabled, the service(s) will be able
+        # to be created and assigned to them
+        if config['gateway_list'] and netAction != 'delete':
+            for service in config['services']:
+                writelog('Searching for Gateway Url')
+                gwUrl = nfgw.find_gateway(netUrl, service['gateway'], token)
+                if service['action'] == 'create':
+                    serviceUrl, serviceName = nfsrv.create_service(netUrl, gwUrl, service, token)
+                    service['name'] = serviceName
+                if service['action'] == 'delete' and service['name']:
+                    serviceUrl = nfsrv.find_service(netUrl, service['name'], token)
+                    nfsrv.delete_service(serviceUrl, token)
+                    service['name'] = None
+            # update config file
+            update_config_file(filename, config)
 
+    # configure appwan(s)
+    if config.get('appwans'):
+        # if services options are enabled, the appwan(s) will be able
+        # to be created and assigned to them
+        if config['services'] and netAction != 'delete':
+            for appwan in config['appwans']:
+                if appwan['name']:
+                    writelog('Searching for appwan')
+                    appwanUrl = nfaw.find_appwan(netUrl, appwan['name'], token)
+                    if appwanUrl == None:
+                        appwanUrl = nfaw.create_appwan(netUrl, appwan['name'], token)
+                    gwUrls = []
+                    serviceUrls = []
+                    writelog('Searching for Gateway Urls')
+                    for endpoint in appwan['endpoints']:
+                        gwUrls = gwUrls + [nfgw.find_gateway(netUrl, endpoint, token)]
+                    writelog('Searching for Service Urls')
+                    for service in appwan['services']:
+                        serviceUrls = serviceUrls + [nfsrv.find_service(netUrl, service, token)]
+                    if appwan['action'] == 'create':
+                        writelog('Adding endpoints and services to appwan')
+                        items = gwUrls + serviceUrls
+                        for item in items:
+                            nfaw.add_item2appwan(appwanUrl, item, token)
+                    if appwan['action'] == 'delete' and appwan['name']:
+                        writelog('Deleting appwan')
+                        nfaw.delete_appwan(appwanUrl, token)
+                        appwan['name'] = None
+                else:
+                    writelog('appwan name is missing')
+            # update config file
+            update_config_file(filename, config)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Network build script')
     parser.add_argument("--file", help="json file with netfoundry resources details to create/update/delete", required=True)

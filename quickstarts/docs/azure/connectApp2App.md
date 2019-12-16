@@ -5,7 +5,7 @@ This quickstart guide will provide steps to create a secure service between a br
 ------------
 
 !!! important
-    Assumption is that the [NF Fabric](../netfoundry/fabric.md) is already up and the [NF Client](../netfoundry/client.md) is installed.
+    Assumption is that the [NF Fabric](../netfoundry/fabric.md) is already up and the [NF Gateway](../netfoundry/gateway.md) is installed.
 
 ```Console tab="Console UI"
 console ui content

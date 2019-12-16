@@ -9,24 +9,41 @@ def create_file(config):
     tf_main = {"module":[],"output":[]}
     for module in config['gateway_list']:
         if module['action'] == 'create' or module['action'] == 'create-terraform':
-            vpc = nftm.create_vpc(module['region'],
-                                  module['public_subnet'],
-                                  module['private_subnet'],
-                                  os.path.expanduser(config['terraform']['source']))
-            index = 0
-            while index < module['count']:
-                vm = nftm.create_vm_aws(module['region'],
-                                      module['region'],
-                                      module['ami'],
-                                      module['names'][index],
-                                      module['regkeys'][index],
+            if module['cloud'] == 'aws':
+                vpc = nftm.create_vpc(module['region'],
+                                      module['public_subnet'],
+                                      module['private_subnet'],
                                       os.path.expanduser(config['terraform']['source']))
-                tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
-                output = "public_ips_" + str(module['names'][index])
-                value = nftm.create_output(module['names'][index])
-                tf_main["output"] = tf_main["output"] + [{output: value}]
-                index += 1
-            tf_main["module"] = tf_main["module"] + [{module['region']: vpc}]
+                index = 0
+                while index < module['count']:
+                    vm = nftm.create_vm_aws(module['region'],
+                                          module['region'],
+                                          module['ami'],
+                                          module['names'][index],
+                                          module['regkeys'][index],
+                                          os.path.expanduser(config['terraform']['source']))
+                    tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
+                    output = "public_ips_" + str(module['names'][index])
+                    value = nftm.create_output(module['names'][index])
+                    tf_main["output"] = tf_main["output"] + [{output: value}]
+                    index += 1
+                tf_main["module"] = tf_main["module"] + [{module['region']: vpc}]
+            if module['cloud'] == 'azure':
+                index = 0
+                while index < module['count']:
+                    vm = nftm.create_vm_azure(module['resourceGroup'],
+                                          module['region'],
+                                          module['regionalCidr'],
+                                          module['names'][index],
+                                          module['regkeys'][index],
+                                          module['tag'],
+                                          os.path.expanduser(config['terraform']['source']))
+                    tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
+                    output = "public_ips_" + str(module['names'][index])
+                    value = nftm.create_output(module['names'][index])
+                    tf_main["output"] = tf_main["output"] + [{output: value}]
+                    index += 1
+
     filename = "%s/main.tf.json" % os.path.expanduser(config['terraform']['work_dir'])
     with open(filename, 'w') as f:
         json.dump(tf_main, f)

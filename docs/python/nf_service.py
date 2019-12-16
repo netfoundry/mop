@@ -19,93 +19,94 @@ def writelog(message):
     logfile.close()
 
 
-def create_service(env, netUrl, loc, type, index, token):
-    # Create AWS GW(s)
-    url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/dataCenters'
-    # find dc id based on location code
-    datacenters = nfreq.get_data(url, token)['_embedded']['dataCenters']
-    dcId = None
-    for dc in datacenters:
-        if dc['locationCode'] == loc:
-            dcId = dc['_links']['self']['href'].split('/')[6]
-    gwUrl = netUrl + '/endpoints'
-    if type == 'aws':
-        gwType = 'AWSCPEGW'
-    new_gw = nfreq.post_data(gwUrl, {"name": gwType +'_'+ str(index) +'_'+ loc.upper(),
-                             "endpointType": gwType,
-                             "geoRegionId": None,
-                             "dataCenterId": dcId,
-                             "o365BreakoutNextHopIp": None}, token)
-    gwName = new_gw['name']
-    gwRegKey = new_gw['registrationKey']
-    gwId = new_gw['_links']['self']['href'].split('/')[8]
-    gwstatus = False
-    writelog('\nWaiting for GW to be ready for service assignment!\n')
-    while not gwstatus:
-        try:
-            result = nfreq.get_data(gwUrl, token)
-            for gw in result['_embedded']['endpoints']:
-                if gw['name'] == gwName:
-                    if gw['status'] == 300:
-                        writelog('\ngw is ready to assign service!\n')
-                        gwstatus = True
-        except Exception as e:
-            writelog(e)
-            writelog('\nError checking GW status!\n')
-        time.sleep(5)
-    return gwName, gwRegKey
+def create_service(netUrl, gwUrl, attributes, token):
+    """
+    Create Service on Gateway
+    :param netUrl: REST Url endpoint for network
+    :param gwUrl: REST Url endpoint for gateway
+    :param serviceAttributes: service paramaters, e.g. service type or name, etc
+    :param token:  seesion token for NF Console
+    :return serviceId, serviceUrl: created service details
+    """
+    url = netUrl+'/services'
+    gwId = gwUrl.split('/')[8]
+    serviceName = attributes['gateway']+'--'+str(attributes['ip'])+'--'+str(attributes['port'])
+    if attributes['type'] == 'host':
+        data = {
+                  "serviceClass" : "CS",
+                  "name" : serviceName,
+                  "serviceInterceptType" : "IP",
+                  "serviceType" : "ALL",
+                  "endpointId" : gwId,
+                  "pbrType" : "WAN",
+                  "dataInterleaving": "NO",
+                  "transparency": "NO",
+                  "networkIp" : attributes['ip'],
+                  "networkFirstPort" : attributes['port'],
+                  "networkLastPort" : attributes['port'],
+                  "interceptIp" : attributes['ip'],
+                  "interceptFirstPort" : attributes['port'],
+                  "interceptLastPort" : attributes['port']
+                }
+    if attributes['type'] == 'network':
+        data =  {
+                  "serviceClass": "GW",
+                  "name": attributes['netIp']+'-'+attributes['netCidr'],
+                  "serviceInterceptType": "IP",
+                  "serviceType": "ALL",
+                  "endpointId": gwId,
+                  "lowLatency": "NO",
+                  "dataInterleaving": "NO",
+                  "transparency": "NO",
+                  "multicast": "OFF",
+                  "dnsOptions": "NONE",
+                  "icmpTunnel": "YES",
+                  "cryptoLevel": "STRONG",
+                  "permanentConnection": "YES",
+                  "collectionLocation": "BOTH",
+                  "pbrType": "WAN",
+                  "rateSmoothing": "NO",
+                  "gatewayClusterId": None,
+                  "interceptIp": attributes['netIp'],
+                  "gatewayIp": attributes['netIp'],
+                  "gatewayCidrBlock": attributes['netCidr'],
+                  "localNetworkGateway": "YES"
+                }
+    returnData = nfreq.post_data(url, data, token)
+    serviceUrl = returnData['_links']['self']['href']
+    time.sleep(1)
+
+    return serviceUrl, serviceName
 
 
-def update_service(env, netUrl, loc, type, index, token):
-    # Create AWS GW(s)
-    url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/dataCenters'
-    # find dc id based on location code
-    datacenters = nfreq.get_data(url, token)['_embedded']['dataCenters']
-    dcId = None
-    for dc in datacenters:
-        if dc['locationCode'] == loc:
-            dcId = dc['_links']['self']['href'].split('/')[6]
-    gwUrl = netUrl + '/endpoints'
-    if type == 'aws':
-        gwType = 'AWSCPEGW'
-    new_gw = nfreq.post_data(gwUrl, {"name": gwType +'_'+ str(index) +'_'+ loc.upper(),
-                             "endpointType": gwType,
-                             "geoRegionId": None,
-                             "dataCenterId": dcId,
-                             "o365BreakoutNextHopIp": None}, token)
-    gwName = new_gw['name']
-    gwRegKey = new_gw['registrationKey']
-    gwId = new_gw['_links']['self']['href'].split('/')[8]
-    gwstatus = False
-    writelog('\nWaiting for GW to be ready for service assignment!\n')
-    while not gwstatus:
-        try:
-            result = nfreq.get_data(gwUrl, token)
-            for gw in result['_embedded']['endpoints']:
-                if gw['name'] == gwName:
-                    if gw['status'] == 300:
-                        writelog('\ngw is ready to assign service!\n')
-                        gwstatus = True
-        except Exception as e:
-            writelog(e)
-            writelog('\nError checking GW status!\n')
-        time.sleep(5)
-    return gwName, gwRegKey
+def find_service(netUrl, serviceName, token):
+    """
+    Find url of an exiting service
+    :param netUrl: REST Url endpoint for network
+    :param serviceName: service name
+    :param token:  seesion token for NF Console
+    :return serviceUrl: url of the found service
+    """
+    servicesUrl = netUrl + '/services'
+    services = nfreq.get_data(servicesUrl, token)['_embedded']['services']
+    for service in services:
+        if service['name'] == serviceName:
+            serviceUrl = service['_links']['self']['href']
+    return serviceUrl
 
 
-def find_service(netUrl, name, token):
-    gwsUrl = netUrl + '/endpoints'
-    gateways = nfreq.get_data(gwsUrl, token)['_embedded']['endpoints']
-    gwUrl = ''
-    for gateway in gateways:
-        if gateway['name'] == name:
-            gwUrl = gateway['_links']['self']['href']
-    return gwUrl
-
-
-def delete_service(gwUrl, token):
-    data = nfreq.delete_nf(gwUrl, token)
-    writelog(data)
+def delete_service(serviceUrl, token):
+    """
+    Delete an exiting service
+    :param serviceUrl: REST endpoint for the service marked for deletion
+    :param token:  seesion token for NF Console
+    :return none:
+    """
+    try:
+        data = nfreq.delete_nf(serviceUrl, token)
+        writelog(data)
+    except Exception as e:
+        writelog(e)
 
 
 if __name__ == '__main__':

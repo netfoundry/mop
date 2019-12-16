@@ -343,8 +343,30 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#create_host_service" class="md-nav__link">
-    Create Host Service
+  <a href="#through_nf_web_console_ui" class="md-nav__link">
+    Through NF Web Console UI
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create_and_install_nf_client" class="md-nav__link">
+    Create and install NF Client
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_and_install_nf_azure_gateway" class="md-nav__link">
+    Create and Install NF Azure Gateway
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_service" class="md-nav__link">
+    Create Service
   </a>
   
 </li>
@@ -353,6 +375,31 @@
   <a href="#create_appwan" class="md-nav__link">
     Create AppWan
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programmatically" class="md-nav__link">
+    Programmatically
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#via_rest_api_python" class="md-nav__link">
+    via REST API (Python)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -488,8 +535,30 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#create_host_service" class="md-nav__link">
-    Create Host Service
+  <a href="#through_nf_web_console_ui" class="md-nav__link">
+    Through NF Web Console UI
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create_and_install_nf_client" class="md-nav__link">
+    Create and install NF Client
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_and_install_nf_azure_gateway" class="md-nav__link">
+    Create and Install NF Azure Gateway
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_service" class="md-nav__link">
+    Create Service
   </a>
   
 </li>
@@ -498,6 +567,31 @@
   <a href="#create_appwan" class="md-nav__link">
     Create AppWan
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#programmatically" class="md-nav__link">
+    Programmatically
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#via_rest_api_python" class="md-nav__link">
+    via REST API (Python)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -526,30 +620,304 @@
                   <h1>User to Cloud Application Connection</h1>
                 
                 <h2 id="user_to_cloud_application_connection">User to Cloud Application Connection<a class="headerlink" href="#user_to_cloud_application_connection" title="Permanent link">@</a></h2>
-<p>This quickstart guide will provide steps to create a secure service between a user and an application hosted in Azure Cloud using NetFoundry Overlay Fabric (NFOF).</p>
-<h3 id="create_host_service">Create Host Service<a class="headerlink" href="#create_host_service" title="Permanent link">@</a></h3>
-<hr />
+<p>This quickstart guide will provide all the steps to create a secure service between a user and an application hosted in Azure Cloud using NetFoundry Overlay Fabric (NFOF).</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Assumption is that the <a href="../../netfoundry/fabric/">NF Fabric</a> is already up and the NF Client Software (<a href="https://support.netfoundry.io/hc/en-us/articles/360017535332-Install-a-NetFoundry-Client-on-Windows">Window</a>, <a href="https://support.netfoundry.io/hc/en-us/articles/360016128692-Install-a-NetFoundry-Client-on-MacOS">Mac</a>) is installed.</p>
+<p>Assumption is that the <a href="../../netfoundry/fabric/">NF Fabric</a> is already up and the <a href="../../netfoundry/client/">NF Client</a> is installed.</p>
 </div>
-<blockquote>
-<p>:bulb: Console
-    1. Navigate to Manage Clients Page
-    <img alt="Image" src="../../images/CreateManagedClient01.png" />
-    1.</p>
-</blockquote>
-<div class="superfences-tabs">
-<input name="__tabs_1" type="radio" id="__tab_1_0" checked="checked" />
-<label for="__tab_1_0">NF Token - Python</label>
-<div class="superfences-content"><div class="highlight"><pre><span></span><span class="n">token</span> <span class="n">content</span>
-</pre></div></div>
-<input name="__tabs_1" type="radio" id="__tab_1_1" />
-<label for="__tab_1_1">NF REST CRUD - Python</label>
-<div class="superfences-content"><div class="highlight"><pre><span></span><span class="n">rest</span> <span class="n">crud</span> <span class="n">content</span>
-</pre></div></div>
+<h3 id="through_nf_web_console_ui">Through NF Web Console UI<a class="headerlink" href="#through_nf_web_console_ui" title="Permanent link">@</a></h3>
+<h4 id="create_and_install_nf_client">Create and install NF Client<a class="headerlink" href="#create_and_install_nf_client" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to createaal the  a client in the NF Console UI. Then, it will provide links to Guides on how to install the NetFoundry Client Software for Windows and MAC Clients, including the registration with the  NF Network Fabric.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage Clients Page
+<img alt="Image" src="../../images/CreateManagedClient01.png" /></li>
+<li>Click on + sign in the top right corner.</li>
+<li>Fill in the required information and click on "Create"
+<img alt="Image" src="../../images/CreateManagedClient02.png" /></li>
+<li>Copy the Client Registration Key
+<img alt="Image" src="../../images/CreateManagedClient03.png" /></li>
+<li>Install the NF Client Software by following the directions at the appropriate OS link<ol>
+<li><a href="https://support.netfoundry.io/hc/en-us/articles/360017535332-Install-a-NetFoundry-Client-on-Windows">Window</a></li>
+<li><a href="https://support.netfoundry.io/hc/en-us/articles/360016128692-Install-a-NetFoundry-Client-on-MacOS">Mac</a></li>
+</ol>
+</li>
+</ol>
 </div>
-<h3 id="create_appwan">Create AppWan<a class="headerlink" href="#create_appwan" title="Permanent link">@</a></h3>
+<h4 id="create_and_install_nf_azure_gateway">Create and Install NF Azure Gateway<a class="headerlink" href="#create_and_install_nf_azure_gateway" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to create a NF Manage Gateway in the NF Console UI and install it in the Azure vNet.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage Gateways Page</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../../images/CreateManagedGatewayAzure01.png" /></li>
+<li>Click on "Create Gateway" on the Azure Cloud Gateway Card
+<img alt="Image" src="../../images/CreateManagedGatewayAzure02.png" /></li>
+<li>Fill in the required information and click on "Create"
+<img alt="Image" src="../../images/CreateManagedGatewayAzure03.png" /></li>
+<li>Copy the Client Registration Key
+<img alt="Image" src="../../images/CreateManagedGatewayAzure04.png" /></li>
+<li>Click on "Deploy to Microsoft Azure". It will take you to the Azure Portal and ask you for your login credentials.</li>
+<li>You will be presented with the template that needs to be filled. The first section is the Basics regarding your Subscription and Resource Group this gateway will be deployed in.
+<img alt="Image" src="../../images/CreateManagedGatewayAzure05.png" /></li>
+<li>The second section related to resources associated with this gateway. e.g. vm name, ip address space, security groups, etc. you will paste the registration key copied in step 5. You will also need the public ssh key to use for access to this gateway remotely.
+<img alt="Image" src="../../images/CreateManagedGatewayAzure06.png" /></li>
+<li>You will need to agree to Azure Marketplace Terms and Conditions and click to "Purchase" to continue.
+<img alt="Image" src="../../images/CreateManagedGatewayAzure07.png" /></li>
+<li>If the NF Gateway was deployed successfully. Here is the view of the Resource Group and NF Conole UI.
+<img alt="Image" src="../../images/CreateManagedGatewayAzure08.png" />
+<img alt="Image" src="../../images/CreateManagedGatewayAzure09.png" /></li>
+<li>Done</li>
+</ol>
+</div>
+<h4 id="create_service">Create Service<a class="headerlink" href="#create_service" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to create a NF Service.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage Services Page under Manage Appwans</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../../images/CreateService01.png" /></li>
+<li>Click on "Create an IP Host Service"
+<img alt="Image" src="../../images/CreateService03.png" /></li>
+<li>Fill in the required information for SSH and click on "Create"
+<img alt="Image" src="../../images/CreateService04.png" /></li>
+<li>If successfully, the service is green.
+<img alt="Image" src="../../images/CreateService05.png" /></li>
+<li>Done</li>
+</ol>
+</div>
+<h4 id="create_appwan">Create AppWan<a class="headerlink" href="#create_appwan" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to enable service connectivity to users by creating an appwan.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage AppWANS Page under Manage Appwans</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../../images/CreateAppWan01.png" /></li>
+<li>Click on "Component Builder Appwan"
+<img alt="Image" src="../../images/CreateAppWan02.png" /></li>
+<li>Moved the desired client (e.g. DemoClient01) from "Available" Clients to "Selected" Endpoints. Moved the desired service (e.g. DemoClient01) from "Available" to "Selected" Services.
+<img alt="Image" src="../../images/CreateAppWan03.png" /></li>
+<li>Click on "Create".
+<img alt="Image" src="../../images/CreateAppWan04.png" /></li>
+<li>Done</li>
+</ol>
+</div>
+<h3 id="programmatically">Programmatically<a class="headerlink" href="#programmatically" title="Permanent link">@</a></h3>
+<h4 id="via_rest_api_python">via REST API (Python)<a class="headerlink" href="#via_rest_api_python" title="Permanent link">@</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the code clarity, we have broken down the code into multiple Python modules  </p>
+<ol>
+<li><a href="../../python/nf_requests.py">NF REST CRUD (Create,Read, Update and Delete) operations</a></li>
+<li><a href="../../python/nf_token.py">Get MOP Session Token</a></li>
+<li><a href="../../python/nf_network.py">Create NF Network</a></li>
+<li><a href="../../python/nf_gateway.py">Create NF Gateway(s)</a></li>
+<li><a href="../../python/nf_service.py">Create NF Service(s)</a></li>
+<li><a href="../../python/nf_appwan.py">Create NF AppWan(s)</a></li>
+<li><a href="../../python/nf_resources.py">Wrapper Script to Create NF Resources based on Resource yaml file</a></li>
+</ol>
+<p>To obtain a session token, the <a href="../../python/nf_token.py">MOP Session Token</a> script parses a configuration file
+for clientId, and secretId if they are not passed to it through the positional arguments
+(env, clientId, secretId). It must be located in the home directory under <a href="../../python/env">'~/.env'</a>.</p>
+<p>Additionally, we created the Terraform module (<a href="../../terraform/m-azure/main.tf">main.tf</a> and <a href="../../terraform/m-azure/variables.tf">variables.tf</a>) for Azure to aid the deployment of gateway(s) into Azure vNet(s). We created the Terraform Python modules (<a href="../../python/nf_tf_main_file.py">nf_tf_main_file.py</a> and <a href="../../python/nf_tf_modules.py">nf_tf_modules.py</a>) that the python wrapper, script based on <a href="../../python/nf_resources.yml">Resource yaml</a> file, calls them to create the Terraform plan main file  in the working directory, and then applies it using the Terraform module.</p>
+<p>Assumption, <a href="../../netfoundry/fabric/">the network named DemoNet01</a> has already been created. If not network action would need to be "create" not "get". The "get" action just means that the network ID will be search based on the name provided and use to add gateways to.</p>
+<p>The new Resource Group in Azure will be created named "demoPythonTerraform01" if one does not exists already in the same region (e.g. centralus). A new vnet will be created and NF Gateway will be placed in it.</p>
+<p>Environment means the NF Console Environment used, not  Azure.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">via REST API (Python)</p>
+<ol>
+<li>Clone this repo (git clone https://github.com/netfoundry/mop.git)</li>
+<li>Update <a href="../../python/nf_resources.yml">Resource yaml</a> file with the desired options to feed into the wrapper script as described
+in the following code snippet.
+<a href="../">All Resource.yml Options</a></li>
+<li>Run this from the root folder to create GW in NF Console UI and Azure.
+<div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">quickstarts</span><span class="o">/</span><span class="n">docs</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">nf_resources</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="nb">file</span> <span class="n">quickstarts</span><span class="o">/</span><span class="n">docs</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">nf_resources</span><span class="o">.</span><span class="n">yml</span>
+</pre></div>
+Required Configuration Parameters for Gateway Creation
+<div class="highlight"><pre><span></span><span class="nt">environment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="nt">network_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
+<span class="nt">gateway_list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+  <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">names</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
+  <span class="nt">regionalCidr</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">10.20.10.0/24</span><span class="p p-Indicator">]</span>
+  <span class="nt">regkeys</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+  <span class="nt">resourceGroup</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">demoPythonTerraform01</span>
+    <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centralus</span>
+  <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TerraformDemo</span>
+<span class="nt">terraform</span><span class="p">:</span>
+  <span class="nt">bin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">terraform</span>
+  <span class="nt">output</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
+  <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./quickstarts/docs/terraform</span>
+  <span class="nt">work_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
+</pre></div></li>
+<li>After the script is run successfully, one can see that the gateway name and registration key were saved Resource.yml file. The nam eis created automatically based on region and gateway type (AZCPEGW means an azure type gateway in NF console).
+<div class="highlight"><pre><span></span><span class="nt">environment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="nt">gateway_list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+  <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">names</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
+  <span class="nt">regionalCidr</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.0/24</span>
+  <span class="nt">regkeys</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">21DB86724EC3F31C11C1C9D68CE5ECD6A06F057E</span>
+  <span class="nt">resourceGroup</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">demoPythonTerraform01</span>
+    <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centralus</span>
+  <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TerraformDemo</span>
+<span class="nt">network_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
+<span class="nt">terraform</span><span class="p">:</span>
+  <span class="nt">bin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">terraform</span>
+  <span class="nt">output</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
+  <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./quickstarts/docs/terraform</span>
+  <span class="nt">work_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
+</pre></div>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure11.png" />
+<img alt="Image" src="../../images/CreateManagedGatewayAzure12.png" /></li>
+<li>Create a test server vm on the same vNet if not already present.
+<img alt="Image" src="../../images/CreateManagedGatewayAzure13.png" /></li>
+<li>Update the Resoure.yaml file to include the Service option to create the NF service on the gateway create in the previous step. make sure to change the action on the gateway to "get".
+<div class="highlight"><pre><span></span><span class="nt">environment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="nt">gateway_list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+  <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">names</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
+  <span class="nt">regionalCidr</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.0/24</span>
+  <span class="nt">regkeys</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">21DB86724EC3F31C11C1C9D68CE5ECD6A06F057E</span>
+  <span class="nt">resourceGroup</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">demoPythonTerraform01</span>
+    <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centralus</span>
+  <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TerraformDemo</span>
+<span class="nt">network_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
+<span class="nt">terraform</span><span class="p">:</span>
+  <span class="nt">bin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">terraform</span>
+  <span class="nt">output</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
+  <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./quickstarts/docs/terraform</span>
+  <span class="nt">work_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
+  <span class="nt">services</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+    <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+    <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
+    <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+    <span class="nt">name</span><span class="p">:</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+</pre></div></li>
+<li>After the script ran again successfully, the service section should have been populated with the service name as so.
+<div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS--10.20.10.5--22</span>
+  <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+</pre></div>
+<img alt="Image" src="../../images/CreateService07.png" /></li>
+<li>Create a client endpoint if not already done so.
+<img alt="Image" src="../../images/DemoClient01.png" /></li>
+<li>Update the Resoure.yaml file to include the AppWan option to create the NF AppWan tying the gateway, clinet and service created in the previous steps. Make sure to change the action on the service to "get".
+<div class="highlight"><pre><span></span><span class="nt">environment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="nt">gateway_list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+  <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">names</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
+  <span class="nt">regionalCidr</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.0/24</span>
+  <span class="nt">regkeys</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">21DB86724EC3F31C11C1C9D68CE5ECD6A06F057E</span>
+  <span class="nt">resourceGroup</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">demoPythonTerraform01</span>
+    <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centralus</span>
+  <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TerraformDemo</span>
+<span class="nt">network_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS--10.20.10.5--22</span>
+  <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+<span class="nt">terraform</span><span class="p">:</span>
+  <span class="nt">bin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">terraform</span>
+  <span class="nt">output</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
+  <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./quickstarts/docs/terraform</span>
+  <span class="nt">work_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="nt">appwans</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+  <span class="nt">endpoints</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DemoClient01</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">appwan-ssh-22</span>
+  <span class="nt">services</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS--10.20.10.5</span>
+</pre></div></li>
+<li>After the script ran again successfully, the connectivity should have been up.
+<img alt="Image" src="../../images/CreateAppWan06.png" /></li>
+<li>To test connectivity, log in to the DemoClinet01 and run ssh "username"@"privateIp"
+<img alt="Image" src="../../images/DemoClientTestSsh01.png" /></li>
+<li>To delete resources created, just follow the reverse order. First AppWans
+<div class="highlight"><pre><span></span><span class="nt">appwans</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
+  <span class="nt">endpoints</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DemoClient01</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">null</span>
+  <span class="nt">services</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS--10.20.10.5--22</span>
+</pre></div></li>
+<li>Then services
+<div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">null</span>
+  <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+</pre></div></li>
+<li>Endpoints - will delete all resources in Azure as well.
+<div class="highlight"><pre><span></span><span class="nt">gateway_list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
+  <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">names</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
+  <span class="nt">regionalCidr</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.0/24</span>
+  <span class="nt">regkeys</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+  <span class="nt">resourceGroup</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">demoPythonTerraform01</span>
+    <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centralus</span>
+  <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TerraformDemo</span>
+</pre></div></li>
+<li>Network
+<div class="highlight"><pre><span></span><span class="nt">environment</span><span class="p">:</span>  <span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="nt">network_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
+<span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
+</pre></div></li>
+</ol>
+</div>
                 
                   
                 

@@ -40,17 +40,15 @@ def create_gateway(env, netUrl, loc, type, index, token):
                              "o365BreakoutNextHopIp": None}, token)
     gwName = new_gw['name']
     gwRegKey = new_gw['registrationKey']
-    gwId = new_gw['_links']['self']['href'].split('/')[8]
+    gwUrl = new_gw['_links']['self']['href']
     gwstatus = False
     writelog('\nWaiting for GW to be ready for service assignment!\n')
     while not gwstatus:
         try:
             result = nfreq.get_data(gwUrl, token)
-            for gw in result['_embedded']['endpoints']:
-                if gw['name'] == gwName:
-                    if gw['status'] == 300:
-                        writelog('\ngw is ready to assign service!\n')
-                        gwstatus = True
+            if gw['status'] == 300:
+                writelog('\ngw is ready to assign service!\n')
+                gwstatus = True
         except Exception as e:
             writelog(e)
             writelog('\nError checking GW status!\n')

@@ -19,93 +19,107 @@ def writelog(message):
     logfile.close()
 
 
-def create_appwan(env, netUrl, loc, type, index, token):
-    # Create AWS GW(s)
-    url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/dataCenters'
-    # find dc id based on location code
-    datacenters = nfreq.get_data(url, token)['_embedded']['dataCenters']
-    dcId = None
-    for dc in datacenters:
-        if dc['locationCode'] == loc:
-            dcId = dc['_links']['self']['href'].split('/')[6]
-    gwUrl = netUrl + '/endpoints'
-    if type == 'aws':
-        gwType = 'AWSCPEGW'
-    new_gw = nfreq.post_data(gwUrl, {"name": gwType +'_'+ str(index) +'_'+ loc.upper(),
-                             "endpointType": gwType,
-                             "geoRegionId": None,
-                             "dataCenterId": dcId,
-                             "o365BreakoutNextHopIp": None}, token)
-    gwName = new_gw['name']
-    gwRegKey = new_gw['registrationKey']
-    gwId = new_gw['_links']['self']['href'].split('/')[8]
-    gwstatus = False
-    writelog('\nWaiting for GW to be ready for service assignment!\n')
-    while not gwstatus:
-        try:
-            result = nfreq.get_data(gwUrl, token)
-            for gw in result['_embedded']['endpoints']:
-                if gw['name'] == gwName:
-                    if gw['status'] == 300:
-                        writelog('\ngw is ready to assign service!\n')
-                        gwstatus = True
-        except Exception as e:
-            writelog(e)
-            writelog('\nError checking GW status!\n')
-        time.sleep(5)
-    return gwName, gwRegKey
+def check_for_status(urlRestEndpoint, token):
+    """
+    Check for status on the resource creation
+    :param urlRestEndpoint: REST Url endpoint for resource
+    :param token:  session token for NF Console
+    :return returndata: pass the response back from the status check
+    """
+    itemStatus = False
+    try:
+        count = 0
+        while not itemStatus:
+            if count > 6:
+                writelog('Timed out waiting for a status change ' + urlRestEndpoint.split('/')[8] +'!')
+                break
+            returnData = nfreq.get_data(urlRestEndpoint, token)
+            print(returnData)
+            if returnData['status'] == 300:
+                writelog('item ' + urlRestEndpoint.split('/')[8] + ' is ready!')
+                break
+            else:
+                time.sleep(5)
+            count += 1
+    except Exception as e:
+        writelog(e)
+    return returnData['status']
 
 
-def update_appwan(env, netUrl, loc, type, index, token):
-    # Create AWS GW(s)
-    url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/dataCenters'
-    # find dc id based on location code
-    datacenters = nfreq.get_data(url, token)['_embedded']['dataCenters']
-    dcId = None
-    for dc in datacenters:
-        if dc['locationCode'] == loc:
-            dcId = dc['_links']['self']['href'].split('/')[6]
-    gwUrl = netUrl + '/endpoints'
-    if type == 'aws':
-        gwType = 'AWSCPEGW'
-    new_gw = nfreq.post_data(gwUrl, {"name": gwType +'_'+ str(index) +'_'+ loc.upper(),
-                             "endpointType": gwType,
-                             "geoRegionId": None,
-                             "dataCenterId": dcId,
-                             "o365BreakoutNextHopIp": None}, token)
-    gwName = new_gw['name']
-    gwRegKey = new_gw['registrationKey']
-    gwId = new_gw['_links']['self']['href'].split('/')[8]
-    gwstatus = False
-    writelog('\nWaiting for GW to be ready for service assignment!\n')
-    while not gwstatus:
-        try:
-            result = nfreq.get_data(gwUrl, token)
-            for gw in result['_embedded']['endpoints']:
-                if gw['name'] == gwName:
-                    if gw['status'] == 300:
-                        writelog('\ngw is ready to assign service!\n')
-                        gwstatus = True
-        except Exception as e:
-            writelog(e)
-            writelog('\nError checking GW status!\n')
-        time.sleep(5)
-    return gwName, gwRegKey
+def add_item2appwan(appwanUrl, itemUrl, token):
+    """
+    Add items to existing appwan if not create one
+    :param env: enviroment, e.g. production, sandbox
+    :param appwanUrl: REST Url endpoint for the appwan under build
+    :param itemUrl: REST Url endpoint for item being added to appwan
+    :return none:
+    """
+    # Check if item is ready
+    checkStatus = check_for_status(appwanUrl, token)
+    # add item to appwan, e.g. gateway, client or service
+    try:
+        if checkStatus == 300:
+            returnData = nfreq.post_data(appwanUrl+'/'+itemUrl.split('/')[7],
+                         {'ids': [itemUrl.split('/')[8]]}, token)
+            writelog(returnData)
+    except Exception as e:
+        writelog(e)
 
 
-def find_appwan(netUrl, name, token):
-    gwsUrl = netUrl + '/endpoints'
-    gateways = nfreq.get_data(gwsUrl, token)['_embedded']['endpoints']
-    gwUrl = ''
-    for gateway in gateways:
-        if gateway['name'] == name:
-            gwUrl = gateway['_links']['self']['href']
-    return gwUrl
-    
+def create_appwan(netUrl, appwanName, token):
+    """
+    Create AppWan
+    :param netUrl: REST Url endpoint for network
+    :param appwanName: appwan name
+    :param token:  seesion token for NF Console
+    :return appwanUrl: url of the created appwan
+    """
+    url = netUrl + '/appWans'
+    try:
+        returnData = nfreq.post_data(url, {"name": appwanName}, token)
+        appwanUrl = returnData['_links']['self']['href']
+        time.sleep(1)
+    except Exception as e:
+        writelog(e)
+        writelog('Print error creating appwan for!')
+        appwanUrl = ""
+    return appwanUrl
 
-def delete_appwan(gwUrl, token):
-    data = nfreq.delete_nf(gwUrl, token)
-    writelog(data)
+
+def find_appwan(netUrl, appwanName, token):
+    """
+    Find url of an exiting appwan
+    :param netUrl: REST Url endpoint for network
+    :param appwanName: appwan name
+    :param token:  seesion token for NF Console
+    :return appwanUrl: url of the found appwan
+    """
+    appwansUrl = netUrl + '/appWans'
+    appwans = nfreq.get_data(appwansUrl, token)
+    if appwans.get('_embedded'):
+        for appwan in appwans['_embedded']['appWans']:
+            if appwan['name'] == appwanName:
+                appwanUrl = appwan['_links']['self']['href']
+    else:
+        appwanUrl = None
+    return appwanUrl
+
+
+def delete_appwan(appwanUrl, token):
+    """
+    Delete an exiting appwan
+    :param appwanUrl: REST endpoint for the appwan marked for deletion
+    :param token:  seesion token for NF Console
+    :return none:
+    """
+    try:
+        # Check if item is ready
+        checkStatus = check_for_status(appwanUrl, token)
+        if checkStatus == 300:
+            data = nfreq.delete_nf(appwanUrl, token)
+            writelog(data)
+    except Exception as e:
+        writelog(e)
 
 
 if __name__ == '__main__':

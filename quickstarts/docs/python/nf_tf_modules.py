@@ -26,6 +26,25 @@ def create_vm_aws(vpc, region, ami, vm_name, nfkey, source):
     }
     return tf_module_vm
 
+def create_vm_azure(resourceGroup, region, regionalCidr, vmName, nfkey, tag, source):
+    tf_module_vm = {
+        "source" : "%s/m-azure" % source,
+        "resourceGroupName": resourceGroup['name'],
+        "resourceGroupRegion": resourceGroup['region'],
+        "region" : region,
+        "vmName": vmName,
+        "nfnKey" : nfkey,
+        "virtualNetworkName": vmName + '-vNet',
+        "regionalCidr": regionalCidr,
+        "virtualSubnetName": vmName + '-subnet',
+        "subnetCidr": regionalCidr[0],
+        "virtualRouteTable": vmName + '-routeTable',
+        "nicName": vmName + '-nic',
+        "publicIp": vmName + '-publicIp',
+        "securityGroup": vmName + '-securityGroup',
+        "tagEnvironment": tag
+    }
+    return tf_module_vm
 
 def create_output(instance):
     value = "${module.%s.instance_public_ips}" % instance

@@ -7,13 +7,13 @@ nav:
       - azure/intro.md
       - azure/connectUser2App.md
       - azure/connectApp2App.md
+      - Bastion Replacement Removal: azure/azure-bastion.md 
     - NetFoundry:
       - Overview: netfoundry/intro.md
       - NF Fabric: netfoundry/fabric.md
       - NF Clients: netfoundry/client.md
       - NF Gateways: netfoundry/gateway.md
-    - Bastion:
-      - Bastion Replacement Removal: bastion/intro.md  
+       
 # Theme Configuration
 theme:
     name: material

@@ -34,7 +34,6 @@ def check_for_status(urlRestEndpoint, token):
                 writelog('Timed out waiting for a status change ' + urlRestEndpoint.split('/')[8] +'!')
                 break
             returnData = nfreq.get_data(urlRestEndpoint, token)
-            print(returnData)
             if returnData['status'] == 300:
                 writelog('item ' + urlRestEndpoint.split('/')[8] + ' is ready!')
                 break

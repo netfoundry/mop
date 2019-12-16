@@ -1,35 +1,29 @@
 appwans:
-- action: create
-  endpoints:
-  - AZCPEGW-0-WESTUS
-  - DemoClient01
-  name: demoappwan01
-  services:
-  - AZCPEGW-0-WESTUS--10.0.10.4--22
+- action: null
+  endpoints: null
+  name: null
+  services: null
 environment: sandbox
 gateway_list:
-- action: null
+- action:
   cloud: azure
   count: 1
-  names:
-  - AZCPEGW-0-WESTUS
-  region: westus
-  regionalCidr:
-  - 10.0.10.0/24
-  regkeys:
-  - 33CBF6C9145CBD9C47353B3F484E7A1F1C7E75AD
+  names: []
+  region:
+  regionalCidr: []
+  regkeys: []
   resourceGroup:
-    name: dariusz.sliwinski
-    region: centralus
+    name:
+    region:
   tag: TerraformDemo
-network_action: get
+network_action: 
 network_name: Demo01
 services:
 - action: null
-  gateway: AZCPEGW-0-WESTUS
-  ip: 10.0.10.4
-  name: AZCPEGW-0-WESTUS--10.0.10.4--22
-  port: 22
+  gateway:
+  ip:
+  name: null
+  port:
   type: host
 terraform:
   bin: terraform

@@ -1,0 +1,101 @@
+pipeline {
+    agent {
+      docker {
+        image "netfoundry/jenkins-slave-edge:latest"
+        registryCredentialsId 'dockerhub'
+        registryUrl 'https://index.docker.io/v1/'
+        alwaysPull true
+      }
+    }
+    parameters {
+        string(name: 'pythonRepoRef', defaultValue: 'master', description: 'Git reference in python repo')
+        choice(name:'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
+    }
+    stages {
+        stage('Set up WORKSPACE'){
+          steps {
+            // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
+            checkout([$class: 'GitSCM', branches: [[name: "${params.pythonRepoRef}"]],
+                      userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']],
+                                           poll: false,
+                                           changelog: false
+                    ])
+          }
+        }
+        // create a netfoundry network
+        stage('network'){
+            steps {
+                script {
+
+                    }
+                }
+            }
+        }
+        // create awv components
+        stage('avw') {
+            steps {
+                script {
+
+                    try {
+                        networks = listNetworksResultJSON['_embedded']['networks']
+                    } catch(err) {
+                        networks = [:]
+                    }
+
+                    for( int i=0; i<networks.size(); i++) {
+                        all_networks.add(networks[i]['name'])
+                    }
+
+                              }
+            }
+        }
+        // create avw site in NF
+        stage('avw site'){
+            steps {
+                script {
+                }
+            }
+        }
+        // attach avw site to vHub
+        stage('Attach Client to Appwan'){
+            steps {
+                script {
+                                }
+            }
+        }
+        // createresiurce in AWS for testing
+        stage('aws resurces) {
+            steps {
+                script {
+                }
+            }
+        }
+        // create servce endpoint and azure
+        stage('azure resource) {
+            steps {
+                script {
+                    dir("/root/ziti/configs") {
+                        sh "cat ziti-proxy.conf"
+                        sh "systemctl daemon-reload"
+                        sh "systemctl stop ziti-proxy"
+                        sh "systemctl start ziti-proxy"
+                        sh "systemctl status ziti-proxy"
+                        sh "openssl s_client -connect 127.0.0.1:18433 <<< 'Q' | grep 'www.weather.com'"
+                        sh "systemctl stop ziti-proxy"
+                        sh "systemctl start ziti-tunnel@${client_name}.json.service"
+                        sh "systemctl status ziti-tunnel@${client_name}.json.service"
+                        sh "ip addr show dev tun0"
+                        sh "systemctl stop ziti-tunnel@${client_name}.json.service"
+                    }
+                }
+            }
+        }
+        // create test service from AWS node
+        stage('azure resource) {
+            steps {
+                script {}
+
+            }
+        }
+    }
+}

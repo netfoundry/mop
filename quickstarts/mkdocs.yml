@@ -13,7 +13,7 @@ nav:
       - NF Clients: netfoundry/client.md
       - NF Gateways: netfoundry/gateway.md
     - Bastion:
-      - bastion/intro.md  
+      - Bastion Replacement Removal: bastion/intro.md  
 # Theme Configuration
 theme:
     name: material

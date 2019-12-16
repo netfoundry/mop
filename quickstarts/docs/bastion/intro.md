@@ -1,7 +1,7 @@
 
-# Bastion Host Replacement/Removal
 
-## Overview
+
+# Overview
 
 **What is a Bastion Host?**
 

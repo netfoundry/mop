@@ -8,7 +8,6 @@ pipeline {
       }
     }
     parameters {
-        string(name: 'pythonRepoRef', defaultValue: 'master', description: 'Git reference in python repo')
         choice(name:'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
     }
     stages {

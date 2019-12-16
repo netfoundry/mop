@@ -11,6 +11,7 @@ We will provide series of quickstart guides on how to quickly deploy and configu
     1. Coming soon
 1. Google Cloud Connectivity
     1. Coming soon
+1. [Bastion Host](bastion/intro.md)    
 
 !!! note
     Regardless of where Applications Users are trying to reach reside, NetFoundry (NF) Network Fabric needs to be provisioned and deployed first.

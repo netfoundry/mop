@@ -1,24 +1,21 @@
 pipeline {
-    agent {
-      docker {
-        image "netfoundry/jenkins-slave-edge:latest"
-        registryCredentialsId 'dockerhub'
-        registryUrl 'https://index.docker.io/v1/'
-        alwaysPull true
+  agent {
+    docker {
+      image "netfoundry/jenkins-slave-edge:latest"
+      registryCredentialsId 'dockerhub'
+      registryUrl 'https://index.docker.io/v1/'
+      alwaysPull true
+    }
+  }
+  parameters {
+    choice(name:'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
+  }
+  stages {
+    stage('Set up WORKSPACE'){
+      steps {
+        // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
+        checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
       }
     }
-    parameters {
-        choice(name:'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
-    }
-    stages {
-        stage('Set up WORKSPACE'){
-          steps {
-            // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
-            checkout([$class: 'GitSCM', branches: [[name: "${params.pythonRepoRef}"]],
-                      userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']],
-                                           poll: false,
-                                           changelog: false])
-          }
-        }
-    }
+  }
 }

@@ -44,3 +44,5 @@ markdown_extensions:
   - admonition
   - pymdownx.superfences:
       preserve_tabs: true
+  - markdown_include.include:
+      base_path: docs

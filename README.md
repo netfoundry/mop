@@ -3,6 +3,7 @@ A repository for open source code and examples pertaining to NetFoundry's Manage
 To get started, follow these simple steps.
 1. Install [mkdocs](https://www.mkdocs.org/)
 1. Install [material](https://squidfunk.github.io/mkdocs-material/) theme for mkdocs
+1. Install markdown-include option to enable ability to link text from other md files by running "pip install markdown-include"
 1. Clone the repo locally
 1. Create a feature branch (feature/xxxxx) and stop adding content!
 1. Once ready to share you changes, push the changes up to github

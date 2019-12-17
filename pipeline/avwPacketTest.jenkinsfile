@@ -22,6 +22,11 @@ pipeline {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
       }
+      steps('Install Python Packages'){
+        sh '''set +x; set -e -u
+        eval pip install azure-mgmt-network
+        '''
+      }
     }
     stage('Create AVW Site'){
       steps {
@@ -33,10 +38,7 @@ pipeline {
             eval python --version
             '''
             sh '''set +x; set -e -u
-            eval echo $ARM_CLIENT_ID
-            '''
-            sh '''set +x; set -e -u
-            eval echo $ARM_TENANT_ID
+            eval python mop/docs/azure/azure_vwan.py
             '''
         }
       }

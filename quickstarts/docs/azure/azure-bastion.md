@@ -15,7 +15,7 @@
 
 ## Standard AWS Bastion
 
-![image](../images/aws-bastion-host.png)
+![image](../images/bastion-host.png)
 
 
 ## Netfoundry
@@ -28,5 +28,10 @@
 ### Private
 
 ![image](../images/netfoundry-bastion-private.png)
+
+
+# Implement Through NF Web Console UI
+
+{!common/nf-client-install.md!}
 
 

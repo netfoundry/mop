@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image "netfoundry/jenkins-slave-edge:latest"
+      image 'python:3.7.5'
       registryCredentialsId 'dockerhub'
       registryUrl 'https://index.docker.io/v1/'
       alwaysPull true

@@ -29,7 +29,7 @@ pipeline {
             usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
           ]){
             // the build steps require for Azure
-            sh '''set +x; set -e -u -o pipefail
+            sh '''set +x; set -e -u 
             eval python --version
             '''
         }

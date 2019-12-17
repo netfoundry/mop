@@ -29,8 +29,14 @@ pipeline {
             usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
           ]){
             // the build steps require for Azure
-            sh '''set +x; set -e -u 
+            sh '''set +x; set -e -u
             eval python --version
+            '''
+            sh '''set +x; set -e -u
+            eval echo $ARM_CLIENT_ID
+            '''
+            sh '''set +x; set -e -u
+            eval echo $ARM_TENANT_ID
             '''
         }
       }

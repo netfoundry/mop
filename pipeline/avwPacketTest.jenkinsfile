@@ -10,11 +10,28 @@ pipeline {
   parameters {
     choice(name:'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
   }
+  environment {
+    // Azure Credentials
+    ARM_TENANT_ID = "25445e86-2ae6-4434-b116-25c66c27168d"
+    ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
+    AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
   stages {
     stage('Set up WORKSPACE'){
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
+      }
+    }
+    stage('Create AVW Site'){
+      steps {
+        withCredentials([
+            usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
+          ]){
+            // the build steps require for Azure
+            sh '''set +x; set -e -u -o pipefail
+            eval az login --identity
+            '''
+        }
       }
     }
   }

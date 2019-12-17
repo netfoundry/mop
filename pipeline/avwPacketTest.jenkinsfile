@@ -23,7 +23,10 @@ pipeline {
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
         // Install Python Packages
         sh '''set +x; set -e -u
-        eval yum install python3.7 -y
+        eval sudo yum install python3.7 -y
+        '''
+        sh '''set +x; set -e -u
+        eval sudo pip3 install azure-mgmt-network
         '''
       }
     }

@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'python:3.7.5'
+      image "netfoundry/jenkins-slave-edge:latest"
       registryCredentialsId 'dockerhub'
       registryUrl 'https://index.docker.io/v1/'
       alwaysPull true
@@ -23,7 +23,7 @@ pipeline {
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
         // Install Python Packages
         sh '''set +x; set -e -u
-        eval pwd
+        eval pip install azure-mgmt-network
         '''
       }
     }

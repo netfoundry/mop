@@ -30,7 +30,7 @@ pipeline {
           ]){
             // the build steps require for Azure
             sh '''set +x; set -e -u -o pipefail
-            eval echo $ARM_CLIENT_ID
+            eval python --version
             '''
         }
       }

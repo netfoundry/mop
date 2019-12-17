@@ -21,12 +21,13 @@ pipeline {
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
+        // Check Current User
+        sh '''set +x; set -e -u
+        eval echo $USER
+        '''
         // Install Python Packages
         sh '''set +x; set -e -u
-        eval users
-        '''
-        sh '''set +x; set -e -u
-        eval pip install --no-cache-dir azure-mgmt-network
+        eval pip install --user $USER --no-cache-dir azure-mgmt-network
         '''
       }
     }

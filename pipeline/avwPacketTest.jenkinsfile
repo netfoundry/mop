@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image "netfoundry/jenkins-slave-edge:latest"
+      image "netfoundry/jenkins-slave-edge:py3"
       registryCredentialsId 'dockerhub'
       registryUrl 'https://index.docker.io/v1/'
       alwaysPull true
@@ -21,13 +21,6 @@ pipeline {
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
-        // Install Python Packages
-        sh '''set +x; set -e -u
-        eval sudo yum install python3.7 -y
-        '''
-        sh '''set +x; set -e -u
-        eval sudo pip3 install azure-mgmt-network
-        '''
       }
     }
     stage('Create AVW Site'){
@@ -37,7 +30,7 @@ pipeline {
           ]){
             // the build steps require for Azure
             sh '''set +x; set -e -u
-            eval python --version
+            eval python3 --version
             '''
             sh '''set +x; set -e -u
             eval python mop/docs/azure/azure_vwan.py

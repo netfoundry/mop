@@ -37,4 +37,5 @@ async_subnet_creation = network_client.subnets.create_or_update(
     {'address_prefix': '10.10.0.0/24'}
 )
 subnet_info = async_subnet_creation.result()
+
 print(subnet_info)

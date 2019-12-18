@@ -30,7 +30,7 @@ pipeline {
           ]){
             // the build steps require for Azure
             sh '''set +x; set -e -u
-            eval python3 --version
+            eval ls
             '''
             sh '''set +x; set -e -u
             eval python3 mop/quickstarts/docs/python/azure/azure_vwan.py

@@ -8,7 +8,7 @@ pipeline {
     }
   }
   parameters {
-    choice(name:'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
+    choice(name: 'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
     string(name: 'vnetPrefix', defaultValue: '10.10.0.0/16', description: 'vnet entire IP block')
     string(name: 'subnetPrefix', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
     string(name: 'vhubPrefix', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
@@ -22,13 +22,13 @@ pipeline {
     // Test Input Variables
     GROUP_NAME = "clouddev-smoke"
     VNET_NAME = "AVW-PT-vnet"
-    VNET_PREFIX = params.vnetPrefix
-    SUBNET_PREFIX = params.subnetPrefix
-    VHUB_PREFIX = params.vhubPrefix
-    LOCATION = params.avwLocation
+    VNET_PREFIX = "params.vnetPrefix"
+    SUBNET_PREFIX = "params.subnetPrefix"
+    VHUB_PREFIX = "params.vhubPrefix"
+    LOCATION = "params.avwLocation"
     SUBNET_NAME = "AVW-PT-subnet"
     KEY1 = "AVW Packet Test"
-    VWAN_NAME = 'AVW-PT-VWAN'
+    VWAN_NAME = "AVW-PT-VWAN"
     VHUB_NAME = "AVW-PT-VHUB"
     VPNG_NAME = "AVW-PT-VPNG"
   }

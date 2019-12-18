@@ -13,7 +13,7 @@ credentials = ServicePrincipalCredentials(
 )
 
 # Connect to Azure APIs and get session details
-network_client = NetworkManagementClient(credentials, os.environ.get('AZURE_SUBSCRIPTION_ID'))
+network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
 
 # Delete Server VM
 

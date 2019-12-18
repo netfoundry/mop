@@ -35,7 +35,7 @@ VHUB_PARAMS = {
       "routes": []
     },
     'virtual_wan': {
-      'id': "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Network/virtualWans/%s" % (os.environ.get('AZURE_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'), os.environ.get('VWAN_NAME'))
+      'id': "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Network/virtualWans/%s" % (os.environ.get('ARM_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'), os.environ.get('VWAN_NAME'))
     },
     'sku': 'Basic'
 }
@@ -49,13 +49,13 @@ VPNG_PARAMS = {
       'peer_weight': 0
     },
     'virtual_hub': {
-      'id': "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Network/virtualHubs/%s" % (os.environ.get('AZURE_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'), os.environ.get('VHUB_NAME'))
+      'id': "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Network/virtualHubs/%s" % (os.environ.get('ARM_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'), os.environ.get('VHUB_NAME'))
     },
     'vpn_gateway_scale_unit': 1
 }
 
 # Connect to Azure APIs and get session details
-network_client = NetworkManagementClient(credentials, os.environ.get('AZURE_SUBSCRIPTION_ID'))
+network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
 
 # Create Virtual Network
 async_vnet_creation = network_client.virtual_networks.create_or_update(

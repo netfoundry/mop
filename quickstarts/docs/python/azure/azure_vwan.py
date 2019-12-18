@@ -30,6 +30,7 @@ async_vnet_creation = network_client.virtual_networks.create_or_update(
     }
 )
 async_vnet_creation.wait()
+print(async_vnet_creation.result())
 
 # Create Subnet
 async_subnet_creation = network_client.subnets.create_or_update(
@@ -38,20 +39,22 @@ async_subnet_creation = network_client.subnets.create_or_update(
     SUBNET_NAME,
     {'address_prefix': '10.10.0.0/24'}
 )
-subnet_info = async_subnet_creation.result()
-print(subnet_info)
+async_subnet_creation.wait()
+print(async_subnet_creation.result())
 
 # Delete Subnet
-async_subnet_creation = network_client.subnets.delete(
+async_subnet_deletion = network_client.subnets.delete(
     GROUP_NAME,
     VNET_NAME,
     SUBNET_NAME
 )
-async_subnet_creation.wait()
+async_subnet_deletion.wait()
+print(async_subnet_deletion.result())
 
 # Delete Virtual Network
-async_vnet_creation = network_client.virtual_networks.delete(
+async_vnet_deletion = network_client.virtual_networks.delete(
     GROUP_NAME,
     VNET_NAME
 )
-async_vnet_creation.wait()
+async_vnet_deletion.wait()
+print(async_subnet_deletion.result())

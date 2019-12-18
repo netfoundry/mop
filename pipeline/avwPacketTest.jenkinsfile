@@ -9,6 +9,8 @@ pipeline {
   }
   parameters {
     choice(name: 'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
+    booleanParam(name: 'createAVW', defaultValue: true, description: 'Create AVW site along wit hall the resources needed, e.g, vhub')
+    booleanParam(name: 'deleteAVW', defaultValue: true, description: 'Delete AVW site along wit hall the resources needed, e.g, vhub')
     string(name: 'vnetPrefix', defaultValue: '10.10.0.0/16', description: 'vnet entire IP block')
     string(name: 'subnetPrefix', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
     string(name: 'vhubPrefix', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
@@ -40,6 +42,7 @@ pipeline {
       }
     }
     stage('Create AVW Site'){
+      when { expression { params.createAVW }}
       steps {
         withCredentials([
             usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
@@ -52,6 +55,7 @@ pipeline {
       }
     }
     stage('Delete AVW Site'){
+      when { expression { params.deleteAVW }}
       steps {
         withCredentials([
             usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')

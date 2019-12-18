@@ -42,11 +42,11 @@ pipeline {
   stages {
     stage('Set up WORKSPACE'){
       steps {
+        // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
+        checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
         withCredentials([
             usernamePassword(credentialsId: 'auth0_jenkinsorg_${params.environment}', usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS')
           ]){
-            // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
-            checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
             sh '''set +x; set -e -u -o pipefail
             echo "[sandbox]" >|  ~/.env
             echo "clientId = ${SMOKE_TEST_USER}" >>  ~/.env

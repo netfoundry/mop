@@ -9,8 +9,10 @@ pipeline {
   }
   parameters {
     choice(name: 'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
-    booleanParam(name: 'createAVW', defaultValue: true, description: 'Create AVW site along wit hall the resources needed, e.g, vhub')
-    booleanParam(name: 'deleteAVW', defaultValue: true, description: 'Delete AVW site along wit hall the resources needed, e.g, vhub')
+    booleanParam(name: 'createAVW', defaultValue: true, description: 'Create AVW site along with all the resources needed, e.g, vhub')
+    booleanParam(name: 'deleteAVW', defaultValue: true, description: 'Delete AVW site along with all the resources needed, e.g, vhub')
+    booleanParam(name: 'createVPNG', defaultValue: true, description: 'Create VPN gateway and sites')
+    booleanParam(name: 'deleteVPNG', defaultValue: true, description: 'Delete VPN gateway and sites')
     string(name: 'vnetPrefix', defaultValue: '10.10.0.0/16', description: 'vnet entire IP block')
     string(name: 'subnetPrefix', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
     string(name: 'vhubPrefix', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
@@ -50,6 +52,32 @@ pipeline {
             // the build steps require for Azure
             sh '''set +x; set -e -u
             eval python3 quickstarts/docs/python/azure/azure_vwan_create.py
+            '''
+        }
+      }
+    }
+    stage('Create VPN Resources'){
+      when { expression { params.createVPNG }}
+      steps {
+        withCredentials([
+            usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
+          ]){
+            // the build steps require for Azure
+            sh '''set +x; set -e -u
+            eval python3 quickstarts/docs/python/azure/azure_vpng_create.py
+            '''
+        }
+      }
+    }
+    stage('Delete VPN Resources'){
+      when { expression { params.deleteVPNG }}
+      steps {
+        withCredentials([
+            usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
+          ]){
+            // the build steps require for Azure
+            sh '''set +x; set -e -u
+            eval python3 quickstarts/docs/python/azure/azure_vpng_delete.py
             '''
         }
       }

@@ -16,8 +16,13 @@ GROUP_NAME = 'clouddev-smoke'
 VNET_NAME = 'AVW-PT-vnet'
 LOCATION = 'westus2'
 SUBNET_NAME = 'AVW-PT-subnet10'
+KEY1 = 'AVW Packet Test'
 VWAN_NAME = 'AVW-PT-VWAN'
 VWAN_PARAMS = {
+    'location': LOCATION,
+    'tags': {
+        'key1': KEY1
+    },
     'disable_vpn_encryption': False,
     'allow_branch_to_branch_traffic': True,
     'allow_vnet_to_vnet_traffic': True,

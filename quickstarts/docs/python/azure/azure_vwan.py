@@ -16,6 +16,14 @@ GROUP_NAME = 'clouddev-smoke'
 VNET_NAME = 'AVW-PT-vnet'
 LOCATION = 'westus2'
 SUBNET_NAME = 'AVW-PT-subnet10'
+VWAN_NAME = 'AVW-PT-VWAN'
+VWAN_PARAMS = {
+    'disable_vpn_encryption': false,
+    'allow_branch_to_branch_traffic': true,
+    'allow_vnet_to_vnet_traffic': true,
+    'office365_local_breakout_category': 'None',
+    'type': 'Basic'
+}
 
 network_client = NetworkManagementClient(credentials, AZURE_SUBSCRIPTION_ID)
 
@@ -43,8 +51,31 @@ async_subnet_creation = network_client.subnets.create_or_update(
 async_subnet_creation.wait()
 print(async_subnet_creation.result())
 
+# Create VWAN
+async_vwan_creation = network_client.VirtualWans.create_or_update(
+    GROUP_NAME,
+    VWAN_NAME,
+    VWAN_PARAMS,
+    custom_headers=None,
+    raw=False,
+    polling=True
+)
+async_vwan_creation.wait()
+print(async_vwan_creation.result())
+
 # Delay for 30 seconds before deleting resources
 time.sleep(30)
+
+# Create VWAN
+async_vwan_deletion = network_client.VirtualWans.create_or_update(
+    GROUP_NAME,
+    VWAN_NAME,
+    custom_headers=None,
+    raw=False,
+    polling=True
+)
+async_vwan_deletion.wait()
+print(async_vwan_deletion.result())
 
 # Delete Subnet
 async_subnet_deletion = network_client.subnets.delete(

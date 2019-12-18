@@ -18,9 +18,9 @@ LOCATION = 'westus2'
 SUBNET_NAME = 'AVW-PT-subnet10'
 VWAN_NAME = 'AVW-PT-VWAN'
 VWAN_PARAMS = {
-    'disable_vpn_encryption': false,
-    'allow_branch_to_branch_traffic': true,
-    'allow_vnet_to_vnet_traffic': true,
+    'disable_vpn_encryption': False,
+    'allow_branch_to_branch_traffic': True,
+    'allow_vnet_to_vnet_traffic': True,
     'office365_local_breakout_category': 'None',
     'type': 'Basic'
 }

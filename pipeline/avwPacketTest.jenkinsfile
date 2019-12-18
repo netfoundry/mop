@@ -33,7 +33,7 @@ pipeline {
             eval python3 --version
             '''
             sh '''set +x; set -e -u
-            eval python mop/docs/azure/azure_vwan.py
+            eval python3 mop/quickstarts/docs/python/azure/azure_vwan.py
             '''
         }
       }

@@ -58,6 +58,7 @@ pipeline {
             echo "token = " >>  ~/.env
             cat ~/.env
             '''
+        }
       }
     }
     stage('Create Azure VWAN'){

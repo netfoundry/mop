@@ -1,4 +1,5 @@
-#pip install azure-mgmt-network
+#!/usr/bin/python3
+
 import os
 from azure.mgmt.network import NetworkManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
@@ -17,6 +18,7 @@ SUBNET_NAME = 'Dariusz-subnet10'
 
 network_client = NetworkManagementClient(credentials, AZURE_SUBSCRIPTION_ID)
 
+# Create Virtual Network
 async_vnet_creation = network_client.virtual_networks.create_or_update(
     GROUP_NAME,
     VNET_NAME,
@@ -37,5 +39,19 @@ async_subnet_creation = network_client.subnets.create_or_update(
     {'address_prefix': '10.10.0.0/24'}
 )
 subnet_info = async_subnet_creation.result()
-
 print(subnet_info)
+
+# Delete Subnet
+async_subnet_creation = network_client.subnets.delete(
+    GROUP_NAME,
+    VNET_NAME,
+    SUBNET_NAME
+)
+async_subnet_creation.wait()
+
+# Delete Virtual Network
+async_vnet_creation = network_client.virtual_networks.delete(
+    GROUP_NAME,
+    VNET_NAME
+)
+async_vnet_creation.wait()

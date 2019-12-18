@@ -52,7 +52,7 @@ async_subnet_creation.wait()
 print(async_subnet_creation.result())
 
 # Create VWAN
-async_vwan_creation = network_client.VirtualWans.create_or_update(
+async_vwan_creation = network_client.virtual_wans.create_or_update(
     GROUP_NAME,
     VWAN_NAME,
     VWAN_PARAMS,
@@ -67,7 +67,7 @@ print(async_vwan_creation.result())
 time.sleep(30)
 
 # Create VWAN
-async_vwan_deletion = network_client.VirtualWans.create_or_update(
+async_vwan_deletion = network_client.virtual_wans.create_or_update(
     GROUP_NAME,
     VWAN_NAME,
     custom_headers=None,

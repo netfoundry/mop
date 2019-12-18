@@ -72,7 +72,7 @@ print(async_vwan_creation.result())
 time.sleep(30)
 
 # Create VWAN
-async_vwan_deletion = network_client.virtual_wans.create_or_update(
+async_vwan_deletion = network_client.virtual_wans.delete(
     GROUP_NAME,
     VWAN_NAME,
     custom_headers=None,

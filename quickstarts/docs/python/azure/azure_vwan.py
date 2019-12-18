@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os
+import time
 from azure.mgmt.network import NetworkManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
 
@@ -12,9 +13,9 @@ credentials = ServicePrincipalCredentials(
 )
 
 GROUP_NAME = 'clouddev-smoke'
-VNET_NAME = 'DariuszRG-vnet'
+VNET_NAME = 'AVW-PT-vnet'
 LOCATION = 'westus2'
-SUBNET_NAME = 'Dariusz-subnet10'
+SUBNET_NAME = 'AVW-PT-subnet10'
 
 network_client = NetworkManagementClient(credentials, AZURE_SUBSCRIPTION_ID)
 
@@ -41,6 +42,9 @@ async_subnet_creation = network_client.subnets.create_or_update(
 )
 async_subnet_creation.wait()
 print(async_subnet_creation.result())
+
+# Delay for 30 seconds before deleting resources
+time.sleep(30)
 
 # Delete Subnet
 async_subnet_deletion = network_client.subnets.delete(

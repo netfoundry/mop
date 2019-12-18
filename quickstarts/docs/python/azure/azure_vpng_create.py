@@ -71,5 +71,3 @@ async_vpng_creation = network_client.vpn_gateways.create_or_update(
 )
 async_vpng_creation.wait()
 print(async_vpng_creation.result())
-
-# Create Server VM in tVNET

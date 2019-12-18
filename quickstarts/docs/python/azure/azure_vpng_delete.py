@@ -15,8 +15,6 @@ credentials = ServicePrincipalCredentials(
 # Connect to Azure APIs and get session details
 network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
 
-# Delete Server VM
-
 # Delete VPNG
 async_vpng_deletion = network_client.vpn_gateways.delete(
     os.environ.get('GROUP_NAME'),

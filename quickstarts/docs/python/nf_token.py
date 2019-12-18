@@ -3,6 +3,7 @@
 import os
 import logging
 import configparser
+import argparse
 import datetime
 import nf_requests as nfreq
 
@@ -35,5 +36,9 @@ def get_token(env, client_id=None, client_secret=None):
 
 
 if __name__ == '__main__':
-    # Get NetFoundry Console token
-    print(get_token('sandbox'))
+    parser = argparse.ArgumentParser(description='Session Token script')
+    parser.add_argument("--client_id", help="NF Console Client Id")
+    parser.add_argument("--client_secret", help="NF Console Client Secret")
+    parser.add_argument("--env", help="NetFoundry Enviroment", required=True)
+    args = parser.parse_args()
+    print(get_token(args.env, args.client_id, args.client_secret))

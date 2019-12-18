@@ -9,12 +9,28 @@ pipeline {
   }
   parameters {
     choice(name:'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
+    string(name: 'vnetPrefix', defaultValue: '10.10.0.0/16', description: 'vnet entire IP block')
+    string(name: 'subnetPrefix', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
+    string(name: 'vhubPrefix', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
+    string(name: 'avwLocation', defaultValue: 'westus2', description: 'avw region')
   }
   environment {
     // Azure Credentials
     ARM_TENANT_ID = "25445e86-2ae6-4434-b116-25c66c27168d"
     ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
     AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
+    // Test Input Variables
+    GROUP_NAME = "clouddev-smoke"
+    VNET_NAME = "AVW-PT-vnet"
+    VNET_PREFIX = params.vnetPrefix
+    SUBNET_PREFIX = params.subnetPrefix
+    VHUB_PREFIX = params.vhubPrefix
+    LOCATION = params.avwLocation
+    SUBNET_NAME = "AVW-PT-subnet"
+    KEY1 = "AVW Packet Test"
+    VWAN_NAME = 'AVW-PT-VWAN'
+    VHUB_NAME = "AVW-PT-VHUB"
+    VPNG_NAME = "AVW-PT-VPNG"
   }
   stages {
     stage('Set up WORKSPACE'){
@@ -30,10 +46,23 @@ pipeline {
           ]){
             // the build steps require for Azure
             sh '''set +x; set -e -u
-            eval python3 quickstarts/docs/python/azure/azure_vwan.py
+            eval python3 quickstarts/docs/python/azure/azure_vwan_create.py
             '''
         }
       }
+    }
+    stage('Delete AVW Site'){
+      steps {
+        withCredentials([
+            usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
+          ]){
+            // the build steps require for Azure
+            sh '''set +x; set -e -u
+            eval python3 quickstarts/docs/python/azure/azure_vwan_delete.py
+            '''
+        }
+      }
+
     }
   }
 }

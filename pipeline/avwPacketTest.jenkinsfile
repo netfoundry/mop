@@ -8,7 +8,7 @@ pipeline {
     }
   }
   parameters {
-    choice(name: 'environment', defaultValue: 'sandbox', choices: ['staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
+    choice(name: 'environment', choices: ['sandbox', 'staging'], description: 'Select NF Console Environment to spin the network and gateways in')
     booleanParam(name: 'createAVWH', defaultValue: true, description: 'Create Azure VWAN along with all the resources needed, e.g, vhub')
     booleanParam(name: 'deleteAVWH', defaultValue: true, description: 'Delete Azure VWAN along with all the resources needed, e.g, vhub')
     booleanParam(name: 'createVPNG', defaultValue: true, description: 'Create Azure VPN Gateway')

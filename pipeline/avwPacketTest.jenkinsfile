@@ -47,7 +47,7 @@ pipeline {
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.environment}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
             sh '''set +x; set -e -u -o pipefail
-            echo $ENVIRONMENT
+            echo $VNET_PREFIX
             echo "[$ENVIRONMENT]" >|  ~/.env
             echo "clientId = ${SMOKE_TEST_USER}" >>  ~/.env
             echo "secretId = ${SMOKE_TEST_PASS}" >>  ~/.env

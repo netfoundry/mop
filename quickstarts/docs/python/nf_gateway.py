@@ -5,6 +5,7 @@ import sys
 import time
 import datetime
 import logging
+import argparse
 import nf_requests as nfreq
 
 
@@ -15,7 +16,7 @@ def clear_log():
 
 def writelog(message):
     logfile = open('logoutput.txt', 'a+')
-    logfile.write(str(datetime.datetime.now()) + ' ' + str(message) + '\n')
+    logfile.write(str(datetime.datetime.now()) + ' gateway-log ' + str(message) + '\n')
     logfile.close()
 
 
@@ -72,4 +73,20 @@ def delete_gateway(gwUrl, token):
 
 
 if __name__ == '__main__':
-    pass
+    parser = argparse.ArgumentParser(description='Gateway build script')
+    parser.add_argument("--action", help="", required=True)
+    parser.add_argument("--type", choices=['azure', 'aws'], help="gateway type to be provisioned")
+    parser.add_argument("--name", help="existing gateway name to be found")
+    parser.add_argument("--url", help="existing gateway url to be delete")
+    parser.add_argument("--token", help="session token", required=True)
+    parser.add_argument("--env", choices=['sandbox', 'staging', 'production'], help="NetFoundry Enviroment")
+    parser.add_argument("--network_url", help="existing network url")
+    parser.add_argument("--location", help="gateway location")
+    parser.add_argument("--count", default=1, help="gateway count in the same location")
+    args = parser.parse_args()
+    if args.action == "create":
+        print(create_gateway(args.env, args.network_url, args.location, args.type, args.count, args.token))
+    if args.action == "find":
+        print(find_gateway(args.network_url, args.name, args.token))
+    if args.action == "delete":
+        delete_gateway(args.url, args.token)

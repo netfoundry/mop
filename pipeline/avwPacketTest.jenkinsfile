@@ -57,7 +57,7 @@ pipeline {
       }
     }
     stage('Create Azure VWAN'){
-      when { expression { params.createAVW }}
+      when { expression { params.CREATE_AVWH }}
       steps {
         withCredentials([
             usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
@@ -72,7 +72,7 @@ pipeline {
     stage('Create VPN Gateway and NF Network'){
       parallel{
         stage('Create Azure VPN Gateway'){
-          when { expression { params.createVPNG }}
+          when { expression { params.CREATE_VPNG }}
           steps {
             withCredentials([
                 usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
@@ -85,12 +85,12 @@ pipeline {
           }
         }
         stage('Create NF Network'){
-          when { expression { params.createNFNK }}
+          when { expression { params.CREATE_NFNK }}
           steps {
             // the build steps to create NF Network
             sh '''set +x; set -e -u -o pipefail
-            NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env ${params.environment}`
-            NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --env ${params.environment} --action create --token $NF_TOKEN --network_name $NFN_NAME`
+            NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
+            NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --env $ENVIRONMENT --action create --token $NF_TOKEN --network_name $NFN_NAME`
             cat logoutput.txt | grep network
             '''
           }
@@ -100,7 +100,7 @@ pipeline {
     stage('Delete VPN Gateway and NF Network'){
       parallel{
         stage('Delete Azure VPN Gateway'){
-          when { expression { params.deleteVPNG }}
+          when { expression { params.DELETE_VPNG }}
           steps {
             withCredentials([
                 usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
@@ -113,12 +113,12 @@ pipeline {
           }
         }
         stage('Delete NF Network'){
-          when { expression { params.deleteNFNK }}
+          when { expression { params.DELETE_NFNK }}
           steps {
             // the build steps to delete NF Network
             sh '''set +x; set -e -u -o pipefail
-            NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env ${params.environment}`
-            NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --env ${params.environment} --action find --token $NF_TOKEN --network_name $NFN_NAME`
+            NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
+            NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --env $ENVIRONMENT --action find --token $NF_TOKEN --network_name $NFN_NAME`
             eval python3 quickstarts/docs/python/nf_network.py --action delete --token $NF_TOKEN --network_name $NFN_URL`
             cat logoutput.txt | grep network
             '''
@@ -127,7 +127,7 @@ pipeline {
       }
     }
     stage('Delete Azure VWAN'){
-      when { expression { params.deleteAVW }}
+      when { expression { params.DELETE_AVWH }}
       steps {
         withCredentials([
             usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')

@@ -26,6 +26,7 @@ pipeline {
     ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
     AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
     // Test Input Variables
+    ENVIRONMENT = "${params.environment}"
     GROUP_NAME = "clouddev-smoke"
     VNET_NAME = "AVW-PT-vnet"
     VNET_PREFIX = "${params.vnetPrefix}"
@@ -47,7 +48,7 @@ pipeline {
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.environment}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
             sh '''set +x; set -e -u -o pipefail
             touch ~/.env
-            echo "[${params.environment}]" >|  ~/.env
+            echo "[$ENVIRONMENT]" >|  ~/.env
             echo "clientId = ${SMOKE_TEST_USER}" >>  ~/.env
             echo "secretId = ${SMOKE_TEST_PASS}" >>  ~/.env
             cat ~/.env

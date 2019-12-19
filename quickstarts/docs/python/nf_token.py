@@ -40,5 +40,8 @@ if __name__ == '__main__':
     parser.add_argument("--client_id", help="NF Console Client Id")
     parser.add_argument("--client_secret", help="NF Console Client Secret")
     parser.add_argument("--env", help="NetFoundry Enviroment", required=True)
+    parser.add_argument("--clear_logs", default=False, action="store_true", help="Clear log file")
     args = parser.parse_args()
+    if args.clear_logs:
+        clear_log()
     print(get_token(args.env, args.client_id, args.client_secret))

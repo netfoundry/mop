@@ -88,13 +88,12 @@ pipeline {
           steps {
             // the build steps to create NF Network
             sh '''
-              set +x; set -e -u 
+              set +x; set -e -u
               NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
               eval echo $NF_TOKEN
               eval echo $NFN_NAME
               eval echo $ENVIRONMENT
-              eval python3 quickstarts/docs/python/nf_network.py
-              eval cat logoutput.txt
+              eval python3 quickstarts/docs/python
               '''
           }
         }

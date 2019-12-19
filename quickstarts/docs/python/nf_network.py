@@ -86,14 +86,14 @@ def delete_network(netUrl, token):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Network build script')
     parser.add_argument("--action", help="", required=True)
-    parser.add_argument("--network_name", help="network name to be used")
+    parser.add_argument("--name", help="network name to be used")
     parser.add_argument("--token", help="session token", required=True)
     parser.add_argument("--env", help="NetFoundry Enviroment")
-    parser.add_argument("--network_url", help="existing network url")
+    parser.add_argument("--url", help="existing network url")
     args = parser.parse_args()
     if args.action == "create":
-        print(create_network(args.env, args.network_name, args.token))
+        print(create_network(args.env, args.name, args.token))
     if args.action == "find":
-        print(find_network(args.env, args.network_name, args.token))
+        print(find_network(args.env, args.name, args.token))
     if args.action == "delete":
-        delete_network(args.network_url, args.token)
+        delete_network(args.url, args.token)

@@ -93,7 +93,7 @@ pipeline {
               eval echo $NF_TOKEN
               eval echo $NFN_NAME
               eval echo $ENVIRONMENT
-              eval python3 quickstarts/docs/python/nf_gateway.py --help
+              eval cat logoutput.txt
               '''
           }
         }

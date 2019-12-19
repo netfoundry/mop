@@ -8,17 +8,17 @@ pipeline {
     }
   }
   parameters {
-    choice(name: 'environment', choices: ['sandbox', 'staging'], description: 'Select NF Console Environment to spin the network and gateways in')
-    booleanParam(name: 'createAVWH', defaultValue: true, description: 'Create Azure VWAN along with all the resources needed, e.g, vhub')
-    booleanParam(name: 'deleteAVWH', defaultValue: true, description: 'Delete Azure VWAN along with all the resources needed, e.g, vhub')
-    booleanParam(name: 'createVPNG', defaultValue: true, description: 'Create Azure VPN Gateway')
-    booleanParam(name: 'deleteVPNG', defaultValue: true, description: 'Delete Azure VPN Gateway')
-    booleanParam(name: 'createNFNK', defaultValue: true, description: 'Create NetFoundry Network')
-    booleanParam(name: 'deleteNFNK', defaultValue: true, description: 'Delete NetFoundry Network')
-    string(name: 'vnetPrefix', defaultValue: '10.10.0.0/16', description: 'vnet entire IP block')
-    string(name: 'subnetPrefix', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
-    string(name: 'vhubPrefix', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
-    string(name: 'avwLocation', defaultValue: 'westus2', description: 'avw region')
+    choice(name: 'ENVIRONMENT', choices: ['sandbox', 'staging'], description: 'Select NF Console Environment to spin the network and gateways in')
+    booleanParam(name: 'CREATE_AVWH', defaultValue: true, description: 'Create Azure VWAN along with all the resources needed, e.g, vhub')
+    booleanParam(name: 'DELETE_AVWH', defaultValue: true, description: 'Delete Azure VWAN along with all the resources needed, e.g, vhub')
+    booleanParam(name: 'CREATE_VPNG', defaultValue: true, description: 'Create Azure VPN Gateway')
+    booleanParam(name: 'DELETE_VPNG', defaultValue: true, description: 'Delete Azure VPN Gateway')
+    booleanParam(name: 'CREATE_NFNK', defaultValue: true, description: 'Create NetFoundry Network')
+    booleanParam(name: 'DELETE_NFNK', defaultValue: true, description: 'Delete NetFoundry Network')
+    string(name: 'VNET_PREFIX', defaultValue: '10.10.0.0/16', description: 'vnet entire IP block')
+    string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
+    string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
+    string(name: 'AVW_LOCATION', defaultValue: 'westus2', description: 'avw region')
   }
   environment {
     // Azure Credentials
@@ -26,13 +26,13 @@ pipeline {
     ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
     AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
     // Test Input Variables
-    ENVIRONMENT = "${params.environment}"
+    ENVIRONMENT = "${params.ENVIRONMENT}"
     GROUP_NAME = "clouddev-smoke"
     VNET_NAME = "AVW-PT-vnet"
-    VNET_PREFIX = "${params.vnetPrefix}"
-    SUBNET_PREFIX = "${params.subnetPrefix}"
-    VHUB_PREFIX = "${params.vhubPrefix}"
-    LOCATION = "${params.avwLocation}"
+    VNET_PREFIX = "${params.VNET_PREFIX}"
+    SUBNET_PREFIX = "${params.SUBNET_PREFIX}"
+    VHUB_PREFIX = "${params.VHUB_PREFIX}"
+    LOCATION = "${params.AVW_LOCATION}"
     SUBNET_NAME = "AVW-PT-subnet"
     KEY1 = "AVW Packet Test"
     VWAN_NAME = "AVW-PT-VWAN"
@@ -45,9 +45,9 @@ pipeline {
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
-        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.environment}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
             sh '''set +x; set -e -u -o pipefail
-            echo "${params.environment}"
+            echo "${params.ENVIRONMENT}"
             echo "[$ENVIRONMENT]" >|  ~/.env
             echo "clientId = ${SMOKE_TEST_USER}" >>  ~/.env
             echo "secretId = ${SMOKE_TEST_PASS}" >>  ~/.env

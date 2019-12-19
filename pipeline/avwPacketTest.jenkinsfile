@@ -87,10 +87,14 @@ pipeline {
           when { expression { params.CREATE_NFNK }}
           steps {
             // the build steps to create NF Network
-            sh '''#!/bin/bash
+            sh '''
               set +x; set -e -u -o pipefail
               NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
-              eval python3 quickstarts/docs/python/nf_network.py --env $ENVIRONMENT --action create --token ${NF_TOKEN} --network_name $NFN_NAME
+              echo $NF_TOKEN
+            '''
+            sh '''
+              set +x; set -e -u -o pipefail
+              eval python3 quickstarts/docs/python/nf_network.py --env $ENVIRONMENT --action create --token $NF_TOKEN --network_name $NFN_NAME
               eval cat logoutput.txt | grep network
             '''
           }
@@ -116,7 +120,7 @@ pipeline {
           when { expression { params.DELETE_NFNK }}
           steps {
             // the build steps to delete NF Network
-            sh '''#!/bin/bash
+            sh '''
               set +x; set -e -u -o pipefail
               NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
               NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --env $ENVIRONMENT --action find --token ${NF_TOKEN} --network_name $NFN_NAME`

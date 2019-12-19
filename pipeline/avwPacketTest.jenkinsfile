@@ -47,7 +47,6 @@ pipeline {
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
             sh '''set +x; set -e -u -o pipefail
-            echo $ENVIRONMENT
             echo "[$ENVIRONMENT]" >|  ~/.env
             echo "clientId = ${SMOKE_TEST_USER}" >>  ~/.env
             echo "secretId = ${SMOKE_TEST_PASS}" >>  ~/.env
@@ -91,7 +90,7 @@ pipeline {
             sh '''set +x; set -e -u -o pipefail
             NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
             NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --env $ENVIRONMENT --action create --token $NF_TOKEN --network_name $NFN_NAME`
-            cat logoutput.txt | grep network
+            eval cat logoutput.txt | grep network
             '''
           }
         }
@@ -119,8 +118,8 @@ pipeline {
             sh '''set +x; set -e -u -o pipefail
             NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
             NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --env $ENVIRONMENT --action find --token $NF_TOKEN --network_name $NFN_NAME`
-            eval python3 quickstarts/docs/python/nf_network.py --action delete --token $NF_TOKEN --network_name $NFN_URL`
-            cat logoutput.txt | grep network
+            eval python3 quickstarts/docs/python/nf_network.py --action delete --token $NF_TOKEN --network_name $NFN_URL
+            eval cat logoutput.txt | grep network
             '''
           }
         }

@@ -46,7 +46,7 @@ pipeline {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
-            sh '''set +x; set -e -u -o pipefail
+            sh '''set +x; set -Eeuxo pipefail
             echo "[$ENVIRONMENT]" >|  ~/.env
             echo "clientId = ${SMOKE_TEST_USER}" >>  ~/.env
             echo "secretId = ${SMOKE_TEST_PASS}" >>  ~/.env
@@ -88,7 +88,7 @@ pipeline {
           steps {
             // the build steps to create NF Network
             sh '''
-              set +x; set -e -u -o pipefail
+              set -Eeuxo pipefail
               NF_TOKEN=`eval /usr/bin/python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT --clear_logs`
               eval echo $NF_TOKEN
               eval echo $NFN_NAME

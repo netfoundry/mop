@@ -92,8 +92,8 @@ if __name__ == '__main__':
     parser.add_argument("--url", help="existing network url")
     args = parser.parse_args()
     if args.action == "create":
-        print(create_network(args.env, args.name, args.token.strip())
+        print(create_network(args.env, args.name, args.token))
     if args.action == "find":
-        print(find_network(args.env, args.name, args.token.strip())
+        print(find_network(args.env, args.name, args.token))
     if args.action == "delete":
-        delete_network(args.url, args.token.strip())
+        delete_network(args.url, args.token)

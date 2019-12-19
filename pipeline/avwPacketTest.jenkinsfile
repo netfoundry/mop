@@ -94,8 +94,7 @@ pipeline {
               eval echo $NFN_NAME
               eval echo $ENVIRONMENT
               python3 quickstarts/docs/python/nf_network.py --action create --token $NF_TOKEN --name $NFN_NAME --env $ENVIRONMENT
-              eval ls
-              eval ls quickstarts/docs/python/
+              eval cat logoutput.txt
               '''
           }
         }

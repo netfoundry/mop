@@ -121,8 +121,7 @@ pipeline {
             // the build steps to delete NF Network
             sh '''
               set +x; set -e -u -o pipefail
-              NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT | tr -d '[:space:]'`
-              echo $NF_TOKEN
+              NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
               NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --action find --token $NF_TOKEN --name $NFN_NAME --env $ENVIRONMENT`
               echo $NFN_URL
               eval python3 quickstarts/docs/python/nf_network.py --action delete --token $NF_TOKEN --name $NFN_URL

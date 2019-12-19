@@ -92,10 +92,6 @@ pipeline {
               NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
               eval python3 quickstarts/docs/python/nf_network.py --action create --token $NF_TOKEN --name $NFN_NAME --env $ENVIRONMENT
               '''
-            sh '''
-              set +x; set -e -u -o pipefail
-              eval cat logoutput.txt | grep network
-            '''
           }
         }
       }
@@ -123,10 +119,8 @@ pipeline {
               set +x; set -e -u -o pipefail
               NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
               NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --action find --token $NF_TOKEN --name $NFN_NAME --env $ENVIRONMENT`
-              echo $NFN_URL
               eval python3 quickstarts/docs/python/nf_network.py --action delete --token $NF_TOKEN --name $NFN_URL
-              eval cat logoutput.txt | grep network
-            '''
+              '''
           }
         }
       }

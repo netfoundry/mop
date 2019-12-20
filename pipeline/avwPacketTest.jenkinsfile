@@ -17,7 +17,7 @@ pipeline {
     booleanParam(name: 'DELETE_NFNK', defaultValue: true, description: 'Delete NetFoundry Network')
     booleanParam(name: 'CREATE_NFGW', defaultValue: true, description: 'Create NetFoundry Gateway')
     booleanParam(name: 'DELETE_NFGW', defaultValue: true, description: 'Delete NetFoundry Gateway')
-    string(name: 'VNET_PREFIX', defaultValue: '10.10.0.0/16', description: 'vnet entire IP block')
+    string(name: 'VNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'vnet entire IP block')
     string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
     string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
     string(name: 'AVW_LOCATION', defaultValue: 'westus2', description: 'avw region')

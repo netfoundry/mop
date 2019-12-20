@@ -66,6 +66,11 @@ def main(filename, action):
             config = yaml.load(f, Loader=yaml.FullLoader)
     except Exception as e:
         writelog(str(e))
+    # get network url
+    env = os.environ.get('ENVIRONMENT')
+    token = nftn.get_token(env)
+    writelog('Searching for network id')
+    netUrl = nfnk.find_network(env, os.environ.get('NFN_NAME'), token)
 
     # manage gateways (list of gateways)
     for gateway in config['gateway_list']:
@@ -143,4 +148,4 @@ if __name__ == '__main__':
     parser.add_argument("--file", help="json file with netfoundry resources details to create/update/delete", required=True)
     parser.add_argument("--action", choices=['create', 'delete', 'create-terraform', 'delete-terraform'], help="json file with netfoundry resources details to create/update/delete", required=True)
     args = parser.parse_args()
-    main(args.file)
+    main(args.file, args.action, args.env, args.network_name)

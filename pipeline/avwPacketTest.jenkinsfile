@@ -56,7 +56,7 @@ pipeline {
         echo "  count: 1" >>  nf_resources.yaml
         echo "  names: []" >>  nf_resources.yaml
         echo "  region: ${LOCATION}" >>  nf_resources.yaml
-        echo "  regionalCidr: SUBNET_PREFIX" >>  nf_resources.yaml
+        echo "  regionalCidr: ${SUBNET_PREFIX}" >>  nf_resources.yaml
         echo "  regkeys: []" >>  nf_resources.yaml
         echo "  resourceGroup:" >>  nf_resources.yaml
         echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml

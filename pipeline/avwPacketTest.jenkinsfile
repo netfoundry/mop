@@ -140,6 +140,7 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                   sh '''
                   set -Eeuxo pipefail
+                  eval cat logoutput.txt
                   eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
                   eval cat logoutput.txt
                   eval cat nf_resources.yaml

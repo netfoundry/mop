@@ -59,6 +59,7 @@ pipeline {
         echo "    region: ${LOCATION}" >>  nf_resources.yaml
         cat nf_resources.yaml
         '''
+      }
     }
     stage('Create Azure VWAN'){
       when { expression { params.CREATE_AVWH }}
@@ -72,7 +73,7 @@ pipeline {
       }
     }
     stage('Create VPN Gateway and NF Network'){
-      parallel{
+      parallel {
         stage('Create Azure VPN Gateway'){
           when { expression { params.CREATE_VPNG }}
           steps {
@@ -86,7 +87,7 @@ pipeline {
         }
         stage('Create NF Resources'){
           when { expression { params.CREATE_NFNK }}
-          stages
+          stages {
             stage('Create NF Network') {
               steps {
                 // the build steps to create NF Network

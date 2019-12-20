@@ -50,13 +50,11 @@ pipeline {
     stage('Create Azure VWAN'){
       when { expression { params.CREATE_AVWH }}
       steps {
-        withCredentials([
-            usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
-          ]){
-            // the build steps require for Azure
-            sh '''set +x; set -e -u -o pipefail
-            eval python3 quickstarts/docs/python/azure/azure_vwan_create.py
-            '''
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+          // the build steps require for Azure
+          sh '''set +x; set -e -u -o pipefail
+          eval python3 quickstarts/docs/python/azure/azure_vwan_create.py
+          '''
         }
       }
     }
@@ -65,13 +63,11 @@ pipeline {
         stage('Create Azure VPN Gateway'){
           when { expression { params.CREATE_VPNG }}
           steps {
-            withCredentials([
-                usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
-              ]){
-                // the build steps require for Azure
-                sh '''set +x; set -e -u -o pipefail
-                eval python3 quickstarts/docs/python/azure/azure_vpng_create.py
-                '''
+            withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+              // the build steps require for Azure
+              sh '''set +x; set -e -u -o pipefail
+              eval python3 quickstarts/docs/python/azure/azure_vpng_create.py
+              '''
             }
           }
         }
@@ -81,10 +77,10 @@ pipeline {
             // the build steps to create NF Network
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
               sh '''
-                set -Eeuxo pipefail
-                eval python3 quickstarts/docs/python/nfn_create.py
-                eval cat logoutput.txt
-                '''
+              set -Eeuxo pipefail
+              eval python3 quickstarts/docs/python/nfn_create.py
+              eval cat logoutput.txt
+              '''
             }
           }
         }
@@ -109,15 +105,9 @@ pipeline {
             // the build steps to delete NF Network
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
               sh '''
-                set +x; set -e -u -o pipefail
-                NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
-                eval echo $NF_TOKEN
-                eval echo $NFN_NAME
-                eval echo $ENVIRONMENT
-                NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --action find --token $NF_TOKEN --name $NFN_NAME --env $ENVIRONMENT`
-                eval echo $NFN_URL
-                eval python3 quickstarts/docs/python/nf_network.py --action delete --token $NF_TOKEN --name $NFN_URL
-                eval cat logoutput.txt
+              set -Eeuxo pipefail
+              eval python3 quickstarts/docs/python/nfn_delete.py
+              eval cat logoutput.txt
               '''
             }
           }
@@ -127,13 +117,11 @@ pipeline {
     stage('Delete Azure VWAN'){
       when { expression { params.DELETE_AVWH }}
       steps {
-        withCredentials([
-            usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
-          ]){
-            // the build steps require for Azure
-            sh '''set +x; set -e -u -o pipefail
-            eval python3 quickstarts/docs/python/azure/azure_vwan_delete.py
-            '''
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+          // the build steps require for Azure
+          sh '''set +x; set -e -u -o pipefail
+          eval python3 quickstarts/docs/python/azure/azure_vwan_delete.py
+          '''
         }
       }
     }

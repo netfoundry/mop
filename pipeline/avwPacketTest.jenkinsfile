@@ -89,7 +89,7 @@ pipeline {
             // the build steps to create NF Network
             sh '''
               set -Eeuxo pipefail
-              eval python3 quickstarts/docs/python/nfn_create.py`
+              eval python3 quickstarts/docs/python/nfn_create.py
               eval cat logoutput.txt
               '''
           }

@@ -94,6 +94,10 @@ pipeline {
         echo "  work_dir: ." >>  nf_resources.yaml
         cat nf_resources.yaml
         '''
+        sh '''
+        set -Eeuxo pipefail
+        ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
+        '''
       }
     }
     stage('Create Azure VWAN'){

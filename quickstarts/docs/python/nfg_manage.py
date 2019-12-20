@@ -68,7 +68,7 @@ def main(filename, action):
         writelog(str(e))
     # get network url
     env = os.environ.get('ENVIRONMENT')
-    token = nftn.get_token(env)
+    token = nftn.get_token(env, os.environ.get('SMOKE_TEST_USER'), os.environ.get('SMOKE_TEST_PASS'))
     writelog('Searching for network id')
     netUrl = nfnk.find_network(env, os.environ.get('NFN_NAME'), token)
 

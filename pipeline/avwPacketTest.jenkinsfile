@@ -45,13 +45,6 @@ pipeline {
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
-        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
-            sh '''set +x; set -Eeuxo pipefail
-            echo "[$ENVIRONMENT]" >|  ~/.env
-            echo "clientId = ${SMOKE_TEST_USER}" >>  ~/.env
-            echo "secretId = ${SMOKE_TEST_PASS}" >>  ~/.env
-            cat ~/.env
-            '''
         }
       }
     }
@@ -87,11 +80,13 @@ pipeline {
           when { expression { params.CREATE_NFNK }}
           steps {
             // the build steps to create NF Network
-            sh '''
-              set -Eeuxo pipefail
-              eval python3 quickstarts/docs/python/nfn_create.py
-              eval cat logoutput.txt
-              '''
+            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+              sh '''
+                set -Eeuxo pipefail
+                eval python3 quickstarts/docs/python/nfn_create.py
+                eval cat logoutput.txt
+                '''
+            }
           }
         }
       }
@@ -115,17 +110,19 @@ pipeline {
           when { expression { params.DELETE_NFNK }}
           steps {
             // the build steps to delete NF Network
-            sh '''
-              set +x; set -e -u -o pipefail
-              NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
-              eval echo $NF_TOKEN
-              eval echo $NFN_NAME
-              eval echo $ENVIRONMENT
-              NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --action find --token $NF_TOKEN --name $NFN_NAME --env $ENVIRONMENT`
-              eval echo $NFN_URL
-              eval python3 quickstarts/docs/python/nf_network.py --action delete --token $NF_TOKEN --name $NFN_URL
-              eval cat logoutput.txt
+            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+              sh '''
+                set +x; set -e -u -o pipefail
+                NF_TOKEN=`eval python3 quickstarts/docs/python/nf_token.py  --env $ENVIRONMENT`
+                eval echo $NF_TOKEN
+                eval echo $NFN_NAME
+                eval echo $ENVIRONMENT
+                NFN_URL=`eval python3 quickstarts/docs/python/nf_network.py --action find --token $NF_TOKEN --name $NFN_NAME --env $ENVIRONMENT`
+                eval echo $NFN_URL
+                eval python3 quickstarts/docs/python/nf_network.py --action delete --token $NF_TOKEN --name $NFN_URL
+                eval cat logoutput.txt
               '''
+            }
           }
         }
       }

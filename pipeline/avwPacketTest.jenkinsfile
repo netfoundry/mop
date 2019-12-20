@@ -45,7 +45,6 @@ pipeline {
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
-        }
       }
     }
     stage('Create Azure VWAN'){
@@ -96,13 +95,11 @@ pipeline {
         stage('Delete Azure VPN Gateway'){
           when { expression { params.DELETE_VPNG }}
           steps {
-            withCredentials([
-                usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')
-              ]){
-                // the build steps require for Azure
-                sh '''set +x; set -e -u -o pipefail
-                eval python3 quickstarts/docs/python/azure/azure_vpng_delete.py
-                '''
+            withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+              // the build steps require for Azure
+              sh '''set +x; set -e -u -o pipefail
+              eval python3 quickstarts/docs/python/azure/azure_vpng_delete.py
+              '''
             }
           }
         }

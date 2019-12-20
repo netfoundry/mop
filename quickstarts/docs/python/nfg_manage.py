@@ -60,6 +60,8 @@ def update_config_file(filename, new_config):
 def main(filename, action):
     # when processing string from POPEN need to strip escape characters
     ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+    # clear logoutput file
+    nftn.clear_log()
     # get resources to configure from file
     try:
         with open(filename, 'r') as f:

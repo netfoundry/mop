@@ -67,7 +67,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
           // the build steps require for Azure
           sh '''set +x; set -e -u -o pipefail
-          eval python3 quickstarts/docs/python/azure/azure_vwan_create.py
+          eval python3 ./quickstarts/docs/python/azure/azure_vwan_create.py
           '''
         }
       }
@@ -80,7 +80,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
               // the build steps require for Azure
               sh '''set +x; set -e -u -o pipefail
-              eval python3 quickstarts/docs/python/azure/azure_vpng_create.py
+              eval python3 ./quickstarts/docs/python/azure/azure_vpng_create.py
               '''
             }
           }
@@ -94,7 +94,7 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval python3 quickstarts/docs/python/nfn_create.py
+                  eval python3 ./quickstarts/docs/python/nfn_create.py
                   eval cat logoutput.txt
                   '''
                 }
@@ -106,7 +106,7 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
+                  eval python3 ./quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
                   eval cat logoutput.txt
                   eval cat nf_resources.yaml
                   '''

@@ -61,11 +61,11 @@ pipeline {
         echo "    region: ${LOCATION}" >>  nf_resources.yaml
         echo "  tag: ${KEY1}" >>  nf_resources.yaml
         echo "  action:" >>  nf_resources.yaml
-        echo "  terraform:" >>  nf_resources.yaml
-        echo "    bin: terraform" >>  nf_resources.yaml
-        echo "    output: yes" >>  nf_resources.yaml
-        echo "    source: ./quickstarts/docs/terraform" >>  nf_resources.yaml
-        echo "    work_dir: ." >>  nf_resources.yaml
+        echo "terraform:" >>  nf_resources.yaml
+        echo "  bin: terraform" >>  nf_resources.yaml
+        echo "  output: yes" >>  nf_resources.yaml
+        echo "  source: ./quickstarts/docs/terraform" >>  nf_resources.yaml
+        echo "  work_dir: ." >>  nf_resources.yaml
         cat nf_resources.yaml
         '''
       }

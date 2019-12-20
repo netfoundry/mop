@@ -74,7 +74,13 @@ def main(filename, action):
 
     # manage gateways (list of gateways)
     for gateway in config['gateway_list']:
+        # need to add this be comparable with script using the yaml file as input for action
+        if action == 'create-terraform':
+            gateway['action'] = 'create-terraform'
+        if action == 'delete-terraform':
+            gateway['action'] = 'delete-terraform'
         if action == 'create':
+            gateway['action'] = 'create'
             index = 0
             while index < gateway['count']:
                 name, regkey = nfgw.create_gateway(env, netUrl, gateway['region'],
@@ -83,6 +89,7 @@ def main(filename, action):
                 gateway['names'] = gateway['names'] + [name]
                 gateway['regkeys'] = gateway['regkeys'] + [regkey]
         if action == 'delete' and gateway['names']:
+            gateway['action'] = 'delete'
             for name in gateway['names']:
                 try :
                     gwUrl = nfgw.find_gateway(netUrl, name, token)

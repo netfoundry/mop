@@ -28,7 +28,7 @@ def create_file(config):
                     tf_main["output"] = tf_main["output"] + [{output: value}]
                     index += 1
                 tf_main["module"] = tf_main["module"] + [{module['region']: vpc}]
-            if module['cloud'] == 'azure':
+            if module['cloud'] == 'azure' or module['cloud'] == 'vwan':
                 index = 0
                 while index < module['count']:
                     vm = nftm.create_vm_azure(module['resourceGroup'],

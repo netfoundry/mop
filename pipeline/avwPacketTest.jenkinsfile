@@ -15,6 +15,8 @@ pipeline {
     booleanParam(name: 'DELETE_VPNG', defaultValue: true, description: 'Delete Azure VPN Gateway')
     booleanParam(name: 'CREATE_NFNK', defaultValue: true, description: 'Create NetFoundry Network')
     booleanParam(name: 'DELETE_NFNK', defaultValue: true, description: 'Delete NetFoundry Network')
+    booleanParam(name: 'CREATE_NFGW', defaultValue: true, description: 'Create NetFoundry Gateway')
+    booleanParam(name: 'DELETE_NFGW', defaultValue: true, description: 'Delete NetFoundry Gateway')
     string(name: 'VNET_PREFIX', defaultValue: '10.10.0.0/16', description: 'vnet entire IP block')
     string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
     string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
@@ -86,9 +88,9 @@ pipeline {
           }
         }
         stage('Create NF Resources'){
-          when { expression { params.CREATE_NFNK }}
           stages {
             stage('Create NF Network') {
+              when { expression { params.CREATE_NFNK }}
               steps {
                 // the build steps to create NF Network
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
@@ -101,6 +103,7 @@ pipeline {
               }
             }
             stage('Create NF Gateways') {
+              when { expression { params.CREATE_NFGW }}
               steps {
                 // the build steps to create NF Gateways
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
@@ -131,9 +134,9 @@ pipeline {
           }
         }
         stage('Delete NF Resources'){
-          when { expression { params.DELETE_NFNK }}
           stages {
             stage('Delete NF Gateways') {
+              when { expression { params.DELETE_NFGW }}
               steps {
                 // the build steps to delete NF Network
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
@@ -147,6 +150,7 @@ pipeline {
               }
             }
             stage('Delete NF Network') {
+              when { expression { params.DELETE_NFNK }}
               steps {
                 // the build steps to create NF Network
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {

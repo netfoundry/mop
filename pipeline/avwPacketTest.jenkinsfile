@@ -131,7 +131,7 @@ pipeline {
         }
         stage('Delete NF Resources'){
           when { expression { params.DELETE_NFNK }}
-          stages
+          stages {
             stage('Delete NF Gateways') {
               steps {
                 // the build steps to delete NF Network

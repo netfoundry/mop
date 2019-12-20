@@ -148,4 +148,4 @@ if __name__ == '__main__':
     parser.add_argument("--file", help="json file with netfoundry resources details to create/update/delete", required=True)
     parser.add_argument("--action", choices=['create', 'delete', 'create-terraform', 'delete-terraform'], help="json file with netfoundry resources details to create/update/delete", required=True)
     args = parser.parse_args()
-    main(args.file, args.action, args.env, args.network_name)
+    main(args.file, args.action)

@@ -1,4 +1,4 @@
-# resource.yaml file opions
+# resource.yaml file options
 
 ``` yaml
 appwans:

@@ -34,6 +34,8 @@ def create_gateway(env, netUrl, loc, type, index, token):
         gwType = 'AWSCPEGW'
     if type == 'azure':
         gwType = 'AZCPEGW'
+    if type == 'vwan':
+        gwType == 'AVWGW'
     new_gw = nfreq.post_data(gwUrl, {"name": gwType +'-'+ str(index) +'-'+ loc.upper(),
                              "endpointType": gwType,
                              "geoRegionId": None,

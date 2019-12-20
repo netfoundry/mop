@@ -17,6 +17,8 @@ pipeline {
     booleanParam(name: 'DELETE_NFNK', defaultValue: true, description: 'Delete NetFoundry Network')
     booleanParam(name: 'CREATE_NFGW', defaultValue: true, description: 'Create NetFoundry Gateway')
     booleanParam(name: 'DELETE_NFGW', defaultValue: true, description: 'Delete NetFoundry Gateway')
+    booleanParam(name: 'CREATE_AVWS', defaultValue: true, description: 'Create NetFoundry AVW VPN Site')
+    booleanParam(name: 'DELETE_AVWS', defaultValue: true, description: 'Delete NetFoundry AVW VPN Site')
     string(name: 'VNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'vnet entire IP block')
     string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
     string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
@@ -56,7 +58,7 @@ pipeline {
         echo "  count: 1" >>  nf_resources.yaml
         echo "  names: []" >>  nf_resources.yaml
         echo "  region: ${LOCATION}" >>  nf_resources.yaml
-        echo "  regionalCidr: ${SUBNET_PREFIX}" >>  nf_resources.yaml
+        echo "  regionalCidr: [${SUBNET_PREFIX}]" >>  nf_resources.yaml
         echo "  regkeys: []" >>  nf_resources.yaml
         echo "  resourceGroup:" >>  nf_resources.yaml
         echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
@@ -67,7 +69,7 @@ pipeline {
         echo "  count: 1" >>  nf_resources.yaml
         echo "  names: []" >>  nf_resources.yaml
         echo "  region: centralus" >>  nf_resources.yaml
-        echo "  regionalCidr: 10.20.10.0/24" >>  nf_resources.yaml
+        echo "  regionalCidr: [10.20.10.0/24]" >>  nf_resources.yaml
         echo "  regkeys: []" >>  nf_resources.yaml
         echo "  resourceGroup:" >>  nf_resources.yaml
         echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
@@ -78,7 +80,7 @@ pipeline {
         echo "  count: 1" >>  nf_resources.yaml
         echo "  names: []" >>  nf_resources.yaml
         echo "  region: centralus" >>  nf_resources.yaml
-        echo "  regionalCidr: 10.20.10.0/24" >>  nf_resources.yaml
+        echo "  regionalCidr: [10.20.10.0/24]" >>  nf_resources.yaml
         echo "  regkeys: []" >>  nf_resources.yaml
         echo "  resourceGroup:" >>  nf_resources.yaml
         echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
@@ -148,6 +150,19 @@ pipeline {
                 }
               }
             }
+            stage('Create NF AVW VPN Site') {
+              when { expression { params.CREATE_AVWS}}
+              steps {
+                // the build steps to create NF AVW VPN Site
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+                  sh '''
+                  set -Eeuxo pipefail
+                  eval cat logoutput.txt
+                  eval cat nf_resources.yaml
+                  '''
+                }
+              }
+            }
           }
         }
       }
@@ -167,6 +182,19 @@ pipeline {
         }
         stage('Delete NF Resources'){
           stages {
+            stage('Delete NF AVW VPN Site') {
+              when { expression { params.DELETE_AVWS }}
+              steps {
+                // the build steps to delete NF Network
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+                  sh '''
+                  set -Eeuxo pipefail
+                  eval cat logoutput.txt
+                  eval cat nf_resources.yaml
+                  '''
+                }
+              }
+            }
             stage('Delete NF Gateways') {
               when { expression { params.DELETE_NFGW }}
               steps {

@@ -46,7 +46,9 @@ pipeline {
     stage('Set up WORKSPACE'){
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
+        // check out the mop git repo where python3 scipts are housed
         checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
+        // fill the gateways details to be deployed
         sh '''
         set -Eeuxo pipefail
         echo "gateway_list:" >|  nf_resources.yaml
@@ -59,7 +61,29 @@ pipeline {
         echo "  resourceGroup:" >>  nf_resources.yaml
         echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
         echo "    region: ${LOCATION}" >>  nf_resources.yaml
-        echo "  tag: ${KEY1}" >>  nf_resources.yaml
+        echo "  tag: Azure-Server-Gateway" >>  nf_resources.yaml
+        echo "  action:" >>  nf_resources.yaml
+        echo "- cloud: azure" >>  nf_resources.yaml
+        echo "  count: 1" >>  nf_resources.yaml
+        echo "  names: []" >>  nf_resources.yaml
+        echo "  region: centralus" >>  nf_resources.yaml
+        echo "  regionalCidr: 10.20.10.0/24" >>  nf_resources.yaml
+        echo "  regkeys: []" >>  nf_resources.yaml
+        echo "  resourceGroup:" >>  nf_resources.yaml
+        echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
+        echo "    region: ${LOCATION}" >>  nf_resources.yaml
+        echo "  tag: Azure-Client-Gateway" >>  nf_resources.yaml
+        echo "  action:" >>  nf_resources.yaml
+        echo "- cloud: vwan" >>  nf_resources.yaml
+        echo "  count: 1" >>  nf_resources.yaml
+        echo "  names: []" >>  nf_resources.yaml
+        echo "  region: centralus" >>  nf_resources.yaml
+        echo "  regionalCidr: 10.20.10.0/24" >>  nf_resources.yaml
+        echo "  regkeys: []" >>  nf_resources.yaml
+        echo "  resourceGroup:" >>  nf_resources.yaml
+        echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
+        echo "    region: ${LOCATION}" >>  nf_resources.yaml
+        echo "  tag: Azure-Site-Gateway" >>  nf_resources.yaml
         echo "  action:" >>  nf_resources.yaml
         echo "terraform:" >>  nf_resources.yaml
         echo "  bin: terraform" >>  nf_resources.yaml

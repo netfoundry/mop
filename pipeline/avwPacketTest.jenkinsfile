@@ -59,6 +59,8 @@ pipeline {
         echo "  resourceGroup:" >>  nf_resources.yaml
         echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
         echo "    region: ${LOCATION}" >>  nf_resources.yaml
+        echo "  tag: ${KEY1}"
+        echo "  action:"
         cat nf_resources.yaml
         '''
       }

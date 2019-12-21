@@ -101,6 +101,8 @@ pipeline {
         eval cat ~/.ssh/id_rsa.pub
         echo ${WORKSPACE}
         ls ~/ -la
+        ls ~/.ssh -la
+        ls ./quickstarts/docs/python -la
         '''
       }
     }
@@ -153,6 +155,8 @@ pipeline {
                   eval cat logoutput.txt
                   echo ${WORKSPACE}
                   ls ~/ -la
+                  ls ~/.ssh -la
+                  ls ./quickstarts/docs/python -la
                   eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
                   eval cat logoutput.txt
                   eval cat nf_resources.yaml

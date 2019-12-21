@@ -100,6 +100,7 @@ pipeline {
         eval cat ~/.ssh/id_rsa
         eval cat ~/.ssh/id_rsa.pub
         echo ${WORKSPACE}
+        ls ~/ -la
         '''
       }
     }
@@ -151,6 +152,7 @@ pipeline {
                   set -Eeuxo pipefail
                   eval cat logoutput.txt
                   echo ${WORKSPACE}
+                  ls ~/ -la
                   eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
                   eval cat logoutput.txt
                   eval cat nf_resources.yaml

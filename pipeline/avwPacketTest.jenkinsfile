@@ -99,7 +99,7 @@ pipeline {
         ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
         eval cat ~/.ssh/id_rsa
         eval cat ~/.ssh/id_rsa.pub
-        echo ${workspace}
+        echo ${WORKSPACE}
         '''
       }
     }
@@ -150,7 +150,7 @@ pipeline {
                   sh '''
                   set -Eeuxo pipefail
                   eval cat logoutput.txt
-                  echo ${workspace}
+                  echo ${WORKSPACE}
                   eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
                   eval cat logoutput.txt
                   eval cat nf_resources.yaml

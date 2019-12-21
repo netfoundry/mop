@@ -29,6 +29,7 @@ pipeline {
     ARM_TENANT_ID = "25445e86-2ae6-4434-b116-25c66c27168d"
     ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
     AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
+    JOBNAME = "${env.JOB_NAME}"
     // Test Input Variables
     ENVIRONMENT = "${params.ENVIRONMENT}"
     GROUP_NAME = "clouddev-smoke"

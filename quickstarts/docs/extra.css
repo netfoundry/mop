@@ -28,6 +28,11 @@
     }
 } 
 
+.md-nav__button img {
+    width: 200px;
+    height: auto;
+}
+
 img {
     width: auto;
     height: auto;

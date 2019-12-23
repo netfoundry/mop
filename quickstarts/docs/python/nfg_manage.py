@@ -68,42 +68,42 @@ def main(filename, action):
             config = yaml.load(f, Loader=yaml.FullLoader)
     except Exception as e:
         writelog(str(e))
-    # get network url
-    env = os.environ.get('ENVIRONMENT')
-    token = nftn.get_token(env, os.environ.get('SMOKE_TEST_USER'), os.environ.get('SMOKE_TEST_PASS'))
-    writelog('Searching for network id')
-    netUrl = nfnk.find_network(env, os.environ.get('NFN_NAME'), token)
+    if action == 'create' or action == 'delete':
+        # get network url
+        env = os.environ.get('ENVIRONMENT')
+        token = nftn.get_token(env, os.environ.get('SMOKE_TEST_USER'), os.environ.get('SMOKE_TEST_PASS'))
+        writelog('Searching for network id')
+        netUrl = nfnk.find_network(env, os.environ.get('NFN_NAME'), token)
 
-    # manage gateways (list of gateways)
-    for gateway in config['gateway_list']:
-        # need to add this be comparable with script using the yaml file as input for action
-        if action == 'create-terraform':
-            gateway['action'] = 'create-terraform'
-        if action == 'delete-terraform':
-            gateway['action'] = 'delete-terraform'
-        if action == 'create':
-            gateway['action'] = 'create'
-            index = 0
-            while index < gateway['count']:
-                name, regkey = nfgw.create_gateway(env, netUrl, gateway['region'],
-                                                                      gateway['cloud'], index, token)
-                index += 1
-                gateway['names'] = gateway['names'] + [name]
-                gateway['regkeys'] = gateway['regkeys'] + [regkey]
-        if action == 'delete' and gateway['names']:
-            gateway['action'] = 'delete'
-            for name in gateway['names']:
-                try :
-                    gwUrl = nfgw.find_gateway(netUrl, name, token)
-                    nfgw.delete_gateway(gwUrl, token)
-                except Exception as e:
-                    writelog(str(e))
-            gateway['names'] = []
-            gateway['regkeys'] = []
-    if action == 'create' or action == 'create-terraform':
+        # manage gateways (list of gateways)
+        for gateway in config['gateway_list']:
+            # need to add this be comparable with script using the yaml file as input for action
+            if action == 'create-terraform':
+                gateway['action'] = 'create-terraform'
+            if action == 'delete-terraform':
+                gateway['action'] = 'delete-terraform'
+            if action == 'create':
+                gateway['action'] = 'create'
+                index = 0
+                while index < gateway['count']:
+                    name, regkey = nfgw.create_gateway(env, netUrl, gateway['region'],
+                                                                          gateway['cloud'], index, token)
+                    index += 1
+                    gateway['names'] = gateway['names'] + [name]
+                    gateway['regkeys'] = gateway['regkeys'] + [regkey]
+            if action == 'delete' and gateway['names']:
+                gateway['action'] = 'delete'
+                for name in gateway['names']:
+                    try :
+                        gwUrl = nfgw.find_gateway(netUrl, name, token)
+                        nfgw.delete_gateway(gwUrl, token)
+                    except Exception as e:
+                        writelog(str(e))
+                gateway['names'] = []
+                gateway['regkeys'] = []
         # update config file
         update_config_file(filename, config)
-
+    if action == 'create-terraform':
         # create template for terraform
         nftmf.create_file(config)
 
@@ -120,7 +120,7 @@ def main(filename, action):
         command = "terraform apply --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
         terraform_command(command)
 
-    if action == 'delete' or  action == 'delete-terraform':
+    if action == 'delete-terraform':
         # update config file
         update_config_file(filename, config)
 

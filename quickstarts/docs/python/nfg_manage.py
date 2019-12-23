@@ -118,8 +118,8 @@ def main(filename, action):
             command = "terraform workspace select %s" % env
             terraform_command(command)
 
-        command = "terraform apply --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
-        terraform_command(command)
+        #command = "terraform apply --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
+        #terraform_command(command)
 
     if action == 'delete-terraform':
         # update config file
@@ -131,8 +131,8 @@ def main(filename, action):
         command = "terraform workspace select %s" % env
         terraform_command(command)
 
-        command = "terraform destroy --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
-        terraform_command(command)
+        #command = "terraform destroy --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
+        #terraform_command(command)
 
     # manage deployment of gateways with terraform
     if config.get('terraform'):

@@ -91,7 +91,7 @@ pipeline {
         echo "  action:" >>  nf_resources.yaml
         echo "terraform:" >>  nf_resources.yaml
         echo "  bin: terraform" >>  nf_resources.yaml
-        echo "  output: yes" >>  nf_resources.yaml
+        echo "  output: no" >>  nf_resources.yaml
         echo "  source: ./quickstarts/docs/terraform" >>  nf_resources.yaml
         echo "  work_dir: ." >>  nf_resources.yaml
         cat nf_resources.yaml
@@ -167,6 +167,9 @@ pipeline {
                   cat nf_resources.yaml
                   python3 quickstarts/docs/python/nfg_manage.py --action create-terraform --file nf_resources.yaml
                   cat logoutput.txt
+                  cat main.tf.json
+                  terraform apply --auto-approve
+                  terraform output -json
                   cat nf_resources.yaml
                   '''
                 }
@@ -227,6 +230,8 @@ pipeline {
                   cat nf_resources.yaml
                   python3 quickstarts/docs/python/nfg_manage.py --action delete-terraform --file nf_resources.yaml
                   cat logoutput.txt
+                  cat main.tf.json
+                  terraform destroy --auto-approve
                   cat nf_resources.yaml
                   '''
                 }

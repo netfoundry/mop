@@ -17,6 +17,8 @@ pipeline {
     booleanParam(name: 'DELETE_NFNK', defaultValue: true, description: 'Delete NetFoundry Network')
     booleanParam(name: 'CREATE_NFGW', defaultValue: true, description: 'Create NetFoundry Gateway')
     booleanParam(name: 'DELETE_NFGW', defaultValue: true, description: 'Delete NetFoundry Gateway')
+    booleanParam(name: 'DEPLOY_AZGW', defaultValue: true, description: 'Deploy NetFoundry Gateway in Azure')
+    booleanParam(name: 'DESTROY_AZGW', defaultValue: true, description: 'Destroy NetFoundry Gateway in Azure')
     booleanParam(name: 'CREATE_AVWS', defaultValue: true, description: 'Create NetFoundry AVW VPN Site')
     booleanParam(name: 'DELETE_AVWS', defaultValue: true, description: 'Delete NetFoundry AVW VPN Site')
     string(name: 'VNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'vnet entire IP block')

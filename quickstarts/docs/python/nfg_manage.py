@@ -68,9 +68,10 @@ def main(filename, action):
             config = yaml.load(f, Loader=yaml.FullLoader)
     except Exception as e:
         writelog(str(e))
+    # initialized env variable with the passed Environment Variable
+    env = os.environ.get('ENVIRONMENT')
     if action == 'create' or action == 'delete':
         # get network url
-        env = os.environ.get('ENVIRONMENT')
         token = nftn.get_token(env, os.environ.get('SMOKE_TEST_USER'), os.environ.get('SMOKE_TEST_PASS'))
         writelog('Searching for network id')
         netUrl = nfnk.find_network(env, os.environ.get('NFN_NAME'), token)

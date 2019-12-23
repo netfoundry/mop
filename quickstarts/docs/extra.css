@@ -1,0 +1,35 @@
+.md-typeset a {
+    color: #606872;
+}
+
+.md-header {
+    background-color: #606872;
+}
+
+.md-hero {
+    background-color: #606872;
+
+}
+
+
+.md-nav__link:active {
+    color: #606872
+}
+
+.md-tabs {
+
+    background-color: #606872;
+
+}
+
+@media only screen and (max-width:76.1875em) {
+    html .md-nav--primary .md-nav__title--site {
+        background-color: #606872;
+    }
+} 
+
+img {
+    width: auto;
+    height: auto;
+}
+

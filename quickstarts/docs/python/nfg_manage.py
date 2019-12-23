@@ -100,8 +100,7 @@ def main(filename, action):
                     writelog(str(e))
             gateway['names'] = []
             gateway['regkeys'] = []
-    if list(filter(lambda gateway: action == 'create' or
-              action == 'create-terraform', config['gateway_list'])):
+    if action == 'create' or action == 'create-terraform':
         # update config file
         update_config_file(filename, config)
 
@@ -121,8 +120,7 @@ def main(filename, action):
         command = "terraform apply --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
         terraform_command(command)
 
-    if list(filter(lambda gateway: action == 'delete' or
-              action == 'delete-terraform', config['gateway_list'])):
+    if action == 'delete' or  action == 'delete-terraform':
         # update config file
         update_config_file(filename, config)
 

@@ -58,28 +58,28 @@ VPNG_PARAMS = {
 network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
 
 # Create Virtual Network
-async_vnet_creation = network_client.virtual_networks.create_or_update(
-    os.environ.get('GROUP_NAME'),
-    os.environ.get('VNET_NAME'),
-    {
-        'location': os.environ.get('LOCATION'),
-        'address_space': {
-            'address_prefixes': [os.environ.get('VNET_PREFIX')]
-        }
-    }
-)
-async_vnet_creation.wait()
-print(async_vnet_creation.result())
+#async_vnet_creation = network_client.virtual_networks.create_or_update(
+#    os.environ.get('GROUP_NAME'),
+#    os.environ.get('VNET_NAME'),
+#    {
+#        'location': os.environ.get('LOCATION'),
+#        'address_space': {
+#            'address_prefixes': [os.environ.get('VNET_PREFIX')]
+#        }
+#    }
+#)
+#async_vnet_creation.wait()
+#print(async_vnet_creation.result())
 
 # Create Subnet
-async_subnet_creation = network_client.subnets.create_or_update(
-    os.environ.get('GROUP_NAME'),
-    os.environ.get('VNET_NAME'),
-    os.environ.get('SUBNET_NAME'),
-    {'address_prefix': os.environ.get('SUBNET_PREFIX')}
-)
-async_subnet_creation.wait()
-print(async_subnet_creation.result())
+#async_subnet_creation = network_client.subnets.create_or_update(
+#    os.environ.get('GROUP_NAME'),
+#    os.environ.get('VNET_NAME'),
+#    os.environ.get('SUBNET_NAME'),
+#    {'address_prefix': os.environ.get('SUBNET_PREFIX')}
+#)
+#async_subnet_creation.wait()
+#print(async_subnet_creation.result())
 
 # Create VWAN
 async_vwan_creation = network_client.virtual_wans.create_or_update(

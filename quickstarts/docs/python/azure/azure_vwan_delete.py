@@ -40,20 +40,20 @@ print(async_vwan_deletion.result())
 print('VWAN Deleted')
 
 # Delete Subnet
-async_subnet_deletion = network_client.subnets.delete(
-    os.environ.get('GROUP_NAME'),
-    os.environ.get('VNET_NAME'),
-    os.environ.get('SUBNET_NAME')
-)
-async_subnet_deletion.wait()
-print(async_subnet_deletion.result())
-print('Subnet Deleted')
+#async_subnet_deletion = network_client.subnets.delete(
+#    os.environ.get('GROUP_NAME'),
+#    os.environ.get('VNET_NAME'),
+#    os.environ.get('SUBNET_NAME')
+#)
+#async_subnet_deletion.wait()
+#print(async_subnet_deletion.result())
+#print('Subnet Deleted')
 
 # Delete Virtual Network
-async_vnet_deletion = network_client.virtual_networks.delete(
-    os.environ.get('GROUP_NAME'),
-    os.environ.get('VNET_NAME')
-)
-async_vnet_deletion.wait()
-print(async_subnet_deletion.result())
-print('VNET Deleted')
+#async_vnet_deletion = network_client.virtual_networks.delete(
+#    os.environ.get('GROUP_NAME'),
+#    os.environ.get('VNET_NAME')
+#)
+#async_vnet_deletion.wait()
+#print(async_subnet_deletion.result())
+#print('VNET Deleted')

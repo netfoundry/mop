@@ -149,10 +149,10 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval cat nf_resources.yaml
-                  eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
-                  eval cat logoutput.txt
-                  eval cat nf_resources.yaml
+                  cat nf_resources.yaml
+                  python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
+                  cat logoutput.txt
+                  cat nf_resources.yaml
                   '''
                 }
               }
@@ -164,10 +164,10 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval cat nf_resources.yaml
-                  eval python3 quickstarts/docs/python/nfg_manage.py --action create-terraform --file nf_resources.yaml
-                  eval cat logoutput.txt
-                  eval cat nf_resources.yaml
+                  cat nf_resources.yaml
+                  python3 quickstarts/docs/python/nfg_manage.py --action create-terraform --file nf_resources.yaml
+                  cat logoutput.txt
+                  cat nf_resources.yaml
                   '''
                 }
               }
@@ -224,10 +224,10 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval cat nf_resources.yaml
-                  eval python3 quickstarts/docs/python/nfg_manage.py --action delete-terraform --file nf_resources.yaml
-                  eval cat logoutput.txt
-                  eval cat nf_resources.yaml
+                  cat nf_resources.yaml
+                  python3 quickstarts/docs/python/nfg_manage.py --action delete-terraform --file nf_resources.yaml
+                  cat logoutput.txt
+                  cat nf_resources.yaml
                   '''
                 }
               }
@@ -240,10 +240,10 @@ pipeline {
                                  usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval cat nf_resources.yaml
-                  eval python3 quickstarts/docs/python/nfg_manage.py --action delete --file nf_resources.yaml
-                  eval cat logoutput.txt
-                  eval cat nf_resources.yaml
+                  cat nf_resources.yaml
+                  python3 quickstarts/docs/python/nfg_manage.py --action delete --file nf_resources.yaml
+                  cat logoutput.txt
+                  cat nf_resources.yaml
                   '''
                 }
               }

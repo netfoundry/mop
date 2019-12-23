@@ -154,11 +154,7 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval cat logoutput.txt
-                  echo ${WORKSPACE}
-                  ls ~/ -la
-                  ls ~/.ssh -la
-                  ls ./quickstarts/docs/python -la
+                  eval cat nf_resources.yaml
                   eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
                   eval cat logoutput.txt
                   eval cat nf_resources.yaml
@@ -173,11 +169,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval cat logoutput.txt
-                  echo ${WORKSPACE}
-                  ls ~/ -la
-                  ls ~/.ssh -la
-                  ls ./quickstarts/docs/python -la
+                  eval cat nf_resources.yaml
                   eval python3 quickstarts/docs/python/nfg_manage.py --action create-terraform --file nf_resources.yaml
                   eval cat logoutput.txt
                   eval cat nf_resources.yaml
@@ -217,25 +209,6 @@ pipeline {
         }
         stage('Delete NF Resources'){
           stages {
-            stage('Destroy NF Gateways') {
-              when { expression { params.DESTROY_AZGW }}
-              steps {
-                // Steps to Destroy NF Gateways VMs in Azure based on Terraform plan
-                withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
-                  sh '''
-                  set -Eeuxo pipefail
-                  eval cat logoutput.txt
-                  echo ${WORKSPACE}
-                  ls ~/ -la
-                  ls ~/.ssh -la
-                  ls ./quickstarts/docs/python -la
-                  eval python3 quickstarts/docs/python/nfg_manage.py --action delete-terraform --file nf_resources.yaml
-                  eval cat logoutput.txt
-                  eval cat nf_resources.yaml
-                  '''
-                }
-              }
-            }
             stage('Delete NF AVW VPN Site') {
               when { expression { params.DELETE_AVWS }}
               steps {
@@ -243,6 +216,21 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                   sh '''
                   set -Eeuxo pipefail
+                  eval cat logoutput.txt
+                  eval cat nf_resources.yaml
+                  '''
+                }
+              }
+            }
+            stage('Destroy NF Gateways') {
+              when { expression { params.DESTROY_AZGW }}
+              steps {
+                // Steps to Destroy NF Gateways VMs in Azure based on Terraform plan
+                withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+                  sh '''
+                  set -Eeuxo pipefail
+                  eval cat nf_resources.yaml
+                  eval python3 quickstarts/docs/python/nfg_manage.py --action delete-terraform --file nf_resources.yaml
                   eval cat logoutput.txt
                   eval cat nf_resources.yaml
                   '''
@@ -257,7 +245,7 @@ pipeline {
                                  usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval terraform --version
+                  eval cat nf_resources.yaml
                   eval python3 quickstarts/docs/python/nfg_manage.py --action delete --file nf_resources.yaml
                   eval cat logoutput.txt
                   eval cat nf_resources.yaml

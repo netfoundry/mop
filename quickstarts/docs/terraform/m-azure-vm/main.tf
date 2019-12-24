@@ -139,6 +139,7 @@ resource "null_resource" "gateway_registration" {
     type     = "ssh"
     user     = "nfadmin"
     private_key = "${file("~/.ssh/id_rsa")}"
+    timeout  = "15m"
   }
 
   provisioner "remote-exec" {

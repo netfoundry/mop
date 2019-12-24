@@ -38,14 +38,14 @@ def create_file(config):
                 rg = nftm.create_rg_azure(module['resourceGroup'],
                                       module['tag'],
                                       os.path.expanduser(config['terraform']['source']))
-                vnet = nftm.create_vnet_azure(module['region']+'_rg',
+                vnet = nftm.create_vnet_azure(module['resourceGroup']['region']+'_rg',
                                       module['region'],
                                       module['regionalCidr'],
                                       module['tag'],
                                       os.path.expanduser(config['terraform']['source']))
                 index = 0
                 while index < module['count']:
-                    vm = nftm.create_vm_azure(module['region']+'_rg',
+                    vm = nftm.create_vm_azure(module['resourceGroup']['region']+'_rg',
                                           module['region'],
                                           module['names'][index],
                                           module['regkeys'][index],
@@ -59,8 +59,8 @@ def create_file(config):
                     index += 1
                 # check if the new modlue is not already created, eliminate duplicates
                 check_list = create_list_keys(tf_main["module"])
-                if module['region']+'_rg' not in check_list:
-                    tf_main["module"] = tf_main["module"] + [{module['region']+'_rg': rg}]
+                if module['resourceGroup']['region']+'_rg' not in check_list:
+                    tf_main["module"] = tf_main["module"] + [{module['resourceGroup']['region']+'_rg': rg}]
                 if module['region']+'_vnet' not in check_list:
                     tf_main["module"] = tf_main["module"] + [{module['region']+'_vnet': vnet}]
     filename = "%s/main.tf.json" % os.path.expanduser(config['terraform']['work_dir'])

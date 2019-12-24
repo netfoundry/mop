@@ -171,6 +171,9 @@ pipeline {
                   cat logoutput.txt
                   cat main.tf.json
                   terraform apply --auto-approve
+                  terraform state list
+                  terraform state rm module.westus2_rg.azurerm_resource_group.terraformgroup
+                  terraform state list
                   terraform output -json
                   cat nf_resources.yaml
                   '''
@@ -230,10 +233,10 @@ pipeline {
                   sh '''
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
-                  python3 quickstarts/docs/python/nfg_manage.py --action delete-terraform --file nf_resources.yaml
-                  cat logoutput.txt
                   cat main.tf.json
+                  terraform state list
                   terraform destroy --auto-approve
+                  terraform state list
                   cat nf_resources.yaml
                   '''
                 }

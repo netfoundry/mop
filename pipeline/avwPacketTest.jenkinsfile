@@ -184,32 +184,6 @@ pipeline {
               steps {
                 // the build steps to create NF AVW VPN Site
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
-                  //https://gateway.sandbox.netfoundry.io/rest/v1/azureSubscriptions/d09dea58-25f5-48ac-9787-ce726b042422/virtualWanSites
-                  //https://gateway.sandbox.netfoundry.io/rest/v1/azureSubscriptions
-                  {
-                    "name" : "DariuszVsite1",
-                    "endpointId": "782eb951-34c9-49f2-81e4-67f67942110c",
-                    "azureResourceGroupName": "dariusz.sliwinski",
-                    "azureVirtualWanId" : "/subscriptions/8699c8dd-f425-46fa-85ef-cefe299aeb4f/resourceGroups/dariusz.sliwinski/providers/Microsoft.Network/virtualWans/DariuszVwan01",
-                    "publicIpAddress" : "35.183.43.110",
-                    "dataCenterId": "98272047-d625-427e-ad0f-67ec43280023",
-                    "bgp" : {
-                      "localPeeringAddress" : {
-                        "ipAddress" : "10.0.10.116",
-                        "asn" : 65000
-                      },
-                      "bgpPeerWeight" : null,
-                      "deviceLinkSpeed" : 0,
-                      "deviceVendor" : null,
-                      "deviceModel" : null,
-                      "neighborPeers" : [ {
-                        "ipAddress" : "10.0.10.55",
-                        "asn" : "65000"
-                      } ],
-                      "advertiseLocal" : true,
-                      "advertisedPrefixes" : [ "172.20.254.0/24" ]
-                    }
-                  }
                   sh '''
                   set -Eeuxo pipefail
                   terraform output -json

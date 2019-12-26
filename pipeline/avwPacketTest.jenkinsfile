@@ -170,7 +170,7 @@ pipeline {
                   python3 quickstarts/docs/python/nfg_manage.py --action create-terraform --file nf_resources.yaml
                   cat logoutput.txt
                   jq . main.tf.json
-                  terraform apply --auto-approve  && echo "OK" || terraform destroy --auto-approve
+                  eval terraform apply --auto-approve  && echo "OK" || terraform destroy --auto-approve
                   terraform state list
                   terraform state rm module.westus2_rg.azurerm_resource_group.terraformgroup
                   terraform state list

@@ -117,7 +117,7 @@ def main(filename, action):
         if newSerr == ('workspace %s already exists' % env):
             command = "terraform workspace select %s" % env
             terraform_command(command)
-
+            
         #command = "terraform apply --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
         #terraform_command(command)
 

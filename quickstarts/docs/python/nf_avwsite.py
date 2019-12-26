@@ -61,16 +61,16 @@ def create_avw_site(filename):
     print(avwSiteUrl)
     # create avw vpn site
     azureVirtualWanId = "/subscriptions/"+os.environ.get('ARM_SUBSCRIPTION_ID')+"/resourceGroups/"+os.environ.get('GROUP_NAME')+"/providers/Microsoft.Network/virtualWans/"+os.environ.get('VWAN_NAME')
-    data = nfreq.post_data(avwSiteUrl, {
+    createData = nfreq.post_data(avwSiteUrl, {
                                         "name": gwName,
                                         "endpointId": gwId,
                                         "azureResourceGroupName": os.environ.get('GROUP_NAME'),
                                         "azureVirtualWanId" : azureVirtualWanId,
-                                        "publicIpAddress" : "35.183.43.110",
+                                        "publicIpAddress" : os.environ.get('AVW_SITE_PUBLIC_IP'),
                                         "dataCenterId": dcId,
                                         "bgp" : {
                                         "localPeeringAddress" : {
-                                          "ipAddress" : "10.0.10.116",
+                                          "ipAddress" : os.environ.get('AVW_SITE_PRIVATE_IP'),
                                           "asn" : 65000
                                         },
                                         "bgpPeerWeight" : 0,
@@ -78,14 +78,16 @@ def create_avw_site(filename):
                                         "deviceVendor" : None,
                                         "deviceModel" : None,
                                         "neighborPeers" : [ {
-                                          "ipAddress" : "10.0.10.55",
+                                          "ipAddress" : os.environ.get('AVW_SITE_PEER_PRIVATE_IP'),
                                           "asn" : 65000
                                         } ],
                                         "advertiseLocal" : True,
                                         "advertisedPrefixes" : []
                                         }
                                        }, token)
-    return data
+    deployData = nfreq.put_data(createData['_links']['self']['href']+"/deploy", None, token)
+
+    return createData, deployData
 
 
 def delete_avw_site():

@@ -64,7 +64,7 @@ def create_vm_azure(rg, region, vmName, nfkey, subnet, tag, source):
     }
     return tf_module_vm
 
-def create_output(instance):
-    value = "${module.%s.instance_public_ips}" % instance
+def create_output(instance, item):
+    value = "${module.%s.%s}" % (instance, item)
     tf_output = {"value": [value]}
     return tf_output

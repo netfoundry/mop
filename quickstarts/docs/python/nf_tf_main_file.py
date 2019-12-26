@@ -29,7 +29,7 @@ def create_file(config):
                                           module['regkeys'][index],
                                           os.path.expanduser(config['terraform']['source']))
                     tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
-                    output = "public_ips_" + str(module['names'][index])
+                    output = str(module['names'][index])
                     value = nftm.create_output(module['names'][index])
                     tf_main["output"] = tf_main["output"] + [{output: value}]
                     index += 1
@@ -53,9 +53,10 @@ def create_file(config):
                                           module['tag'],
                                           os.path.expanduser(config['terraform']['source']))
                     tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
-                    output = "public_ips_" + str(module['names'][index])
-                    value = nftm.create_output(module['names'][index])
-                    tf_main["output"] = tf_main["output"] + [{output: value}]
+                    for item in ['public_ips', 'private_ips']:
+                        output = str(module['names'][index]) + '_' + item
+                        value = nftm.create_output(module['names'][index], item)
+                        tf_main["output"] = tf_main["output"] + [{output: value}]
                     index += 1
                 # check if the new modlue is not already created, eliminate duplicates
                 check_list = create_list_keys(tf_main["module"])

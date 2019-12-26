@@ -149,6 +149,10 @@ resource "null_resource" "gateway_registration" {
   }
 }
 
-output "instance_public_ips" {
+output "public_ips" {
   value = "${azurerm_public_ip.terraformpublicip.*.ip_address}"
+}
+
+output "private_ips" {
+  value = "${azurerm_network_interface.terraformnic.*.private_ip_address}"
 }

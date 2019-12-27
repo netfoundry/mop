@@ -60,8 +60,8 @@ def create_avw_site(filename):
     try:
         avwSiteUrl = nfreq.get_data(azureSubscriptionsURL, token)['_embedded']['azureSubscriptions'][0]['_links']['self']['href']+'/virtualWanSites'
     except KeyError as kerr:
-        print(kerr.message)
-        if kerr.message == '_embedded':
+        print(kerr.args)
+        if kerr.args[0] == '_embedded':
             data = nfreq.post_data(azureSubscriptionsURL, {
                                     "name" : "AVW Packet Test",
                                     "subscriptionId" : os.environ.get('ARM_SUBSCRIPTION_ID'),

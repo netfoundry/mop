@@ -41,7 +41,11 @@ def create_gateway(env, netUrl, loc, type, index, token):
                              "geoRegionId": None,
                              "dataCenterId": dcId,
                              "o365BreakoutNextHopIp": None}, token)
-    gwName = new_gw['name']
+    try:
+        gwName = new_gw['name']
+    except TypeError as terr:
+        print(terr.args[0])
+        sys.exit(1)
     gwRegKey = new_gw['registrationKey']
     gwUrl = new_gw['_links']['self']['href']
     gwstatus = False

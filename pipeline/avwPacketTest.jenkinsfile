@@ -167,7 +167,7 @@ pipeline {
                   sh '''
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
-                  terraform destroy --auto-approve
+                  rm -Rf terraform.tfstate.d
                   python3 quickstarts/docs/python/nfg_manage.py --action create-terraform --file nf_resources.yaml
                   cat logoutput.txt
                   jq . main.tf.json

@@ -57,7 +57,19 @@ def create_avw_site(filename):
     # build Azure Subscriptions Url for a given NF Enviroment API
     azureSubscriptionsURL = 'https://gateway.' + env + '.netfoundry.io/rest/v1/azureSubscriptions'
     # get Azure Subscriptions url of the first one, the assumption is that there is only one.
-    avwSiteUrl = nfreq.get_data(azureSubscriptionsURL, token)['_embedded']['azureSubscriptions'][0]['_links']['self']['href']+'/virtualWanSites'
+    try:
+        avwSiteUrl = nfreq.get_data(azureSubscriptionsURL, token)['_embedded']['azureSubscriptions'][0]['_links']['self']['href']+'/virtualWanSites'
+    except KeyError as kerr:
+        if kerr == '_embedded':
+            data = nfreq.post_data(azureSubscriptionsURL, {
+                                    "name" : "AVW Packet Test",
+                                    "subscriptionId" : os.environ.get('ARM_SUBSCRIPTION_ID'),
+                                    "tenantId" : os.environ.get('ARM_TENANT_ID'),
+                                    "applicationId" : os.environ.get('ARM_CLIENT_ID'),
+                                    "applicationKey" : os.environ.get('ARM_CLIENT_SECRET')
+                                  }, token)
+
+            avwSiteUrl = data['_links']['self']['href']+'/virtualWanSites'
     print(avwSiteUrl)
     # create avw vpn site
     azureVirtualWanId = "/subscriptions/"+os.environ.get('ARM_SUBSCRIPTION_ID')+"/resourceGroups/"+os.environ.get('GROUP_NAME')+"/providers/Microsoft.Network/virtualWans/"+os.environ.get('VWAN_NAME')

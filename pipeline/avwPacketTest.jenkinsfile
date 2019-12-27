@@ -184,7 +184,8 @@ pipeline {
               when { expression { params.CREATE_AVWS}}
               steps {
                 // the build steps to create NF AVW VPN Site
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']],
+                                [usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
                   sh '''
                   set -Eeuxo pipefail
                   export AVW_SITE_PRIVATE_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`

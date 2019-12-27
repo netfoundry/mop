@@ -98,6 +98,18 @@ def create_avw_site(filename):
                                         "advertisedPrefixes" : []
                                         }
                                        }, token)
+    avwSiteSatus = False
+    print('\nWaiting for AVW Site to be ready for Azure Deployment!\n')
+    while not avwSiteSatus:
+        try:
+            result = nfreq.get_data(createData['_links']['self']['href'], token)
+            if result['status'] == 300:
+                print('\nAVW Site is ready to be deployed!\n')
+                avwSiteSatus = True
+        except Exception as e:
+            print(e)
+            print('\nError checking GW status!\n')
+        time.sleep(5)
     deployData = nfreq.put_data(createData['_links']['self']['href']+"/deploy", None, token)
 
     return createData, deployData

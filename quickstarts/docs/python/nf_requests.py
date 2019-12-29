@@ -35,6 +35,7 @@ def nf_req(req, method, token=None):
             try:
                 handle = requests.post(req[0], data=req[1], timeout=timeout, verify=verify)
                 writelog(str(handle.status_code))
+                writelog(handle.headers)
                 return handle.json()
             except Exception as e:
                 writelog(e)
@@ -46,6 +47,7 @@ def nf_req(req, method, token=None):
             try:
                 handle = requests.post(req[0], data=req[1], timeout=timeout, headers=headers, verify=verify)
                 writelog(str(handle.status_code))
+                writelog(handle.headers)
                 return handle.json()
             except Exception as e:
                 writelog(e)
@@ -58,6 +60,7 @@ def nf_req(req, method, token=None):
             try:
                 handle = requests.get(req, timeout=timeout, headers=headers, verify=verify)
                 writelog(str(handle.status_code))
+                writelog(handle.headers)
                 return handle.json()
             except Exception as e:
                 writelog(e)
@@ -69,6 +72,7 @@ def nf_req(req, method, token=None):
             try:
                 handle = requests.delete(req, timeout=timeout, headers=headers, verify=verify)
                 writelog(str(handle.status_code))
+                writelog(handle.headers)
                 return handle
             except Exception as e:
                 writelog(e)
@@ -80,6 +84,7 @@ def nf_req(req, method, token=None):
             try:
                 handle = requests.put(req[0], data=req[1], timeout=timeout, headers=headers, verify=verify)
                 writelog(str(handle.status_code))
+                writelog(handle.headers)
                 return handle.json()
             except Exception as e:
                 writelog(e)

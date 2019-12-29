@@ -11,7 +11,8 @@ import nf_requests as nfreq
 import nf_gateway as nfgw
 import nf_network as nfnk
 import nf_token as nftn
-
+from azure.mgmt.network import NetworkManagementClient
+from azure.common.credentials import ServicePrincipalCredentials
 
 def clear_log():
     logfile = open('logoutput.txt', 'w')
@@ -22,6 +23,67 @@ def writelog(message):
     logfile = open('logoutput.txt', 'a+')
     logfile.write(str(datetime.datetime.now()) + ' avwsite-log ' + str(message) + '\n')
     logfile.close()
+
+
+def vpn_site_connection_creation(siteName):
+    # setup Azure Login Credentials from Environmental Variables
+    credentials = ServicePrincipalCredentials(
+        client_id = os.environ.get('ARM_CLIENT_ID'),
+        secret = os.environ.get('ARM_CLIENT_SECRET'),
+        tenant = os.environ.get('ARM_TENANT_ID')
+    )
+
+    # declaire Test Input Variables
+    CONNECTION_PARAMS = {
+        'enable_bgp': True,
+        'remote_vpnsite': {
+          'id': "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Network/vpnSites/%s" % (os.environ.get('ARM_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'), siteName)
+        }
+    }
+
+    # Connect to Azure APIs and get session details
+    network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
+
+    # Delay for 30 seconds before deleting resources
+    time.sleep(60)
+
+    # Create VPN Site Connection to VPNG
+    async_vpn_site_connection_creation = network_client.vpn_connections.create_or_update(
+        os.environ.get('GROUP_NAME'),
+        os.environ.get('VPNG_NAME'),
+        'CONNECTION_' + siteName),
+        CONNECTION_PARAMS,
+        custom_headers=None,
+        raw=False,
+        polling=True
+    )
+    async_vpn_site_connection_creation.wait()
+    print(async_vpn_site_connection_creation.result())
+
+
+def vpn_site_connection_deletion(siteName):
+    # setup Azure Login Credentials from Environmental Variables
+    credentials = ServicePrincipalCredentials(
+        client_id = os.environ.get('ARM_CLIENT_ID'),
+        secret = os.environ.get('ARM_CLIENT_SECRET'),
+        tenant = os.environ.get('ARM_TENANT_ID')
+    )
+
+    # Connect to Azure APIs and get session details
+    network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
+
+    # Delete VPN Site Connection to VPNG
+    async_vpn_site_connection_deletion = network_client.vpn_connections.delete(
+        os.environ.get('GROUP_NAME'),
+        os.environ.get('VPNG_NAME'),
+        'CONNECTION_' + siteName,
+        custom_headers=None,
+        raw=False,
+        polling=True
+    )
+    async_vpn_site_connection_deletion.wait()
+    print(async_vpn_site_connection_deletion.result())
+    print('VPN Site Connection to VPNG Deleted')
 
 
 def create_avw_site(filename):
@@ -98,20 +160,9 @@ def create_avw_site(filename):
                                         "advertisedPrefixes" : []
                                         }
                                        }, token)
-    avwSiteSatus = False
-    print('\nWaiting for AVW Site to be ready for Azure Deployment!\n')
-    while not avwSiteSatus:
-        try:
-            result = nfreq.get_data(createData['_links']['self']['href'], token)
-            if result['status'] == 300:
-                print('\nAVW Site is ready to be deployed!\n')
-                avwSiteSatus = True
-        except Exception as e:
-            print(e)
-            print('\nError checking GW status!\n')
-        time.sleep(5)
-    deployData = nfreq.put_data(createData['_links']['self']['href']+"/deploy", None, token)
-
+    deployData = nfreq.put_data(createData['_links']['self']['href']+"/deploy", {}, token)
+    # Connect th enewly created site to the Azure VPN Gateway
+    vpn_site_connection_creation(gwName)
     return createData, deployData
 
 
@@ -122,6 +173,9 @@ def delete_avw_site():
     nfn_url = nfnk.find_network(os.environ.get('ENVIRONMENT'), os.environ.get('NFN_NAME'), token)
     # get AVW Site url of the first one, the assumption is that there is only one.
     avwSite_url = nfreq.get_data(nfn_url+'/virtualWanSites', token)['_embedded']['azureVirtualWanSites'][0]['_links']['self']['href']
+    # Disconnect the VPN site under test from the Azure VPN Gateway
+    vpn_site_connection_deletion(avwSite_url.split('/')[8])
+    # Delete the site from the NF Network
     data = nfreq.delete_nf(avwSite_url, token)
     return data
 

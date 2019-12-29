@@ -180,25 +180,38 @@ pipeline {
                 }
               }
             }
-            stage('Create NF AVW VPN Site') {
-              when { expression { params.CREATE_AVWS}}
-              steps {
-                // the build steps to create NF AVW VPN Site
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS'],
-                                usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
-                  sh '''
-                  set -Eeuxo pipefail
-                  export AVW_SITE_PRIVATE_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
-                  export AVW_SITE_PUBLIC_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_public_ips.value[][]`
-                  export AVW_SITE_PEER_PRIVATE_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
-                  export VW_SITE_PEER_PUBLIC_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]`
-                  python3 quickstarts/docs/python/nf_avwsite.py --action create --file nf_resources.yaml
-                  eval cat logoutput.txt
-                  '''
-                }
-              }
-            }
           }
+        }
+      }
+    }
+    stage('Create NF AVW VPN Site') {
+      when { expression { params.CREATE_AVWS}}
+      steps {
+        // the build steps to create NF AVW VPN Site
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS'],
+                        usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+          sh '''
+          set -Eeuxo pipefail
+          export AVW_SITE_PRIVATE_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
+          export AVW_SITE_PUBLIC_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_public_ips.value[][]`
+          export AVW_SITE_PEER_PRIVATE_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
+          export VW_SITE_PEER_PUBLIC_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]`
+          python3 quickstarts/docs/python/nf_avwsite.py --action create --file nf_resources.yaml
+          eval cat logoutput.txt
+          '''
+        }
+      }
+    }
+    stage('Delete NF AVW VPN Site') {
+      when { expression { params.DELETE_AVWS }}
+      steps {
+        // the build steps to delete NF Network
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+          sh '''
+          set -Eeuxo pipefail
+          python3 quickstarts/docs/python/nf_avwsite.py --action delete
+          eval cat logoutput.txt
+          '''
         }
       }
     }
@@ -217,19 +230,6 @@ pipeline {
         }
         stage('Delete NF Resources'){
           stages {
-            stage('Delete NF AVW VPN Site') {
-              when { expression { params.DELETE_AVWS }}
-              steps {
-                // the build steps to delete NF Network
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
-                  sh '''
-                  set -Eeuxo pipefail
-                  python3 quickstarts/docs/python/nf_avwsite.py --action delete
-                  eval cat logoutput.txt
-                  '''
-                }
-              }
-            }
             stage('Destroy NF Gateways') {
               when { expression { params.DESTROY_AZGW }}
               steps {

@@ -51,7 +51,7 @@ def vpn_site_connection_creation(siteName):
     async_vpn_site_connection_creation = network_client.vpn_connections.create_or_update(
         os.environ.get('GROUP_NAME'),
         os.environ.get('VPNG_NAME'),
-        'CONNECTION_' + siteName),
+        'CONNECTION_' + siteName,
         CONNECTION_PARAMS,
         custom_headers=None,
         raw=False,

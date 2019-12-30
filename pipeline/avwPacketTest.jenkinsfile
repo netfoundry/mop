@@ -248,9 +248,9 @@ pipeline {
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
                   jq . main.tf.json
-                  terraform state list
-                  terraform destroy --auto-approve
-                  terraform state list
+                  eval terraform state list
+                  eval terraform destroy --auto-approve
+                  eval terraform state list
                   cat nf_resources.yaml
                   '''
                 }

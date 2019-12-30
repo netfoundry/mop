@@ -36,7 +36,7 @@ def vpn_site_connection_creation(siteName):
     # declaire Test Input Variables
     CONNECTION_PARAMS = {
         'enable_bgp': True,
-        'remote_vpnsite': {
+        'remote_vpn_site': {
           'id': "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Network/vpnSites/%s" % (os.environ.get('ARM_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'), siteName)
         }
     }

@@ -206,7 +206,7 @@ pipeline {
       steps {
         //Run test Cases to pass packet across the AVW Network
         sh '''
-        eval sleep 5m
+        eval sleep 30m
         '''
       }
     }

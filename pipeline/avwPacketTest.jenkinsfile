@@ -202,11 +202,18 @@ pipeline {
         }
       }
     }
+    stage('Test Case 1') {
+      //Run test Cases to pass packet across the AVW Network
+      sh '''
+      eval sleep 5m
+      '''
+    }
     stage('Delete NF AVW VPN Site') {
       when { expression { params.DELETE_AVWS }}
       steps {
         // the build steps to delete NF Network
-        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS'],
+                        usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           sh '''
           set -Eeuxo pipefail
           python3 quickstarts/docs/python/nf_avwsite.py --action delete

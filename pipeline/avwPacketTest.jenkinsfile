@@ -203,10 +203,12 @@ pipeline {
       }
     }
     stage('Test Case 1') {
-      //Run test Cases to pass packet across the AVW Network
-      sh '''
-      eval sleep 5m
-      '''
+      steps {
+        //Run test Cases to pass packet across the AVW Network
+        sh '''
+        eval sleep 5m
+        '''
+      }
     }
     stage('Delete NF AVW VPN Site') {
       when { expression { params.DELETE_AVWS }}

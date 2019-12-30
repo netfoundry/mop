@@ -39,4 +39,8 @@
 
 {!common/create-azure-gateway.md!}
 
+{!common/create-ip-network-service.md!}
+
+{!common/create-appwan.md!}
+
 

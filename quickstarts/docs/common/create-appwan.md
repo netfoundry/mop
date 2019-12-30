@@ -11,4 +11,4 @@ This section will guide a user through the steps on how to enable service connec
     ![Image](../images/CreateAppWan03.png)
     1. Click on "Create".
     ![Image](../images/CreateAppWan04.png)
-    1. Done
+    1. Done 

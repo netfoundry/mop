@@ -81,7 +81,6 @@ def vpn_site_connection_deletion(siteName):
         raw=False,
         polling=True
     )
-    async_vpn_site_connection_show.wait()
     print(async_vpn_site_connection_show.result())
 
     # Delete VPN Site Connection to VPNG

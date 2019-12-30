@@ -5,7 +5,7 @@
 
 **What is a Bastion Host?**
 
-`A bastion host is a server whose purpose is to provide access to a private network from an external network, such as the Internet. Because of its exposure to potential attack, it's important to lock this down ast tightly as possile.`
+`A bastion host is a server whose purpose is to provide access to a private network from an external network, such as the Internet. Because of its exposure to potential attack, it's important to lock this down as tightly as possible.`
 
 **How can NetFoundry Help?**
 
@@ -13,7 +13,7 @@
 
 # Solution Architecture
 
-## Standard AWS Bastion
+## Standard Bastion Setup
 
 ![image](../images/bastion-host.png)
 
@@ -35,6 +35,8 @@
 
 # Implement Through NF Web Console UI
 
-{!common/nf-client-install.md!}
+{!common/install-nf-client.md!}
+
+{!common/create-aws-gateway.md!}
 
 

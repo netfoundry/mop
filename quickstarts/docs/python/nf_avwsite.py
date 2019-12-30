@@ -72,6 +72,18 @@ def vpn_site_connection_deletion(siteName):
     # Connect to Azure APIs and get session details
     network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
 
+    # Show VPN Site Connection to VPNG
+    async_vpn_site_connection_show = network_client.vpn_connections.get(
+        os.environ.get('GROUP_NAME'),
+        os.environ.get('VPNG_NAME'),
+        'CONNECTION_' + siteName,
+        custom_headers=None,
+        raw=False,
+        polling=True
+    )
+    async_vpn_site_connection_show.wait()
+    print(async_vpn_site_connection_show.result())
+
     # Delete VPN Site Connection to VPNG
     async_vpn_site_connection_deletion = network_client.vpn_connections.delete(
         os.environ.get('GROUP_NAME'),

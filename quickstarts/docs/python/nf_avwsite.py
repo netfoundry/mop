@@ -184,11 +184,11 @@ def delete_avw_site():
     # get network url
     nfn_url = nfnk.find_network(os.environ.get('ENVIRONMENT'), os.environ.get('NFN_NAME'), token)
     # get AVW Site url of the first one, the assumption is that there is only one.
-    avwSite_url = nfreq.get_data(nfn_url+'/virtualWanSites', token)['_embedded']['azureVirtualWanSites'][0]['_links']['self']['href']
+    avwSite = nfreq.get_data(nfn_url+'/virtualWanSites', token)['_embedded']['azureVirtualWanSites'][0]
     # Disconnect the VPN site under test from the Azure VPN Gateway
-    vpn_site_connection_deletion(avwSite_url.split('/')[8])
+    vpn_site_connection_deletion(avwSite['name'])
     # Delete the site from the NF Network
-    data = nfreq.delete_nf(avwSite_url, token)
+    data = nfreq.delete_nf(avwSite['_links']['self']['href'], token)
     return data
 
 

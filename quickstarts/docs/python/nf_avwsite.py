@@ -78,10 +78,9 @@ def vpn_site_connection_deletion(siteName):
         os.environ.get('VPNG_NAME'),
         'CONNECTION_' + siteName,
         custom_headers=None,
-        raw=False,
-        polling=True
+        raw=False
     )
-    print(async_vpn_site_connection_show.result())
+    print(async_vpn_site_connection_show)
 
     # Delete VPN Site Connection to VPNG
     async_vpn_site_connection_deletion = network_client.vpn_connections.delete(

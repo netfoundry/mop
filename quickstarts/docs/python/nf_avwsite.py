@@ -93,7 +93,6 @@ def vpn_site_connection_deletion(siteName):
         raw=False,
         polling=True
     )
-    async_vpn_site_connection_deletion.wait()
     print(async_vpn_site_connection_deletion.result())
     print('VPN Site Connection to VPNG Deleted')
 

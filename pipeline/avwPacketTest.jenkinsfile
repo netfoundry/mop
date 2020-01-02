@@ -229,9 +229,10 @@ pipeline {
         '''
         sh '''
         set -Eeuxo pipefail
-        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr -u nfadmin -e customerRouter=True -v
+        eval export ANSIBLE_HOST_KEY_CHECKING=False
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr -u nfadmin -e customerRouter=True -vvvv
         cat /opt/netfoundry/nfroute/etc/routes_local.json
-        tail /var/log/nf-routing-host.log
+        cat /var/log/nf-routing-host.log
         '''
       }
     }

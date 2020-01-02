@@ -16,4 +16,3 @@
   become: True
   roles:
     - { role: app-server, tags: ["app-server"], when: appServer is defined }
-...

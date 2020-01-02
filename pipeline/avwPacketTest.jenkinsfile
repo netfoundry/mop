@@ -211,6 +211,23 @@ pipeline {
         sh '''
         eval sleep 30m
         '''
+        sh '''
+        set -Eeuxo pipefail
+        echo "[customer-router]" >| quickstarts/docs/ansible/hosts
+        echo `terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
+
+        localIP=`eval terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
+        localPeerIp=`eval terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
+
+        echo "bgp:" >| quickstarts/docs/ansible/customer-router/vars/bgp.yml
+        echo " localIp: ${localIp}" >> quickstarts/docs/ansible/customer-router/vars/bgp.yml
+        echo " localPeerIp: ${localPeerIp}"" >> quickstarts/docs/ansible/customer-router/vars/bgp.yml
+        cat quickstarts/docs/ansible/customer-router/vars/bgp.yml
+        '''
+        sh '''
+        set -Eeuxo pipefail
+        eval ansible -i hosts
+        '''
       }
     }
     stage('Delete NF AVW VPN Site') {

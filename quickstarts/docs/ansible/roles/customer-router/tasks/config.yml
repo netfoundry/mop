@@ -1,0 +1,8 @@
+---
+- name: config | Configuring daemons
+  template:
+    src: routes_local.json.j2
+    dest: /opt/netfoundry/nfroute/etc/routes_local.json
+    owner: nfadmin
+    group: nfadmin
+    mode: u=rw,g=r,o=r

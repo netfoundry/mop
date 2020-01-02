@@ -1,0 +1,51 @@
+---
+# handlers file for frr
+- name: full restart frr
+  service:
+    name: frr
+    state: restarted
+    enabled: true
+  become: true
+  listen: "restart frr"
+
+- name: reload frr
+  service:
+    name: frr
+    state: reloaded
+    enabled: true
+  become: true
+  listen: "reload frr"
+
+# handlers file for frr-routing
+- name: full restart frr-routing service
+  service:
+    name: frr-routing.service
+    state: restarted
+    enabled: true
+  become: true
+  listen: "restart frr-routing"
+
+- name: full restart frr-routing timer
+  service:
+    name: frr-routing.timer
+    state: restarted
+    enabled: true
+  become: true
+  listen: "restart frr-routing timer"
+
+# handlers file for mop-routing
+- name: full restart mop-routing service
+  service:
+    name: mop-routing.service
+    state: restarted
+    enabled: true
+  become: true
+  listen: "restart mop-routing"
+
+- name: full restart mop-routing timer
+  service:
+    name: mop-routing.timer
+    state: restarted
+    enabled: true
+  become: true
+  listen: "restart mop-routing timer"

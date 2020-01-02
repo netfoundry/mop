@@ -1,0 +1,40 @@
+---
+# defaults file for frr
+frr_daemons:
+  zebra: true
+  bgpd: false
+  ospfd: false
+  ospf6d: false
+  ripd: false
+  ripngd: false
+  isisd: false
+  ldpd: false
+  pimd: false
+  nhrpd: false
+  eigrpd: false
+  babeld: false
+  sharpd: false
+  pbrd: false
+  bfdd: false
+
+frr_enable_vtysh: true
+
+# Define any interfaces which you would like IP addresses configured on
+frr_interfaces: []
+  # enp0s9:
+  #   description: network-1
+  #   ip: 192.168.1.10/24
+  # enp0s10:
+  #   description: network-2
+  #   ip: 192.168.2.10/24
+  # enp0s16:
+  #   description: network-3
+  #   ip: 192.168.3.10/24
+  # lo:
+  #   description: router-id
+  #   ip: "{{ frr_router_id }}/32"
+
+frr_password: zebra
+
+configuration_type: traditional
+log_type: syslog

@@ -1,0 +1,19 @@
+---
+- name: customer-router
+  hosts: customer-router
+  become: True
+  roles:
+    - { role: customer-router, tags: ["customer-router"], when: customerRouter is defined }
+
+- name: frr
+  hosts: customer-router
+  become: True
+  roles:
+    - { role: frr, tags: ["frr"], when: customerRouter is defined }
+
+- name: app-server
+  hosts: app-server
+  become: True
+  roles:
+    - { role: app-server, tags: ["app-server"], when: appServer is defined }
+...

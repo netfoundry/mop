@@ -1,0 +1,4 @@
+---
+# tasks file for frr
+- include_vars: bgp.yml
+- include_tasks: config.yml

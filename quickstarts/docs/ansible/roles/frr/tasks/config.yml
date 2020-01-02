@@ -1,0 +1,80 @@
+---
+- name: config | Configuring daemons
+  template:
+    src: etc/frr/daemons.j2
+    dest: /etc/frr/daemons
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify:
+    - restart frr
+
+- name: config | Configuring zebra.conf
+  template:
+    src: etc/frr/zebra.conf.j2
+    dest: /etc/frr/zebra.conf
+    owner: frr
+    group: frr
+    mode: 0644
+  become: true
+  register: _frr_zebra_configured
+  notify:
+    - reload frr
+
+- name: Append the user 'nfadmin' the group 'frrvt' to the user's groups
+  user:
+    name: nfadmin
+    groups: frrvty
+    append: yes
+
+- name: config | Configuring FRR
+  template:
+    src: etc/frr/frr.conf.j2
+    dest: /etc/frr/frr.conf
+    owner: frr
+    group: frr
+    mode: 0644
+  become: true
+  notify:
+    - reload frr
+
+- name: Configure frr-routing service
+  template:
+    src: etc/frr-routing.service.j2
+    dest: /usr/lib/systemd/system/frr-routing.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart frr-routing
+
+- name: Configure frr-routing timer
+  template:
+    src: etc/frr-routing.timer.j2
+    dest: /usr/lib/systemd/system/frr-routing.timer
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart frr-routing timer
+
+- name: Configure mop-routing service
+  template:
+    src: etc/mop-routing.service.j2
+    dest: /usr/lib/systemd/system/mop-routing.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart mop-routing
+
+- name: Configure mop-routing timer
+  template:
+    src: etc/mop-routing.timer.j2
+    dest: /usr/lib/systemd/system/mop-routing.timer
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart mop-routing timer

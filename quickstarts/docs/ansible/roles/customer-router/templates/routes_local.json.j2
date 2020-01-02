@@ -1,0 +1,22 @@
+{
+  "routes": {
+    "genericRouting": {
+      "bgp": {
+        "neighborPeers": [
+          {
+            "ipAddress": "{{ bgp.localPeerIp }}",
+            "asn": 65000,
+            "keepaliveTimer": 10,
+            "description": "Connected to Router AVW Gateway"
+          }
+        ],
+        "localAsn": 65001,
+        "localPeerIP": "{{ bgp.localIp }}",
+        "ecmp": 64,
+        'logNeighborChanges': true,
+        "keepaliveTimer": 10
+      },
+      "ospf": {}
+    }
+  }
+}

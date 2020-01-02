@@ -1,0 +1,6 @@
+---
+# tasks file for frr
+- include_vars: routes.yml
+- include_vars: daemons.yml
+#- include_vars: interfaces.yml
+- include_tasks: config.yml

@@ -1,7 +1,7 @@
 {{ ansible_managed|comment }}
 
-{% if frr_version|default('6.0.2') > 6.0 %}
-{%   for key, value in frr_daemons.iteritems() %}
+{% if frr_version|default('6.0.2') > '6.0' %}
+{%   for key, value in frr_daemons.items() %}
 {{ key }}={% if value %}yes{% else %}no{% endif %}
 
 {%   endfor %}

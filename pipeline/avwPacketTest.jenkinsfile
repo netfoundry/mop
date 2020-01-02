@@ -209,16 +209,18 @@ pipeline {
       steps {
         //Run test Cases to pass packet across the AVW Network
         sh '''
-        eval sleep 30m
+        eval sleep 1m
         '''
         sh '''
         set -Eeuxo pipefail
         echo "[customer-router]" >| quickstarts/docs/ansible/hosts
         echo `terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
-
+        echo "[app-server]" >> quickstarts/docs/ansible/hosts
+        cat quickstarts/docs/ansible/hosts
+        '''
+        set -Eeuxo pipefail
         localIP=`eval terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
         localPeerIp=`eval terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
-
         echo "bgp:" >| quickstarts/docs/ansible/customer-router/vars/bgp.yml
         echo " localIp: ${localIp}" >> quickstarts/docs/ansible/customer-router/vars/bgp.yml
         echo " localPeerIp: ${localPeerIp}"" >> quickstarts/docs/ansible/customer-router/vars/bgp.yml
@@ -226,7 +228,9 @@ pipeline {
         '''
         sh '''
         set -Eeuxo pipefail
-        eval ansible -i hosts
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr -u nfadmin -e customerRouter=True -v
+        cat /opt/netfoundry/nfroute/etc/routes_local.json
+        tail /var/log/nf-routing-host.log
         '''
       }
     }

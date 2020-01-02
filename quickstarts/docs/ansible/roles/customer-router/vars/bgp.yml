@@ -1,4 +1,4 @@
 ---
 bgp:
-  localIp
-  localPeerIp
+  localIp: 10.13.10.10
+  localPeerIp: 10.13.10.11

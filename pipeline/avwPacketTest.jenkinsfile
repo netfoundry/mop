@@ -22,6 +22,7 @@ pipeline {
     booleanParam(name: 'CREATE_AVWS', defaultValue: true, description: 'Create NetFoundry AVW VPN Site')
     booleanParam(name: 'DELETE_AVWS', defaultValue: true, description: 'Delete NetFoundry AVW VPN Site')
     booleanParam(name: 'BYPASS_TC01', defaultValue: true, description: 'Bypass the test case 01')
+    booleanParam(name: 'CLEANUP', defaultValue: true, description: 'Clean up of OS disks and Account Storages')
     string(name: 'VNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'vnet entire IP block')
     string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
     string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
@@ -298,6 +299,17 @@ pipeline {
           // the build steps require for Azure
           sh '''set +x; set -e -u -o pipefail
           eval python3 quickstarts/docs/python/azure/azure_vwan_delete.py
+          '''
+        }
+      }
+    }
+    stage('Clean up of OS disks and Account Storages'){
+      when { expression { params.CLEANUP }}
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+          // the build steps require for Azure
+          sh '''set +x; set -e -u -o pipefail
+          eval python3 quickstarts/docs/python/azure/azure_cleanup.py
           '''
         }
       }

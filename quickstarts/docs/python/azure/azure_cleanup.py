@@ -41,4 +41,4 @@ for item in compute_client.disks.list_by_resource_group(os.environ.get('GROUP_NA
         async_disk_deletion = compute_client.disks.delete(os.environ.get('GROUP_NAME'), item.name)
         print(async_disk_deletion.wait())
         print(async_disk_deletion.result())
-        print('OS Dosk %s Deleted' % item.name)
+        print('OS Disk %s Deleted' % item.name)

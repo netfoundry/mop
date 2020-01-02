@@ -218,6 +218,7 @@ pipeline {
         echo "[app-server]" >> quickstarts/docs/ansible/hosts
         cat quickstarts/docs/ansible/hosts
         '''
+        sh '''
         set -Eeuxo pipefail
         localIP=`eval terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
         localPeerIp=`eval terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`

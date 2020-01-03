@@ -208,7 +208,7 @@ pipeline {
       steps {
         //Configure Client and Server between the network under test for the packet connectivity test
         sh '''
-        eval sleep 1m
+        eval sleep 30m
         '''
         sh '''
         set -Eeuxo pipefail
@@ -239,7 +239,6 @@ pipeline {
       steps {
         //Run test Cases to pass packet across the AVW Network
         sh '''
-        set -Eeuxo pipefail
         serverIp=`eval terraform output -json | jq -j .AZCPEGWx0xWESTUS2_private_ips.value[][]`
         eval export ANSIBLE_HOST_KEY_CHECKING=False
         eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags test-case-01 -u nfadmin -e testCase01=True -e serverIp=$serverIp -vvvv

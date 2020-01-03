@@ -102,6 +102,7 @@ pipeline {
         sh '''
         set -Eeuxo pipefail
         ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
+        cat ~/.ssh/id_rsa
         eval cat logoutput.txt
         '''
       }
@@ -208,7 +209,7 @@ pipeline {
       steps {
         //Configure Client and Server between the network under test for the packet connectivity test
         sh '''
-        eval sleep 30m
+        eval sleep 1m
         '''
         sh '''
         set -Eeuxo pipefail
@@ -239,11 +240,11 @@ pipeline {
       steps {
         //Run test Cases to pass packet across the AVW Network
         sh '''
-        set -Eeuxo pipefail
+        set +ex
         serverIp=`eval terraform output -json | jq -j .AZCPEGWx0xWESTUS2_private_ips.value[][]`
         eval export ANSIBLE_HOST_KEY_CHECKING=False
         eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags test-case-01 -u nfadmin -e testCase01=True -e serverIp=$serverIp
-        # tryin gto catch error code 1 or higher to continue if the tests fail
+        # trying to catch error code 1 or higher to continue if the tests fail
         errorCode=$?
         if [ $errorCode -ne 0 ]; then
           echo "One or more Tests Failed"

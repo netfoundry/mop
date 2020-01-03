@@ -21,7 +21,8 @@ pipeline {
     booleanParam(name: 'DESTROY_AZGW', defaultValue: true, description: 'Destroy NetFoundry Gateway in Azure')
     booleanParam(name: 'CREATE_AVWS', defaultValue: true, description: 'Create NetFoundry AVW VPN Site')
     booleanParam(name: 'DELETE_AVWS', defaultValue: true, description: 'Delete NetFoundry AVW VPN Site')
-    booleanParam(name: 'BYPASS_TC01', defaultValue: true, description: 'Bypass the test case 01')
+    booleanParam(name: 'SETUP_CLIENT_SERVER', defaultValue: true, description: 'Set up Test Client and Server for all test cases')
+    booleanParam(name: 'TEST_CASE01', defaultValue: true, description: 'Test Case 01')
     booleanParam(name: 'CLEANUP', defaultValue: true, description: 'Clean up of OS disks and Account Storages')
     string(name: 'VNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'vnet entire IP block')
     string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
@@ -111,8 +112,6 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
           // the build steps require for Azure
           sh '''set +x; set -e -u -o pipefail
-          echo $ARM_TENANT_ID
-          echo $ARM_SUBSCRIPTION_ID
           eval python3 quickstarts/docs/python/azure/azure_vwan_create.py
           '''
         }
@@ -204,10 +203,10 @@ pipeline {
         }
       }
     }
-    stage('Test Case 01') {
-      when { expression { params.BYPASS_TC01 }}
+    stage('Set up Test Client and Server for all test cases') {
+      when { expression { params.SETUP_CLIENT_SERVER }}
       steps {
-        //Run test Cases to pass packet across the AVW Network
+        //Configure Client and Server between the network under test for the packet connectivity test
         sh '''
         eval sleep 1m
         '''
@@ -216,6 +215,7 @@ pipeline {
         echo "[customer-router]" >| quickstarts/docs/ansible/hosts
         echo `terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
         echo "[app-server]" >> quickstarts/docs/ansible/hosts
+        echo `terraform output -json | jq -j .AZCPEGWx0xWESTUS2_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
         cat quickstarts/docs/ansible/hosts
         '''
         sh '''
@@ -230,9 +230,19 @@ pipeline {
         sh '''
         set -Eeuxo pipefail
         eval export ANSIBLE_HOST_KEY_CHECKING=False
-        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr -u nfadmin -e customerRouter=True -vvvv
-        cat /opt/netfoundry/nfroute/etc/routes_local.json
-        cat /var/log/nf-routing-host.log
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr,app-server -u nfadmin -e customerRouter=True -e appServer=True -vvvv
+        '''
+      }
+    }
+    stage('Test Case 01') {
+      when { expression { params.TEST_CASE01 }}
+      steps {
+        //Run test Cases to pass packet across the AVW Network
+        sh '''
+        set -Eeuxo pipefail
+        serverIp=`eval terraform output -json | jq -j .AZCPEGWx0xWESTUS2_private_ips.value[][]`
+        eval export ANSIBLE_HOST_KEY_CHECKING=False
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags test-case-01 -u nfadmin -e testCase01=True -e serverIp -vvvv
         '''
       }
     }

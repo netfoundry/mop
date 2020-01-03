@@ -16,3 +16,8 @@
   become: True
   roles:
     - { role: app-server, tags: ["app-server"], when: appServer is defined }
+
+- name: test case 01 - client server connectivity
+  hosts: customer-router
+  roles:
+    - { role: test-case-01, tags: ["test-case-01"], when: testCase01 is defined }

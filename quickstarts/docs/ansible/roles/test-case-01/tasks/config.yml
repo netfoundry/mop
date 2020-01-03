@@ -1,0 +1,21 @@
+---
+
+- name:  run iperf3 in detached server mode
+  command:
+    argv:
+      - /usr/bin/ping
+      - "-c 10"
+      - {{ serverIp }}
+  register: result_ping
+
+- debug: msg="{{ result_ping.stdout }}"
+
+- name:  run iperf3 in detached server mode
+  command:
+    argv:
+      - /usr/bin/iperf3
+      - "-c"
+      - {{ serverIp }}
+  register: result_iperf
+
+- debug: msg="{{ result_iperf.stdout }}"

@@ -163,7 +163,7 @@ def create_avw_site(filename):
                                         "deviceModel" : None,
                                         "neighborPeers" : [ {
                                           "ipAddress" : os.environ.get('AVW_SITE_PEER_PRIVATE_IP'),
-                                          "asn" : 65000
+                                          "asn" : 65001
                                         } ],
                                         "advertiseLocal" : True,
                                         "advertisedPrefixes" : []

@@ -1,12 +1,17 @@
 ---
+- name:  run show ip route to ckeck if route to app server in propagated
+  command: /usr/sbin/ip route
+  register: result_ip_route
 
-- name:  run iperf3 in detached server mode
+- debug: msg="{{ result_ip_route.stdout }}"
+
+- name:  run ping test to app server
   command: /usr/bin/ping -c 10 {{ serverIp }}
   register: result_ping
 
 - debug: msg="{{ result_ping.stdout }}"
 
-- name:  run iperf3 in detached server mode
+- name:  run iperf3 test to app server
   command: /usr/bin/iperf3 -c {{ serverIp }}
   register: result_iperf
 

@@ -7,8 +7,14 @@
 - name:  run iperf3 in detached server mode
   command: /usr/bin/iperf3 -sD
 
-- name:  run iperf3 in detached server mode
-  command: ps -e -f 
-  register: process_iperf
+- name:  list what processes are running
+  command: ps -e -f
+  register: list_run_processes
 
-- debug: msg="{{ process_iperf.stdout }}"
+- debug: msg="{{ list_run_processes.stdout }}"
+
+- name:  list listen/open ports
+  command: netstat -l -t -n -u
+  register: list_listen_ports
+
+- debug: msg="{{ list_listen_ports.stdout }}"

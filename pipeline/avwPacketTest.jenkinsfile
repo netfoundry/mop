@@ -239,9 +239,18 @@ pipeline {
       steps {
         //Run test Cases to pass packet across the AVW Network
         sh '''
+        set -Eeuxo pipefail
         serverIp=`eval terraform output -json | jq -j .AZCPEGWx0xWESTUS2_private_ips.value[][]`
         eval export ANSIBLE_HOST_KEY_CHECKING=False
-        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags test-case-01 -u nfadmin -e testCase01=True -e serverIp=$serverIp -vvvv
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags test-case-01 -u nfadmin -e testCase01=True -e serverIp=$serverIp
+        # tryin gto catch error code 1 or higher to continue if the tests fail
+        errorCode=$?
+        if [ $errorCode -ne 0 ]; then
+          echo "One or more Tests Failed"
+          # We exit the all script with the same error, if you don't want to
+          # exit it and continue, just comment out this line.
+          #exit $errorCode
+        fi
         '''
       }
     }

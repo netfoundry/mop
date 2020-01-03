@@ -8,7 +8,7 @@
   command: /usr/bin/iperf3 -sD
 
 - name:  run iperf3 in detached server mode
-  command: ps -ef | grep iperf3
+  command: ps -e -f 
   register: process_iperf
 
 - debug: msg="{{ process_iperf.stdout }}"

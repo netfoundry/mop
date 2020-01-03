@@ -5,18 +5,10 @@
     state: present
 
 - name:  run iperf3 in detached server mode
-  command:
-    argv:
-      - /usr/bin/iperf3
-      - "-sD"
+  command: /usr/bin/iperf3 -sD
 
 - name:  run iperf3 in detached server mode
-  command:
-    argv:
-      - ps
-      - "-ef"
-      - " | grep"
-      - iperf3
+  command: ps -ef | grep iperf3
   register: process_iperf
-  
+
 - debug: msg="{{ process_iperf.stdout }}"

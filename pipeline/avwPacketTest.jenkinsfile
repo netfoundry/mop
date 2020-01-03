@@ -209,7 +209,7 @@ pipeline {
       steps {
         //Configure Client and Server between the network under test for the packet connectivity test
         sh '''
-        eval sleep 1m
+        eval sleep 30m
         '''
         sh '''
         set -Eeuxo pipefail

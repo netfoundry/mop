@@ -39,7 +39,7 @@
   notify:
     - reload frr
 
-- name: Configure frr-routing service
+- name: Config | Frr-routing Service
   template:
     src: etc/frr-routing.service.j2
     dest: /usr/lib/systemd/system/frr-routing.service
@@ -49,7 +49,7 @@
   notify:
     - restart frr-routing
 
-- name: Configure frr-routing timer
+- name: Config | Frr-routing Timer
   template:
     src: etc/frr-routing.timer.j2
     dest: /usr/lib/systemd/system/frr-routing.timer
@@ -59,7 +59,7 @@
   notify:
     - restart frr-routing timer
 
-- name: Configure mop-routing service
+- name: Config | Mop-routing Service
   template:
     src: etc/mop-routing.service.j2
     dest: /usr/lib/systemd/system/mop-routing.service
@@ -69,7 +69,7 @@
   notify:
     - restart mop-routing
 
-- name: Configure mop-routing timer
+- name: Config | Mop-routing Timer
   template:
     src: etc/mop-routing.timer.j2
     dest: /usr/lib/systemd/system/mop-routing.timer
@@ -78,3 +78,17 @@
     mode: 0644
   notify:
     - restart mop-routing timer
+
+- name: Start | Frr-routing Timer
+  service:
+    name: frr-routing.timer
+    state: started
+    enabled: true
+  become: true
+
+- name: Start | Mop-routing Timer
+  service:
+    name: mop-routing.timer
+    state: started
+    enabled: true
+  become: true

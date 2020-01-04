@@ -11,10 +11,22 @@
   command: ps -e -f
   register: list_run_processes
 
-- debug: msg="{{ list_run_processes.stdout }}"
+- debug: msg="{{ list_run_processes.stdout_lines }}"
 
 - name:  list listen/open ports
   command: netstat -l -t -n -u
   register: list_listen_ports
 
-- debug: msg="{{ list_listen_ports.stdout }}"
+- debug: msg="{{ list_listen_ports.stdout_lines }}"
+
+- name: Config | Firewalld to allow tcp 5201
+  firewalld:
+    port: 5201/tcp
+    permanent: yes
+    state: enabled
+
+- name: Config | Firewalld to allow udp 5201
+  firewalld:
+    port: 5201/udp
+    permanent: yes
+    state: enabled

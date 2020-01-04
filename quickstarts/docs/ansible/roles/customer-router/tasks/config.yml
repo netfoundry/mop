@@ -1,5 +1,5 @@
 ---
-- name: config | Configuring daemons
+- name: config | Configuring local bgp file
   template:
     src: routes_local.json.j2
     dest: /opt/netfoundry/nfroute/etc/routes_local.json
@@ -12,3 +12,9 @@
   yum:
     name: https://iperf.fr/download/fedora/iperf3-3.1.3-1.fc24.x86_64.rpm
     state: present
+
+- name: Config | Firewalld to allow tcp 179
+  firewalld:
+    port: 179/tcp
+    permanent: yes
+    state: enabled

@@ -1,18 +1,28 @@
 ---
-- name:  run show ip route to ckeck if route to app server in propagated
-  command: /usr/sbin/ip route
+- name:  Test | To show routes propagated through bgp from AVW Site
+  shell: |
+    echo "All Routes"
+    /usr/bin/vtysh -c "show ip route json" | /usr/bin/jq .[][].prefix
+    echo "BGP only"
+    /usr/bin/vtysh -c "show ip route bgp json" | /usr/bin/jq .[][].prefix
   register: result_ip_route
 
-- debug: msg="{{ result_ip_route.stdout }}"
+- debug: msg="{{ result_ip_route.stdout_lines }}"
 
-- name:  run ping test to app server
-  command: /usr/bin/ping -c 10 {{ serverIp }}
+- name:  Test | To show BGP Neighbor (to AVW Site) Connection Status
+  shell: /usr/bin/vtysh -c "show ip bgp neighbor json" | /usr/bin/jq .[].bgpState
+  register: result_vtysh_bgp_status
+
+- debug: msg="{{ result_vtysh_bgp_status.stdout_lines }}"
+
+- name:  Test | Ping App Server
+  shell: /usr/bin/ping -c 10 {{ serverIp }}
   register: result_ping
 
-- debug: msg="{{ result_ping.stdout }}"
+- debug: msg="{{ result_ping.stdout_lines }}"
 
-- name:  run iperf3 test to app server
-  command: /usr/bin/iperf3 -c {{ serverIp }}
+- name:  Test | Run iperf3 to App Server
+  shell: /usr/bin/iperf3 -c {{ serverIp }}
   register: result_iperf
 
-- debug: msg="{{ result_iperf.stdout }}"
+- debug: msg="{{ result_iperf.stdout_lines }}"

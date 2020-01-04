@@ -233,6 +233,18 @@ pipeline {
         eval export ANSIBLE_HOST_KEY_CHECKING=False
         eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr,app-server -u nfadmin -e customerRouter=True -e appServer=True -vvvv
         '''
+        // Attaching Server vNet to vHub in Azure
+        sh '''
+        set -Eeuxo pipefail
+        az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+        az extension add --name virtual-wan
+        response=`eval az network route-table route create -g $GROUP_NAME  --route-table-name centralus-routeTable -n route_10.10.10.0 \
+            --next-hop-type VirtualAppliance --address-prefix 10.10.10.0/24 --next-hop-ip-address 10.20.10.5`
+        echo $response | jq .
+        vNetId=`eval az network vnet show --resource-group $GROUP_NAME --name westus2-vNet | jq -j .id`
+        response=`eval az network vhub connection create --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet --remote-vnet $vNetId --internet-security true`
+        echo $response | jq .
+        '''
       }
     }
     stage('Test Case 01') {
@@ -265,6 +277,12 @@ pipeline {
           set -Eeuxo pipefail
           python3 quickstarts/docs/python/nf_avwsite.py --action delete
           eval cat logoutput.txt
+          '''
+          sh '''
+          set -Eeuxo pipefail
+          az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+          eval az network vhub connection delete --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet
+          eval az network route-table route delete -g $GROUP_NAME --route-table-name centralus-routeTable -n route_10.10.10.0
           '''
         }
       }

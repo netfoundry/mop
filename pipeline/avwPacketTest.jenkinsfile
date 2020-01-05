@@ -201,21 +201,7 @@ pipeline {
           python3 quickstarts/docs/python/nf_avwsite.py --action create --file nf_resources.yaml
           eval cat logoutput.txt
           '''
-          sh '''
-          set -Eeuxo pipefail
-          localIp=`eval terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
-          localPeerIp=`eval terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
-          echo "bgp:" >| quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
-          echo " localIp: ${localIp}" >> quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
-          echo " localPeerIp: ${localPeerIp}" >> quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
-          cat quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
-          '''
-          sh '''
-          set -Eeuxo pipefail
-          eval export ANSIBLE_HOST_KEY_CHECKING=False
-          eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr,app-server -u nfadmin -e customerRouter=True -e appServer=True -vvvv
-          '''
-          // Attaching Server vNet to vHub in Azure
+          // Attaching Server vNet to vHub in Azure and creating a route to server
           sh '''
           set -Eeuxo pipefail
           az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
@@ -244,6 +230,20 @@ pipeline {
         echo "[app-server]" >> quickstarts/docs/ansible/hosts
         echo `terraform output -json | jq -j .AZCPEGWx0xWESTUS2_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
         cat quickstarts/docs/ansible/hosts
+        '''
+        sh '''
+        set -Eeuxo pipefail
+        localIp=`eval terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
+        localPeerIp=`eval terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
+        echo "bgp:" >| quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
+        echo " localIp: ${localIp}" >> quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
+        echo " localPeerIp: ${localPeerIp}" >> quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
+        cat quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
+        '''
+        sh '''
+        set -Eeuxo pipefail
+        eval export ANSIBLE_HOST_KEY_CHECKING=False
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr,app-server -u nfadmin -e customerRouter=True -e appServer=True -vvvv
         '''
       }
     }

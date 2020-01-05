@@ -204,7 +204,7 @@ pipeline {
           // Attaching Server vNet to vHub in Azure and creating a route to server
           sh '''
           set -Eeuxo pipefail
-          export ROUTE_NAME=`eval echo "route_${VNET_PREFIX}" | sed -r 's/\//_/g'`
+          export ROUTE_NAME=`eval echo "route_${VNET_PREFIX}" | sed -r "s/\//_/g"`
           az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
           az extension add --name virtual-wan
           response=`eval az network route-table route create -g $GROUP_NAME  --route-table-name centralus-routeTable -n $ROUTE_NAME \

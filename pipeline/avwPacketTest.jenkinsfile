@@ -205,6 +205,7 @@ pipeline {
           sh '''
           set -Eeuxo pipefail
           export ROUTE_NAME=`eval echo "route_${VNET_PREFIX}" | sed -r "s/\\//_/g"`
+          export AVW_SITE_PRIVATE_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
           az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
           az extension add --name virtual-wan
           response=`eval az network route-table route create -g $GROUP_NAME  --route-table-name centralus-routeTable -n $ROUTE_NAME \
@@ -284,6 +285,7 @@ pipeline {
           '''
           sh '''
           set -Eeuxo pipefail
+          export ROUTE_NAME=`eval echo "route_${VNET_PREFIX}" | sed -r "s/\\//_/g"`
           az extension add --name virtual-wan
           az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
           eval az network vhub connection delete --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet

@@ -17,7 +17,8 @@
   firewalld:
     port: 179/tcp
     permanent: yes
+    immediate: yes
     state: enabled
-  register: list_firewallds
+  register: list_firewalld
 
-- debug: msg="{{ list_firewalld.stdout_lines }}"
+- debug: msg="{{ list_firewalld }}"

@@ -204,10 +204,11 @@ pipeline {
           // Attaching Server vNet to vHub in Azure and creating a route to server
           sh '''
           set -Eeuxo pipefail
+          export ROUTE_NAME=`eval echo "route_${VNET_PREFIX}" | sed -r 's/\//_/g'`
           az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
           az extension add --name virtual-wan
-          response=`eval az network route-table route create -g $GROUP_NAME  --route-table-name centralus-routeTable -n route_10.10.10.0 \
-              --next-hop-type VirtualAppliance --address-prefix 10.10.10.0/24 --next-hop-ip-address 10.20.10.5`
+          response=`eval az network route-table route create -g $GROUP_NAME  --route-table-name centralus-routeTable -n $ROUTE_NAME \
+              --next-hop-type VirtualAppliance --address-prefix $VNET_PREFIX --next-hop-ip-address $AVW_SITE_PRIVATE_IP`
           echo $response | jq .
           vNetId=`eval az network vnet show --resource-group $GROUP_NAME --name westus2-vNet | jq -j .id`
           response=`eval az network vhub connection create --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet --remote-vnet $vNetId --internet-security true`
@@ -252,6 +253,9 @@ pipeline {
       steps {
         //Run test Cases to pass packet across the AVW Network
         sh '''
+        eval sleep 5m
+        '''
+        sh '''
         set +ex
         serverIp=`eval terraform output -json | jq -j .AZCPEGWx0xWESTUS2_private_ips.value[][]`
         eval export ANSIBLE_HOST_KEY_CHECKING=False
@@ -282,7 +286,7 @@ pipeline {
           set -Eeuxo pipefail
           az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
           eval az network vhub connection delete --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet
-          eval az network route-table route delete -g $GROUP_NAME --route-table-name centralus-routeTable -n route_10.10.10.0
+          eval az network route-table route delete -g $GROUP_NAME --route-table-name centralus-routeTable -n $ROUTE_NAME
           '''
         }
       }

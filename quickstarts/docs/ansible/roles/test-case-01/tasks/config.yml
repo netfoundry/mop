@@ -1,4 +1,11 @@
 ---
+- name:  Test | To show firewalld Drop Zone Setting
+  shell: firewall-cmd --list-all
+  become: yes
+  register: show_firewall
+
+- debug: msg="{{ show_firewall.stdout_lines }}"
+
 - name:  Test | To show routes propagated through bgp from AVW Site
   shell: |
     echo "All Routes"

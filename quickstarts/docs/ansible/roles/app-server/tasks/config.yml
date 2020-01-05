@@ -23,14 +23,18 @@
   firewalld:
     port: 5201/tcp
     permanent: yes
+    immediate: yes
     state: enabled
   register: list_firewalld
+
+- debug: msg="{{ list_firewalld }}"
 
 - name: Config | Firewalld to allow udp 5201
   firewalld:
     port: 5201/udp
     permanent: yes
+    immediate: yes
     state: enabled
-  register: list_firewallds
+  register: list_firewalld
 
-- debug: msg="{{ list_firewalld.stdout_lines }}"
+- debug: msg="{{ list_firewalld }}"

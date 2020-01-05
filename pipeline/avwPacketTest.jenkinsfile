@@ -243,7 +243,7 @@ pipeline {
         sh '''
         set -Eeuxo pipefail
         eval export ANSIBLE_HOST_KEY_CHECKING=False
-        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr,app-server -u nfadmin -e customerRouter=True -e appServer=True -vvvv
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr,app-server -u nfadmin -e customerRouter=True -e appServer=True
         '''
       }
     }

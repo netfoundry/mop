@@ -3,15 +3,22 @@ nav:
     - Home: index.md
     - AWS:
       - aws/intro.md
+      - Bastion Replacement Removal: aws/aws-bastion.md
     - Azure:
       - azure/intro.md
       - azure/connectUser2App.md
       - azure/connectApp2App.md
+      - Bastion Replacement Removal: azure/azure-bastion.md 
+    - GCP:
+      - Overview: gcp/intro.md  
     - NetFoundry:
       - Overview: netfoundry/intro.md
       - NF Fabric: netfoundry/fabric.md
       - NF Clients: netfoundry/client.md
       - NF Gateways: netfoundry/gateway.md
+    - VCPE:
+      - Overview: vcpe/intro.md  
+       
 # Theme Configuration
 theme:
     name: material
@@ -20,7 +27,7 @@ theme:
     font:
       text: Ubuntu
       code: Ubuntu Mono
-    logo: images/logo.png
+    logo: images/wide_logo.png
     language: en
     favicon: images/fav.png
     feature:
@@ -46,3 +53,5 @@ markdown_extensions:
       preserve_tabs: true
   - markdown_include.include:
       base_path: docs
+extra_css:
+  - 'extra.css' 

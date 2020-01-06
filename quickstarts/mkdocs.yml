@@ -9,11 +9,15 @@ nav:
       - azure/connectUser2App.md
       - azure/connectApp2App.md
       - Bastion Replacement Removal: azure/azure-bastion.md 
+    - GCP:
+      - Overview: gcp/intro.md  
     - NetFoundry:
       - Overview: netfoundry/intro.md
       - NF Fabric: netfoundry/fabric.md
       - NF Clients: netfoundry/client.md
       - NF Gateways: netfoundry/gateway.md
+    - VCPE:
+      - Overview: vcpe/intro.md  
        
 # Theme Configuration
 theme:

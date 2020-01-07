@@ -163,7 +163,6 @@ pipeline {
                     # exit it and continue, just comment out this line.
                     #exit $errorCode
                   fi
-                  '''
                   cat logoutput.txt
                   cat nf_resources.yaml
                   '''

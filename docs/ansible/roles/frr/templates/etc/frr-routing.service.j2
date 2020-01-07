@@ -1,0 +1,6 @@
+[Unit]
+Description=push configuration data stored in sqlite db into frr conf file job
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "/opt/netfoundry/nfroute/bin/frr_routing -t 60"

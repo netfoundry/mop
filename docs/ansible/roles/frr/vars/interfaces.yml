@@ -1,0 +1,6 @@
+---
+# Define any interfaces which you would like IP addresses configured on
+frr_interfaces:
+  lo:
+    description: router-id
+    ip: "{{ bgp.localPeerIP }}/32"

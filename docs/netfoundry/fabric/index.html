@@ -338,8 +338,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../azure/intro/" title="Use Case Overview" class="md-nav__link">
-      Use Case Overview
+    <a href="../../azure/intro/" title="Use Cases Overview" class="md-nav__link">
+      Use Cases Overview
     </a>
   </li>
 
@@ -350,8 +350,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../azure/connectUser2App/" title="User to Cloud Application Connection" class="md-nav__link">
-      User to Cloud Application Connection
+    <a href="../../azure/connectUser2App/" title="Mobile User To Cloud Application Connectivity" class="md-nav__link">
+      Mobile User To Cloud Application Connectivity
     </a>
   </li>
 
@@ -362,8 +362,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../azure/connectApp2App/" title="Branch Application to Cloud Application Connection" class="md-nav__link">
-      Branch Application to Cloud Application Connection
+    <a href="../../azure/connectApp2App/" title="Branch Application To Cloud Application Connectivity" class="md-nav__link">
+      Branch Application To Cloud Application Connectivity
     </a>
   </li>
 
@@ -660,11 +660,12 @@
 <li><a href="../../python/nf_resources.py">Wrapper Script to Create NF Resources based on Resource yaml file</a></li>
 </ol>
 <p>To obtain a session token, the <a href="../../python/nf_token.py">MOP Session Token</a> script parses a configuration file
-for clientId, and secretId if they are not passed to it through the positional arguments
-(env, clientId, secretId). It must be located in the home directory under <a href="../../python/env">'~/.env'</a></p>
+for clientId, and clientSecret if they are not passed to it through the positional arguments
+(e.g. env, clientId, clientSecret). This configuration file must be located in the home directory under <a href="../../python/env">'~/.env'</a></p>
 </div>
 <ol>
 <li>Clone this repo (git clone https://github.com/netfoundry/mop.git)</li>
+<li>Change directory to <code>cd mop</code></li>
 <li>Update <a href="../../python/nf_resources.yml">Resource yaml</a> file with the desired options to feed into the wrapper script as described
 in the following code snippet.</li>
 <li>Run this from the root folder
@@ -679,7 +680,7 @@ Required Configuration Paramters
 </ol>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The logs will be outputted to the log file named logoutput.txt under the home directory '~/'.</p>
+<p>The logs will be outputted to the log file named logoutput.txt under the directory that the script is run './'.</p>
 </div>
                 
                   

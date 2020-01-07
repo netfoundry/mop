@@ -30,8 +30,7 @@
 ![image](../images/netfoundry-bastion-private.png)
 
 
-!!! important
-    Assumption is that the [NF Fabric](../netfoundry/fabric.md) is already up and the [NF Client](../netfoundry/client.md) is installed.
+{!common/fabric-client-important.md!}
 
 # Implement Through NF Web Console UI
 

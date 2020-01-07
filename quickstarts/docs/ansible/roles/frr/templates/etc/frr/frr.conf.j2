@@ -1,0 +1,178 @@
+#
+# managed by frr_routing script
+#
+frr defaults {{ configuration_type }}
+log {{ log_type }}
+!
+{%-  if ospf %}
+{%-   if ospf['area']['id'] is not none %}
+{%-     if ospf['area']['networks'] %}
+{%-       if bgp['advertisedPrefixes'] is defined %}
+{%-         for _network in bgp['advertisedPrefixes'] %}
+{%-            if _network | length %}
+ip route {{ _network }} lo
+{%-            endif %}
+{%-         endfor %}
+{%-       endif %}
+{%-     endif %}
+{%-   endif %}
+{%-  endif %}
+!
+{%-  if bgp and bgp['localPeerIP'] is defined %}
+interface lo
+  description "BGP Local Source Peer Address"
+  ip address {{ bgp['localPeerIP'] }}/32
+{%-   endif %}
+!
+{%-   if bgp and bgp['localAsn'] is defined %}
+router bgp {{ bgp['localAsn'] }}
+{%-       if bgp['localPeerIP'] %}
+  bgp router-id {{ bgp['localPeerIP'] }}
+{%-       endif %}
+{%-       if bgp['logNeighborChanges']|default(False) %}
+  bgp log-neighbor-changes
+{%-       endif %}
+{%-       if bgp['gracefulRestart']|default(False) %}
+  bgp graceful-restart
+{%-       endif %}
+{%-       if bgp['ecmp'] is defined %}
+  maximum-paths {{ bgp['ecmp'] }}
+  maximum-paths ibgp {{ bgp['ecmp'] }}
+{%-       endif %}
+{%-       if bgp['keepaliveTimer']|default(False) %}
+  timers bgp {{ bgp['keepaliveTimer'] }} {{ bgp['keepaliveTimer'] * 3 }}
+{%-       endif %}
+{%-       if bgp['neighborPeers']|default(False) %}
+{%-         for neighbor in bgp['neighborPeers'] %}
+{%-             if neighbor['peerGroup']|default(False) %}
+{%-               if neighbor['asn'] %}
+  neighbor {{ neighbor['peerGroup'] }} peer-group
+  neighbor {{ neighbor['ipAddress'] }} peer-group {{ neighbor['peerGroup'] }}
+{%-               else %} 
+  neighbor {{ neighbor['ipAddress'] }} peer-group {{ neighbor['peerGroup'] }}
+{%-               endif %} 
+{%-             endif %}
+{%-             if neighbor['asn'] is defined and (neighbor['peerGroup'] is not defined or neighbor['peerGroup'] is none) %}
+  neighbor {{ neighbor['ipAddress']}} remote-as {{ neighbor['asn'] }}
+{%-             endif %}
+{%-             if neighbor['asn'] is defined and (neighbor['peerGroup'] is defined and neighbor['peerGroup'] is not none) %}
+  neighbor {{ neighbor['peerGroup']}} remote-as {{ neighbor['asn'] }}
+{%-             endif %}
+{%-             if neighbor['password'] and (neighbor['peerGroup'] is not defined or neighbor['peerGroup'] is none) |default(False) %}
+  neighbor {{ neighbor['ipAddress'] }} password {{ neighbor['password'] }}
+{%-             endif %}
+{%-             if neighbor['password'] and (neighbor['peerGroup'] is defined and neighbor['peerGroup'] is not none) |default(False) %}
+  neighbor {{ neighbor['peerGroup'] }} password {{ neighbor['password'] }}
+{%-             endif %}
+{%-             if neighbor['multihopCount'] and (neighbor['peerGroup'] is not defined or neighbor['peerGroup'] is none) |default(False) %}
+  neighbor {{ neighbor['ipAddress'] }} ebgp-multihop {{ neighbor['multihopCount'] }}
+{%-             endif %}
+{%-             if neighbor['multihopCount'] and (neighbor['peerGroup'] is defined and neighbor['peerGroup'] is not none) |default(False) %}
+  neighbor {{ neighbor['peerGroup'] }} ebgp-multihop {{ neighbor['multihopCount'] }}
+{%-             endif %}
+{%-             if neighbor['keepaliveTimer'] and (neighbor['peerGroup'] is not defined or neighbor['peerGroup'] is none) |default(False) %}
+  neighbor {{ neighbor['ipAddress'] }} timers {{ neighbor['keepaliveTimer'] }} {{ neighbor['keepaliveTimer'] * 3 }}
+{%-             endif %}
+{%-             if neighbor['keepaliveTimer'] and (neighbor['peerGroup'] is defined and neighbor['peerGroup'] is not none) |default(False) %}
+  neighbor {{ neighbor['peerGroup'] }} timers {{ neighbor['keepaliveTimer'] }} {{ neighbor['keepaliveTimer'] * 3 }}
+{%-             endif %}
+{%-             if neighbor['description'] and (neighbor['peerGroup'] is not defined or neighbor['peerGroup'] is none) |default(False) %}
+  neighbor {{ neighbor['ipAddress'] }} description {{ neighbor['description'] }}
+{%-             endif %}
+{%-             if neighbor['description'] and (neighbor['peerGroup'] is defined and neighbor['peerGroup'] is not none) |default(False) %}
+  neighbor {{ neighbor['peerGroup'] }} description {{ neighbor['description'] }}
+{%-             endif %}
+{%-             if bgp['localPeerIP'] is defined and (neighbor['peerGroup'] is not defined or neighbor['peerGroup'] is none) %}
+  neighbor {{ neighbor['ipAddress'] }} update-source {{ bgp['localPeerIP'] }}
+{%-             endif %}
+{%-             if bgp['localPeerIP'] is defined and (neighbor['peerGroup'] is defined and neighbor['peerGroup'] is not none and neighbor['asn']) %}
+  neighbor {{ neighbor['peerGroup'] }} update-source {{ bgp['localPeerIP'] }}
+{%-             endif %}
+{%-             if neighbor['nexthopSelf'] and (neighbor['peerGroup'] is not defined or neighbor['peerGroup'] is none) |default(False) %}
+  neighbor {{ neighbor['ipAddress'] }} next-hop-self
+{%-             endif %}
+{%-             if neighbor['nexthopSelf'] and (neighbor['peerGroup'] is defined and neighbor['peerGroup'] is not none) |default(False) %}
+  neighbor {{ neighbor['peerGroup'] }} next-hop-self
+{%-             endif %}
+{%-             if neighbor['softReconfiguration'] and (neighbor['peerGroup'] is not defined or neighbor['peerGroup'] is none) |default(False) %}
+  neighbor {{ neighbor['ipAddress'] }} soft-reconfiguration inbound
+{%-             endif %}
+{%-             if neighbor['softReconfiguration'] and (neighbor['peerGroup'] is defined and neighbor['peerGroup'] is not none) |default(False) %}
+  neighbor {{ neighbor['peerGroup'] }} soft-reconfiguration inbound
+{%-             endif %}
+{%-         endfor %}
+{%-       endif %}
+{%-       if bgp.routeMaps is defined %}
+{%-         for routeMap in bgp.routeMaps %}
+{%-           if routeMap['direction'] == "both" %}
+  neighbor {{ routeMap['neighborPeer'] }} route-map rt_{{ routeMap['neighborPeer'] }} in
+  neighbor {{ routeMap['neighborPeer'] }} route-map rt_{{ routeMap['neighborPeer'] }} out
+{%-           endif %}
+{%-           if routeMap['direction'] == "in" or routeMap['direction'] == "out" %}
+  neighbor {{ routeMap['neighborPeer'] }} route-map rt_{{ routeMap['neighborPeer'] }} {{ routeMap['direction'] }}
+{%-           endif %}
+{%-         endfor %}
+{%-       endif %}
+{%-       if bgp['advertisedPrefixesCheck']|default(False) %}
+  bgp network import-check
+{%-       endif %}
+{%-       if bgp['advertisedPrefixes'] is defined %}
+  address-family ipv4 unicast
+{%-         for _network in bgp['advertisedPrefixes'] %}
+{%-            if _network | length %}
+    network {{ _network }}
+{%-            endif %}
+{%-         endfor %}
+{%-       endif %}
+{%-       if bgp['redistributeType'] is defined %}
+{%-         if bgp['advertisedPrefixes'] is not defined %}
+!
+  address-family ipv4 unicast
+{%-         endif %}
+{%-         for _type in bgp['redistributeType'] %}
+    redistribute {{ _type }}
+{%-         endfor %}
+{%-       endif %}
+{%-       if bgp['advertisedPrefixes'] is defined or bgp['redistributeType'] is defined %}
+  exit-address-family
+{%-       endif %}
+{%-       if bgp['routeMaps']|default(False) %}
+{%-         for routeMap in bgp['routeMaps'] %}
+route-map  rt_{{ routeMap['neighborPeer'] }} permit 10
+{%-           if routeMap['localPref'] %}
+  set local-preference {{ routeMap['localPref'] }}
+{%-           endif %}
+{%-           if routeMap['metric'] %}
+  set metric {{ routeMap['metric'] }}
+{%-           endif %}
+{%-         endfor %}
+{%-       endif %}
+{%-   endif %}
+!
+{%-  if ospf %}
+{%-   if ospf['area']['id'] is not none %}
+router ospf
+{%-     if ospf['area']['id'] is defined and ospf['area']['networks'] is defined %}
+{%-        for _network in ospf['area']['networks'] %}
+  network {{ _network }} area {{ ospf['area']['id'] }}
+{%-        endfor %}
+{%-     endif %}
+{%-     if ospf['redistributeTypes'] is defined %}
+{%-        for _type in ospf['redistributeTypes'] %}
+{%-           if _type['routeMetric'] is none and _type['routeType'] is none %}
+  redistribute {{ _type['type'] }}
+{%-           endif %}
+{%-           if _type['routeMetric'] is not none and _type['routeType'] is not none %}
+  redistribute {{ _type['type'] }} metric {{ _type['routeMetric'] }} metric-type {{ _type['routeType'] }}
+{%-           endif %}
+{%-           if _type['routeMetric'] is not none and _type['routeType'] is none %}
+  redistribute {{ _type['type'] }} metric {{ _type['routeMetric'] }}
+{%-           endif %}
+{%-           if _type['routeMetric'] is none and _type['routeType'] is not none %}
+  redistribute {{ _type['type'] }} metric-type {{ _type['routeType'] }}
+{%-           endif %}
+{%-        endfor %}
+{%-     endif %}
+{%-   endif %}
+{%-  endif %}
+!

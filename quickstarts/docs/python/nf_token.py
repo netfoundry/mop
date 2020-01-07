@@ -3,6 +3,7 @@
 import os
 import logging
 import configparser
+import argparse
 import datetime
 import nf_requests as nfreq
 
@@ -23,7 +24,7 @@ def get_token(env, client_id=None, client_secret=None):
         config.sections()
         config.read(os.path.expanduser('~/.env'))
         client_id = config[env]['clientId']
-        client_secret = config[env]['secretId']
+        client_secret = config[env]['clientSecret']
     data = {"client_id": client_id,
             "client_secret": client_secret,
             "audience": "https://gateway." + env + ".netfoundry.io/",
@@ -35,5 +36,12 @@ def get_token(env, client_id=None, client_secret=None):
 
 
 if __name__ == '__main__':
-    # Get NetFoundry Console token
-    print(get_token('sandbox'))
+    parser = argparse.ArgumentParser(description='Session Token script')
+    parser.add_argument("--client_id", help="NF Console Client Id")
+    parser.add_argument("--client_secret", help="NF Console Client Secret")
+    parser.add_argument("--env", help="NetFoundry Enviroment", required=True)
+    parser.add_argument("--clear_logs", action="store_true", help="Clear log file")
+    args = parser.parse_args()
+    if args.clear_logs:
+        clear_log()
+    print(get_token(args.env, args.client_id, args.client_secret))

@@ -1,0 +1,6 @@
+[Unit]
+Description=mop declared configuration pushed into sqlite db job
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "/opt/netfoundry/nfroute/bin/mop_routing"

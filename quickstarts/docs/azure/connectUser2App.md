@@ -1,8 +1,7 @@
-# User to Cloud Application Connection
-This quickstart guide will provide all the steps to create a secure service between a user and an application hosted in Azure Cloud using NetFoundry Overlay Fabric (NFOF).
+# Overview
+This quickstart guide will provide all the steps to create a secure service between a remote user and an application hosted in Azure Cloud using NetFoundry Overlay Fabric (NFOF).
 
-!!! important
-    Assumption is that the [NF Fabric](../netfoundry/fabric.md) is already up and the [NF Client](../netfoundry/client.md) is installed.
+{!common/fabric-client-important.md!}
 
 ## Through NF Web Console UI
 
@@ -12,40 +11,21 @@ This quickstart guide will provide all the steps to create a secure service betw
 
 {!common/create-ip-host-service.md!}
 
-{!common/create-appwan.md!}
+{!common/create-appwan-client.md!}
 
 ## Programmatically
 
-### via REST API (Python)
+### via Python and Terraform
 
-!!! note
-    For the code clarity, we have broken down the code into multiple Python modules  
+{!common/python-module-note.md!}
 
-    1. [NF REST CRUD (Create,Read, Update and Delete) operations](../../python/nf_requests.py)
-    1. [Get MOP Session Token](../../python/nf_token.py)
-    1. [Create NF Network](../../python/nf_network.py)
-    1. [Create NF Gateway(s)](../../python/nf_gateway.py)
-    1. [Create NF Service(s)](../../python/nf_service.py)
-    1. [Create NF AppWan(s)](../../python/nf_appwan.py)
-    1. [Wrapper Script to Create NF Resources based on Resource yaml file](../../python/nf_resources.py)
+{!common/azure-environment-setup-note.md!}
 
-    To obtain a session token, the [MOP Session Token](../../python/nf_token.py) script parses a configuration file
-    for clientId, and secretId if they are not passed to it through the positional arguments
-    (env, clientId, secretId). It must be located in the home directory under ['~/.env'](../../python/env).
-
-    Additionally, we created the Terraform module ([main.tf](../../terraform/m-azure/main.tf) and [variables.tf](../../terraform/m-azure/variables.tf)) for Azure to aid the deployment of gateway(s) into Azure vNet(s). We created the Terraform Python modules ([nf_tf_main_file.py](../../python/nf_tf_main_file.py) and [nf_tf_modules.py](../../python/nf_tf_modules.py)) that the python wrapper, script based on [Resource yaml](../../python/nf_resources.yml) file, calls them to create the Terraform plan main file  in the working directory, and then applies it using the Terraform module.
-
-    Assumption, [the network named DemoNet01](../netfoundry/fabric.md) has already been created. If not network action would need to be "create" not "get". The "get" action just means that the network ID will be search based on the name provided and use to add gateways to.
-
-    The new Resource Group in Azure will be created named "demoPythonTerraform01" if one does not exists already in the same region (e.g. centralus). A new vnet will be created and NF Gateway will be placed in it.
-
-    Environment means the NF Console Environment used, not  Azure.
-
-!!! example "via REST API (Python)"
+!!! example "Steps"
     1. Clone this repo (git clone https://github.com/netfoundry/mop.git)
-    1. Update [Resource yaml](../../python/nf_resources.yml) file with the desired options to feed into the wrapper script as described
+    1. Update [Resource yaml](../python/nf_resources.yml) file with the desired options to feed into the wrapper script as described
     in the following code snippet.
-    [All Resource.yml Options](./README.md)
+    [All Resource.yml Options](README.md)
     1. Run this from the root folder to create GW in NF Console UI and Azure.
     ``` python
     python3 quickstarts/docs/python/nf_resources.py --file quickstarts/docs/python/nf_resources.yml
@@ -73,7 +53,7 @@ This quickstart guide will provide all the steps to create a secure service betw
       source: ./quickstarts/docs/terraform
       work_dir: .
     ```
-    1. After the script is run successfully, one can see that the gateway name and registration key were saved Resource.yml file. The nam eis created automatically based on region and gateway type (AZCPEGW means an azure type gateway in NF console).
+    1. After the script is run successfully, one can see that the gateway name and registration key were saved in Resource.yml file. The name is created automatically based on region and gateway type joined with x and gateway count (AZCPEGW means an azure type gateway in NF console). One can create more than one gateway in the same region by increasing the count to more than 1.
     ``` yaml
     environment: production
     gateway_list:
@@ -81,7 +61,7 @@ This quickstart guide will provide all the steps to create a secure service betw
       cloud: azure
       count: 1
       names:
-      - AZCPEGW-0-WESTUS
+      - AZCPEGWx0xWESTUS
       region: westus
       regionalCidr:
       - 10.20.10.0/24
@@ -103,7 +83,7 @@ This quickstart guide will provide all the steps to create a secure service betw
     ![Image](../images/CreateManagedGatewayAzure12.png)
     1. Create a test server vm on the same vNet if not already present.
     ![Image](../images/CreateManagedGatewayAzure13.png)
-    1. Update the Resoure.yaml file to include the Service option to create the NF service on the gateway create in the previous step. make sure to change the action on the gateway to "get".
+    1. Update the Resoure.yaml file to include the Service option to create the NF service on the gateway create in the previous step. Don't forget to change the action on the gateway to "get".
     ``` yaml
     environment: production
     gateway_list:
@@ -111,7 +91,7 @@ This quickstart guide will provide all the steps to create a secure service betw
       cloud: azure
       count: 1
       names:
-      - AZCPEGW-0-WESTUS
+      - AZCPEGWx0xWESTUS
       region: westus
       regionalCidr:
       - 10.20.10.0/24
@@ -130,26 +110,26 @@ This quickstart guide will provide all the steps to create a secure service betw
       work_dir: .
       services:
       - action: create
-        gateway: AZCPEGW-0-WESTUS
+        gateway: AZCPEGWx0xWESTUS
         ip: 10.20.10.5
         port: 22
         name:
         type: host
     ```
-    1. After the script ran again successfully, the service section should have been populated with the service name as so.
+    1. After the script run again successfully, the service section should have been populated with the service name as so.
     ``` yaml
     services:
     - action: create
-      gateway: AZCPEGW-0-WESTUS
+      gateway: AZCPEGWx0xWESTUS
       ip: 10.20.10.5
-      name: AZCPEGW-0-WESTUS--10.20.10.5--22
+      name: AZCPEGWx0xWESTUS--10.20.10.5--22
       port: 22
       type: host
     ```
     ![Image](../images/CreateService07.png)
     1. Create a client endpoint if not already done so.
     ![Image](../images/DemoClient01.png)
-    1. Update the Resoure.yaml file to include the AppWan option to create the NF AppWan tying the gateway, clinet and service created in the previous steps. Make sure to change the action on the service to "get".
+    1. Update the Resoure.yaml file to include the AppWan option to create the NF AppWan tying the gateway, client and service created in the previous steps. Don't forget to change the action on the service option to "get".
     ``` yaml
     environment: production
     gateway_list:
@@ -173,7 +153,7 @@ This quickstart guide will provide all the steps to create a secure service betw
     - action: get
       gateway: AZCPEGW-0-WESTUS
       ip: 10.20.10.5
-      name: AZCPEGW-0-WESTUS--10.20.10.5--22
+      name: AZCPEGWx0xWESTUS--10.20.10.5--22
       port: 22
       type: host
     terraform:
@@ -188,34 +168,36 @@ This quickstart guide will provide all the steps to create a secure service betw
       - DemoClient01
       name: appwan-ssh-22
       services:
-      - AZCPEGW-0-WESTUS--10.20.10.5
+      - AZCPEGWx0xWESTUS--10.20.10.5
     ```
     1. After the script ran again successfully, the connectivity should have been up.
     ![Image](../images/CreateAppWan06.png)
     1. To test connectivity, log in to the DemoClinet01 and run ssh "username"@"privateIp"
     ![Image](../images/DemoClientTestSsh01.png)
-    1. To delete resources created, just follow the reverse order. First AppWans
+    1. To delete resources created, just follow the reverse order. Change the action to delete for AppWans first, then other resources as indicated in the code snippets.
     ``` yaml
     appwans:
     - action: delete
       endpoints:
-      - AZCPEGW-0-WESTUS
+      - AZCPEGWx0xWESTUS
       - DemoClient01
       name: null
       services:
-      - AZCPEGW-0-WESTUS--10.20.10.5--22
+      - AZCPEGWx0xWESTUS--10.20.10.5--22
     ```
-    1. Then services
+    1. Services
     ``` yaml
     services:
     - action: delete
-      gateway: AZCPEGW-0-WESTUS
+      gateway: AZCPEGWx0xWESTUS
       ip: 10.20.10.5
       name: null
       port: 22
       type: host
     ```
     1. Endpoints - will delete all resources in Azure as well.
+        1. `terraform state rm "{tf resource name for RG}" // run this before the python script if Resource Group needs to be preserved`
+        1.
     ``` yaml
     gateway_list:
     - action: delete
@@ -237,3 +219,10 @@ This quickstart guide will provide all the steps to create a secure service betw
     network_action: delete
     network_name: DemoNet01
     ```
+    1. Done
+
+### via Jenkins
+
+In this section, we will replace [Resource yaml](../python/nf_resources.yml) with Jenkinsfile to show how to automate the steps further by creating the Jenkins Job
+
+!!! info "Coming Soon"

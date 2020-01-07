@@ -1,25 +1,384 @@
 pipeline {
-    agent {
-      docker {
-        image "netfoundry/jenkins-slave-edge:latest"
-        registryCredentialsId 'dockerhub'
-        registryUrl 'https://index.docker.io/v1/'
-        alwaysPull true
+  agent {
+    docker {
+      image "netfoundry/jenkins-slave-edge:py3"
+      registryCredentialsId 'dockerhub'
+      registryUrl 'https://index.docker.io/v1/'
+      alwaysPull true
+    }
+  }
+  parameters {
+    choice(name: 'ENVIRONMENT', choices: ['sandbox', 'staging'], description: 'Select NF Console Environment to spin the network and gateways in')
+    booleanParam(name: 'CREATE_AVWH', defaultValue: true, description: 'Create Azure VWAN along with all the resources needed, e.g, vhub')
+    booleanParam(name: 'DELETE_AVWH', defaultValue: true, description: 'Delete Azure VWAN along with all the resources needed, e.g, vhub')
+    booleanParam(name: 'CREATE_VPNG', defaultValue: true, description: 'Create Azure VPN Gateway')
+    booleanParam(name: 'DELETE_VPNG', defaultValue: true, description: 'Delete Azure VPN Gateway')
+    booleanParam(name: 'CREATE_NFNK', defaultValue: true, description: 'Create NetFoundry Network')
+    booleanParam(name: 'DELETE_NFNK', defaultValue: true, description: 'Delete NetFoundry Network')
+    booleanParam(name: 'CREATE_NFGW', defaultValue: true, description: 'Create NetFoundry Gateway')
+    booleanParam(name: 'DELETE_NFGW', defaultValue: true, description: 'Delete NetFoundry Gateway')
+    booleanParam(name: 'DEPLOY_AZGW', defaultValue: true, description: 'Deploy NetFoundry Gateway in Azure')
+    booleanParam(name: 'DESTROY_AZGW', defaultValue: true, description: 'Destroy NetFoundry Gateway in Azure')
+    booleanParam(name: 'CREATE_AVWS', defaultValue: true, description: 'Create NetFoundry AVW VPN Site')
+    booleanParam(name: 'DELETE_AVWS', defaultValue: true, description: 'Delete NetFoundry AVW VPN Site')
+    booleanParam(name: 'SETUP_CLIENT_SERVER', defaultValue: true, description: 'Set up Test Client and Server for all test cases')
+    booleanParam(name: 'TEST_CASE01', defaultValue: true, description: 'Test Case 01')
+    booleanParam(name: 'CLEANUP', defaultValue: true, description: 'Clean up of OS disks and Account Storages')
+    string(name: 'VNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'vnet entire IP block')
+    string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
+    string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
+    string(name: 'AVW_LOCATION', defaultValue: 'westus2', description: 'avw region')
+  }
+  environment {
+    // Azure Credentials
+    ARM_TENANT_ID = "25445e86-2ae6-4434-b116-25c66c27168d"
+    ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
+    AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
+    // Test Input Variables
+    ENVIRONMENT = "${params.ENVIRONMENT}"
+    GROUP_NAME = "clouddev-smoke"
+    VNET_NAME = "AVW-PT-vnet"
+    VNET_PREFIX = "${params.VNET_PREFIX}"
+    SUBNET_PREFIX = "${params.SUBNET_PREFIX}"
+    VHUB_PREFIX = "${params.VHUB_PREFIX}"
+    LOCATION = "${params.AVW_LOCATION}"
+    SUBNET_NAME = "AVW-PT-subnet"
+    KEY1 = "AVW Packet Test"
+    VWAN_NAME = "AVW-PT-VWAN"
+    VHUB_NAME = "AVW-PT-VHUB"
+    VPNG_NAME = "AVW-PT-VPNG"
+    NFN_NAME = "AVW-PT-NFN"
+  }
+  stages {
+    stage('Set up WORKSPACE'){
+      steps {
+        // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
+        // check out the mop git repo where python3 scripts are housed
+        checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
+        // fill the gateways details to be deployed
+        sh '''
+        set -Eeuxo pipefail
+        echo "gateway_list:" >|  nf_resources.yaml
+        echo "- cloud: azure" >>  nf_resources.yaml
+        echo "  count: 1" >>  nf_resources.yaml
+        echo "  names: []" >>  nf_resources.yaml
+        echo "  region: ${LOCATION}" >>  nf_resources.yaml
+        echo "  regionalCidr: [${SUBNET_PREFIX}]" >>  nf_resources.yaml
+        echo "  regkeys: []" >>  nf_resources.yaml
+        echo "  resourceGroup:" >>  nf_resources.yaml
+        echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
+        echo "    region: ${LOCATION}" >>  nf_resources.yaml
+        echo "  tag: Azure-Server-Gateway" >>  nf_resources.yaml
+        echo "  action:" >>  nf_resources.yaml
+        echo "- cloud: azure" >>  nf_resources.yaml
+        echo "  count: 1" >>  nf_resources.yaml
+        echo "  names: []" >>  nf_resources.yaml
+        echo "  region: centralus" >>  nf_resources.yaml
+        echo "  regionalCidr: [10.20.10.0/24]" >>  nf_resources.yaml
+        echo "  regkeys: []" >>  nf_resources.yaml
+        echo "  resourceGroup:" >>  nf_resources.yaml
+        echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
+        echo "    region: ${LOCATION}" >>  nf_resources.yaml
+        echo "  tag: Azure-Client-Gateway" >>  nf_resources.yaml
+        echo "  action:" >>  nf_resources.yaml
+        echo "- cloud: vwan" >>  nf_resources.yaml
+        echo "  count: 1" >>  nf_resources.yaml
+        echo "  names: []" >>  nf_resources.yaml
+        echo "  region: centralus" >>  nf_resources.yaml
+        echo "  regionalCidr: [10.20.10.0/24]" >>  nf_resources.yaml
+        echo "  regkeys: []" >>  nf_resources.yaml
+        echo "  resourceGroup:" >>  nf_resources.yaml
+        echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
+        echo "    region: ${LOCATION}" >>  nf_resources.yaml
+        echo "  tag: Azure-Site-Gateway" >>  nf_resources.yaml
+        echo "  action:" >>  nf_resources.yaml
+        echo "terraform:" >>  nf_resources.yaml
+        echo "  bin: terraform" >>  nf_resources.yaml
+        echo "  output: no" >>  nf_resources.yaml
+        echo "  source: ./quickstarts/docs/terraform" >>  nf_resources.yaml
+        echo "  work_dir: ." >>  nf_resources.yaml
+        cat nf_resources.yaml
+        '''
+        sh '''
+        set -Eeuxo pipefail
+        ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
+        eval cat logoutput.txt
+        '''
       }
     }
-    parameters {
-        string(name: 'pythonRepoRef', defaultValue: 'master', description: 'Git reference in python repo')
-        choice(name:'environment', choices: [ 'staging', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
+    stage('Create Azure VWAN'){
+      when { expression { params.CREATE_AVWH }}
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+          // the build steps require for Azure
+          sh '''set +x; set -e -u -o pipefail
+          eval python3 quickstarts/docs/python/azure/azure_vwan_create.py
+          '''
+        }
+      }
     }
-    stages {
-        stage('Set up WORKSPACE'){
+    stage('Create VPN Gateway and NF Network'){
+      parallel {
+        stage('Create Azure VPN Gateway'){
+          when { expression { params.CREATE_VPNG }}
           steps {
-            // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
-            checkout([$class: 'GitSCM', branches: [[name: "${params.pythonRepoRef}"]],
-                      userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']],
-                                           poll: false,
-                                           changelog: false])
+            withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+              // the build steps require for Azure
+              sh '''set +x; set -e -u -o pipefail
+              eval python3 quickstarts/docs/python/azure/azure_vpng_create.py
+              '''
+            }
           }
         }
+        stage('Create NF Resources'){
+          stages {
+            stage('Create NF Network') {
+              when { expression { params.CREATE_NFNK }}
+              steps {
+                // the build steps to create NF Network
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+                  sh '''
+                  set -Eeuxo pipefail
+                  eval python3 quickstarts/docs/python/nfn_create.py
+                  eval cat logoutput.txt
+                  '''
+                }
+              }
+            }
+            stage('Create NF Gateways') {
+              when { expression { params.CREATE_NFGW }}
+              steps {
+                // the build steps to create NF Gateways
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+                  sh '''
+                  set -Eeuxo pipefail
+                  cat nf_resources.yaml
+                  eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
+                  cat logoutput.txt
+                  cat nf_resources.yaml
+                  '''
+                }
+              }
+            }
+            stage('Deploy NF Gateways') {
+              when { expression { params.DEPLOY_AZGW }}
+              steps {
+                // Steps to Deploy NF Gateways VMs in Azure based on Terraform plan
+                withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+                  sh '''
+                  set -Eeuxo pipefail
+                  cat nf_resources.yaml
+                  rm -Rf terraform.tfstate.d
+                  eval python3 quickstarts/docs/python/nfg_manage.py --action create-terraform --file nf_resources.yaml
+                  cat logoutput.txt
+                  jq . main.tf.json
+                  eval terraform apply --auto-approve
+                  eval terraform state list
+                  eval terraform state rm module.westus2_rg.azurerm_resource_group.terraformgroup
+                  eval terraform state list
+                  cat nf_resources.yaml
+                  '''
+                }
+              }
+            }
+          }
+        }
+      }
     }
+    stage('Create NF AVW VPN Site') {
+      when { expression { params.CREATE_AVWS}}
+      steps {
+        // the build steps to create NF AVW VPN Site
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS'],
+                        usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+          sh '''
+          set -Eeuxo pipefail
+          export AVW_SITE_PRIVATE_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
+          export AVW_SITE_PUBLIC_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_public_ips.value[][]`
+          export AVW_SITE_PEER_PRIVATE_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
+          export VW_SITE_PEER_PUBLIC_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]`
+          eval python3 quickstarts/docs/python/nf_avwsite.py --action create --file nf_resources.yaml
+          eval cat logoutput.txt
+          '''
+          // Attaching Server vNet to vHub in Azure and creating a route to server
+          sh '''
+          set -Eeuxo pipefail
+          export ROUTE_NAME=`eval echo "route_${VNET_PREFIX}" | sed -r "s/\\//_/g"`
+          export AVW_SITE_PRIVATE_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
+          az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+          az extension add --name virtual-wan
+          response=`eval az network route-table route create -g $GROUP_NAME  --route-table-name centralus-routeTable -n $ROUTE_NAME \
+              --next-hop-type VirtualAppliance --address-prefix $VNET_PREFIX --next-hop-ip-address $AVW_SITE_PRIVATE_IP`
+          echo $response | jq .
+          vNetId=`eval az network vnet show --resource-group $GROUP_NAME --name westus2-vNet | jq -j .id`
+          response=`eval az network vhub connection create --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet --remote-vnet $vNetId --internet-security true`
+          echo $response | jq .
+          '''
+        }
+      }
+    }
+    stage('Set up Test Client and Server for all test cases') {
+      when { expression { params.SETUP_CLIENT_SERVER }}
+      steps {
+        //Configure Client and Server between the network under test for the packet connectivity test
+        sh '''
+        eval sleep 30m
+        '''
+        sh '''
+        set -Eeuxo pipefail
+        echo "[customer-router]" >| quickstarts/docs/ansible/hosts
+        echo `terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
+        echo "[app-server]" >> quickstarts/docs/ansible/hosts
+        echo `terraform output -json | jq -j .AZCPEGWx0xWESTUS2_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
+        cat quickstarts/docs/ansible/hosts
+        '''
+        sh '''
+        set -Eeuxo pipefail
+        localIp=`eval terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
+        localPeerIp=`eval terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
+        echo "bgp:" >| quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
+        echo " localIp: ${localIp}" >> quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
+        echo " localPeerIp: ${localPeerIp}" >> quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
+        cat quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
+        '''
+        sh '''
+        set -Eeuxo pipefail
+        eval export ANSIBLE_HOST_KEY_CHECKING=False
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags customer-router,frr,app-server -u nfadmin -e customerRouter=True -e appServer=True
+        '''
+      }
+    }
+    stage('Test Case 01') {
+      when { expression { params.TEST_CASE01 }}
+      steps {
+        //Run test Cases to pass packet across the AVW Network
+        sh '''
+        eval sleep 5m
+        '''
+        sh '''
+        set +ex
+        serverIp=`eval terraform output -json | jq -j .AZCPEGWx0xWESTUS2_private_ips.value[][]`
+        eval export ANSIBLE_HOST_KEY_CHECKING=False
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags test-case-01 -u nfadmin -e testCase01=True -e serverIp=$serverIp
+        # trying to catch error code 1 or higher to continue if the tests fail
+        errorCode=$?
+        if [ $errorCode -ne 0 ]; then
+          echo "One or more Tests Failed"
+          # We exit the all script with the same error, if you don't want to
+          # exit it and continue, just comment out this line.
+          #exit $errorCode
+        fi
+        '''
+      }
+    }
+    stage('Delete NF AVW VPN Site') {
+      when { expression { params.DELETE_AVWS }}
+      steps {
+        // the build steps to delete NF Network
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS'],
+                        usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+          sh '''
+          set -Eeuxo pipefail
+          python3 quickstarts/docs/python/nf_avwsite.py --action delete
+          eval cat logoutput.txt
+          '''
+          sh '''
+          set -Eeuxo pipefail
+          export ROUTE_NAME=`eval echo "route_${VNET_PREFIX}" | sed -r "s/\\//_/g"`
+          az extension add --name virtual-wan
+          az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+          eval az network vhub connection delete --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet
+          eval az network route-table route delete -g $GROUP_NAME --route-table-name centralus-routeTable -n $ROUTE_NAME
+          '''
+        }
+      }
+    }
+    stage('Delete VPN Gateway and NF Network'){
+      parallel{
+        stage('Delete Azure VPN Gateway'){
+          when { expression { params.DELETE_VPNG }}
+          steps {
+            withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+              // the build steps require for Azure
+              sh '''set +x; set -e -u -o pipefail
+              eval python3 quickstarts/docs/python/azure/azure_vpng_delete.py
+              '''
+            }
+          }
+        }
+        stage('Delete NF Resources'){
+          stages {
+            stage('Destroy NF Gateways') {
+              when { expression { params.DESTROY_AZGW }}
+              steps {
+                // Steps to Destroy NF Gateways VMs in Azure based on Terraform plan
+                withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+                  sh '''
+                  set -Eeuxo pipefail
+                  cat nf_resources.yaml
+                  jq . main.tf.json
+                  eval terraform state list
+                  eval terraform destroy --auto-approve
+                  eval terraform state list
+                  cat nf_resources.yaml
+                  '''
+                }
+              }
+            }
+            stage('Delete NF Gateways') {
+              when { expression { params.DELETE_NFGW }}
+              steps {
+                // the build steps to delete NF Network
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS'],
+                                 usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+                  sh '''
+                  set -Eeuxo pipefail
+                  cat nf_resources.yaml
+                  python3 quickstarts/docs/python/nfg_manage.py --action delete --file nf_resources.yaml
+                  cat logoutput.txt
+                  cat nf_resources.yaml
+                  '''
+                }
+              }
+            }
+            stage('Delete NF Network') {
+              when { expression { params.DELETE_NFNK }}
+              steps {
+                // the build steps to create NF Network
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+                  sh '''
+                  set -Eeuxo pipefail
+                  eval python3 quickstarts/docs/python/nfn_delete.py
+                  eval cat logoutput.txt
+                  '''
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    stage('Delete Azure VWAN'){
+      when { expression { params.DELETE_AVWH }}
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+          // the build steps require for Azure
+          sh '''set +x; set -e -u -o pipefail
+          eval python3 quickstarts/docs/python/azure/azure_vwan_delete.py
+          '''
+        }
+      }
+    }
+    stage('Clean up of OS disks and Account Storages'){
+      when { expression { params.CLEANUP }}
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+          // the build steps require for Azure
+          sh '''set +x; set -e -u -o pipefail
+          eval python3 quickstarts/docs/python/azure/azure_cleanup.py
+          '''
+        }
+      }
+    }
+  }
 }

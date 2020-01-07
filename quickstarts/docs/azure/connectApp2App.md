@@ -1,22 +1,24 @@
-# Branch Application to Cloud Application Connection
-This quickstart guide will provide steps to create a secure service between a branch application and/or user and an application hosted in Azure Cloud using NetFoundry Overlay Fabric (NFOF).
+# Overview
+This quickstart guide will provide all the steps to create a secure service between a branch application and/or user and an application hosted in Azure Cloud using NetFoundry Overlay Fabric (NFOF).
 
-## Create Host Service
-------------
+!!! info "PAGE UNDER CONSTRUCTION"
 
-!!! important
-    Assumption is that the [NF Fabric](../netfoundry/fabric.md) is already up and the [NF Gateway](../netfoundry/gateway.md) is installed.
+{!common/fabric-only-important.md!}
 
-```Console tab="Console UI"
-console ui content
-```
+## Through NF Web Console UI
 
-```Python tab="NF Token - Python"
-token content
-```
+{!common/create-private-gateway.md!}
 
-```Python tab="NF REST CRUD - Python"
-rest crud content
-```
+{!common/create-azure-gateway.md!}
 
-## Create AppWan
+{!common/create-ip-host-service.md!}
+
+{!common/create-appwan-gateway.md!}
+
+## Programmatically
+
+### via Python and Terraform
+
+{!common/python-module-note.md!}
+
+{!common/azure-environment-setup-note.md!}

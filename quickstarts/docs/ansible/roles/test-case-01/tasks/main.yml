@@ -1,0 +1,3 @@
+---
+# tasks for application server
+- include_tasks: config.yml

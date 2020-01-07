@@ -26,27 +26,45 @@ def create_vm_aws(vpc, region, ami, vm_name, nfkey, source):
     }
     return tf_module_vm
 
-def create_vm_azure(resourceGroup, region, regionalCidr, vmName, nfkey, tag, source):
-    tf_module_vm = {
-        "source" : "%s/m-azure" % source,
+def create_rg_azure(resourceGroup, tag, source):
+    tf_module_rg = {
+        "source" : "%s/m-azure-rg" % source,
         "resourceGroupName": resourceGroup['name'],
         "resourceGroupRegion": resourceGroup['region'],
+        "tagEnvironment": tag
+    }
+    return tf_module_rg
+
+def create_vnet_azure(rg, region, regionalCidr, tag, source):
+    tf_module_vnet = {
+        "source" : "%s/m-azure-vnet" % source,
+        "resourceGroupName": "${module.%s.rgName}" % rg,
+        "region" : region,
+        "virtualNetworkName": region + '-vNet',
+        "regionalCidr": regionalCidr,
+        "virtualSubnetName": region + '-subnet',
+        "subnetCidr": regionalCidr[0],
+        "virtualRouteTable": region + '-routeTable',
+        "tagEnvironment": tag
+    }
+    return tf_module_vnet
+
+def create_vm_azure(rg, region, vmName, nfkey, subnet, tag, source):
+    tf_module_vm = {
+        "source" : "%s/m-azure-vm" % source,
+        "resourceGroupName": "${module.%s.rgName}" % rg,
         "region" : region,
         "vmName": vmName,
         "nfnKey" : nfkey,
-        "virtualNetworkName": vmName + '-vNet',
-        "regionalCidr": regionalCidr,
-        "virtualSubnetName": vmName + '-subnet',
-        "subnetCidr": regionalCidr[0],
-        "virtualRouteTable": vmName + '-routeTable',
         "nicName": vmName + '-nic',
         "publicIp": vmName + '-publicIp',
         "securityGroup": vmName + '-securityGroup',
+        "publicSubnetId": "${module.%s.publicSubnetId}" % subnet,
         "tagEnvironment": tag
     }
     return tf_module_vm
 
-def create_output(instance):
-    value = "${module.%s.instance_public_ips}" % instance
+def create_output(instance, item):
+    value = "${module.%s.%s}" % (instance, item)
     tf_output = {"value": [value]}
     return tf_output

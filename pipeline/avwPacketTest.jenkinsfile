@@ -155,14 +155,6 @@ pipeline {
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
                   eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
-                  # trying to catch error code 1 or higher to continue if the tests fail
-                  errorCode=$?
-                  if [ $errorCode -ne 0 ]; then
-                    cat logoutput.txt
-                    # We exit the all script with the same error, if you don't want to
-                    # exit it and continue, just comment out this line.
-                    #exit $errorCode
-                  fi
                   cat logoutput.txt
                   cat nf_resources.yaml
                   '''

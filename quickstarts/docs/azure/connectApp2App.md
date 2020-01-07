@@ -7,6 +7,8 @@ This quickstart guide will provide all the steps to create a secure service betw
 
 ## Through NF Web Console UI
 
+{!common/create-private-gateway.md!}
+
 {!common/create-azure-gateway.md!}
 
 {!common/create-ip-host-service.md!}

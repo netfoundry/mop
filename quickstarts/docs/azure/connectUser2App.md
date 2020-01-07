@@ -195,7 +195,7 @@ This quickstart guide will provide all the steps to create a secure service betw
     ![Image](../images/CreateAppWan06.png)
     1. To test connectivity, log in to the DemoClinet01 and run ssh "username"@"privateIp"
     ![Image](../images/DemoClientTestSsh01.png)
-    1. To delete resources created, just follow the reverse order. Change the action to delete for AppWans first, then other resource as indicated in the code snippets.
+    1. To delete resources created, just follow the reverse order. Change the action to delete for AppWans first, then other resources as indicated in the code snippets.
     ``` yaml
     appwans:
     - action: delete
@@ -206,7 +206,7 @@ This quickstart guide will provide all the steps to create a secure service betw
       services:
       - AZCPEGWx0xWESTUS--10.20.10.5--22
     ```
-    1. Then services
+    1. Services
     ``` yaml
     services:
     - action: delete
@@ -218,7 +218,7 @@ This quickstart guide will provide all the steps to create a secure service betw
     ```
     1. Endpoints - will delete all resources in Azure as well.
         1. `terraform state rm "{tf resource name for RG}" // run this before the python script if Resource Group needs to be preserved`
-        1. 
+        1.
     ``` yaml
     gateway_list:
     - action: delete

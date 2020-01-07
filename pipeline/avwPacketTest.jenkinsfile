@@ -154,7 +154,16 @@ pipeline {
                   sh '''
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
-                  python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
+                  eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
+                  # trying to catch error code 1 or higher to continue if the tests fail
+                  errorCode=$?
+                  if [ $errorCode -ne 0 ]; then
+                    cat logoutput.txt
+                    # We exit the all script with the same error, if you don't want to
+                    # exit it and continue, just comment out this line.
+                    #exit $errorCode
+                  fi
+                  '''
                   cat logoutput.txt
                   cat nf_resources.yaml
                   '''
@@ -170,7 +179,7 @@ pipeline {
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
                   rm -Rf terraform.tfstate.d
-                  python3 quickstarts/docs/python/nfg_manage.py --action create-terraform --file nf_resources.yaml
+                  eval python3 quickstarts/docs/python/nfg_manage.py --action create-terraform --file nf_resources.yaml
                   cat logoutput.txt
                   jq . main.tf.json
                   eval terraform apply --auto-approve
@@ -198,7 +207,7 @@ pipeline {
           export AVW_SITE_PUBLIC_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_public_ips.value[][]`
           export AVW_SITE_PEER_PRIVATE_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
           export VW_SITE_PEER_PUBLIC_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]`
-          python3 quickstarts/docs/python/nf_avwsite.py --action create --file nf_resources.yaml
+          eval python3 quickstarts/docs/python/nf_avwsite.py --action create --file nf_resources.yaml
           eval cat logoutput.txt
           '''
           // Attaching Server vNet to vHub in Azure and creating a route to server

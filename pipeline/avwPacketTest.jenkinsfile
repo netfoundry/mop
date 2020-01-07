@@ -102,7 +102,6 @@ pipeline {
         sh '''
         set -Eeuxo pipefail
         ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
-        cat ~/.ssh/id_rsa
         eval cat logoutput.txt
         '''
       }

@@ -7,8 +7,8 @@ This section will guide a user through the steps on how to enable service connec
     ![Image](../images/CreateAppWan01.png)
     1. Click on "Component Builder Appwan"
     ![Image](../images/CreateAppWan02.png)
-    1. Moved the desired client (e.g. DemoClient01) from "Available" Clients to "Selected" Endpoints. Moved the desired service (e.g. DemoClient01) from "Available" to "Selected" Services.
+    1. Move the desired gateway (e.g. DemoGateway01) from "Available" Gateways to "Selected" Endpoints. Move the desired service (e.g. DemoServiceSsh) from "Available" to "Selected" Services.
     ![Image](../images/CreateAppWan03.png)
     1. Click on "Create".
     ![Image](../images/CreateAppWan04.png)
-    1. Done 
+    1. Done

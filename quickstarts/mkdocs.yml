@@ -5,8 +5,8 @@ nav:
       - aws/intro.md
       - Bastion Replacement Removal: aws/aws-bastion.md
     - Azure:
-      - azure/intro.md
-      - Connect User To Cloud Application: azure/connectUser2App.md
+      - Use Cases Overview: azure/intro.md
+      - Connect Mobile User To Cloud Application: azure/connectUser2App.md
       - Connect Branch Application with Cloud Application: azure/connectApp2App.md
       - Bastion Replacement Removal: azure/azure-bastion.md
     - GCP:

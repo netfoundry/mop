@@ -9,7 +9,7 @@
 
 **How can NetFoundry Help?**
 
-`Deploying a bastion host setup with NetFoundry is more secure!  Why?  Because the bastion doesn't need to be directly accessible from outside networks. It only needs outbound access & can reside in either public or private networks.` 
+`Deploying a bastion host setup with NetFoundry is more secure!  Why?  Because the bastion doesn't need to be directly accessible from outside networks. It only needs outbound access & can reside in either public or private networks.`
 
 # Solution Architecture
 
@@ -41,6 +41,4 @@
 
 {!common/create-ip-network-service.md!}
 
-{!common/create-appwan.md!}
-
-
+{!common/create-appwan-client.md!}

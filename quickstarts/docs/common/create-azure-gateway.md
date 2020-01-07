@@ -1,4 +1,4 @@
-### Create and Install NF Azure Gateway
+### Create and Deploy NF Azure Gateway
 This section will guide a user through the steps on how to create a NF Manage Gateway in the NF Console UI and install it in the Azure vNet.
 
 !!! example "Console UI"
@@ -21,4 +21,4 @@ This section will guide a user through the steps on how to create a NF Manage Ga
     1. If the NF Gateway was deployed successfully. Here is the view of the Resource Group and NF Conole UI.
     ![Image](../images/CreateManagedGatewayAzure08.png)
     ![Image](../images/CreateManagedGatewayAzure09.png)
-    1. Done 
+    1. Done

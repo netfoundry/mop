@@ -21,10 +21,11 @@ This section will show how to do that through [NF Console](https://nfconsole.io)
     1. [Wrapper Script to Create NF Resources based on Resource yaml file](../python/nf_resources.py)
 
     To obtain a session token, the [MOP Session Token](../python/nf_token.py) script parses a configuration file
-    for clientId, and secretId if they are not passed to it through the positional arguments
-    (env, clientId, secretId). It must be located in the home directory under ['~/.env'](../python/env)
+    for clientId, and clientSecret if they are not passed to it through the positional arguments
+    (e.g. env, clientId, clientSecret). This configuration file must be located in the home directory under ['~/.env'](../../python/env)
 
 1. Clone this repo (git clone https://github.com/netfoundry/mop.git)
+1. Change directory to `cd mop`
 1. Update [Resource yaml](../python/nf_resources.yml) file with the desired options to feed into the wrapper script as described
 in the following code snippet.
 1. Run this from the root folder

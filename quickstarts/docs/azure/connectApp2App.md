@@ -1,4 +1,4 @@
-# Branch Application to Cloud Application Connection
+# Overview
 This quickstart guide will provide steps to create a secure service between a branch application and/or user and an application hosted in Azure Cloud using NetFoundry Overlay Fabric (NFOF).
 
 ## Create Host Service

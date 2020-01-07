@@ -1,5 +1,5 @@
 ### Create and install NF Client
-This section will guide a user through the steps on how to createaal the  a client in the NF Console UI. Then, it will provide links to Guides on how to install the NetFoundry Client Software for Windows and MAC Clients, including the registration with the  NF Network Fabric.
+This section will guide a user through the steps on how to create a client in the NF Console UI. Then, it will provide links to Guides on how to install the NetFoundry Client Software for Windows and MAC Clients, including the registration with the  NF Network Fabric.
 
 !!! example "Console UI"
     1. Navigate to Manage Clients Page

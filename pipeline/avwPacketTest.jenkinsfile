@@ -266,7 +266,7 @@ pipeline {
         sh '''
         set -Eeuxo pipefail
         localIp=`eval terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
-        localPeerIp=`eval terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
+        localPeerIp=`eval terraform output -json | jq -j .${AVW_SITE_NAME}_private_ips.value[][]`
         echo "bgp:" >| quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
         echo " localIp: ${localIp}" >> quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml
         echo " localPeerIp: ${localPeerIp}" >> quickstarts/docs/ansible/roles/customer-router/vars/bgp.yml

@@ -24,10 +24,10 @@ pipeline {
     booleanParam(name: 'SETUP_CLIENT_SERVER', defaultValue: true, description: 'Set up Test Client and Server for all test cases')
     booleanParam(name: 'TEST_CASE01', defaultValue: true, description: 'Test Case 01')
     booleanParam(name: 'CLEANUP', defaultValue: true, description: 'Clean up of OS disks and Account Storages')
-    string(name: 'VNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'vnet entire IP block')
-    string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
-    string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
-    string(name: 'AVW_LOCATION', defaultValue: 'westus2', description: 'avw region')
+    string(name: 'VNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'Test vNet in vHub Region; Entire IP block')
+    string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'Test Subnet in vHub Region')
+    string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'vHub Subnet')
+    string(name: 'AVW_LOCATION', defaultValue: 'westus2', description: 'vWan/vHub region, Test Server Location')
     string(name: 'AVW_SITE_NAME', defaultValue: 'NetFoundryVpnSite', description: 'NetFoundry Vpn Site Name')
   }
   environment {
@@ -257,6 +257,7 @@ pipeline {
         '''
         sh '''
         set -Eeuxo pipefail
+        SERVER_LOC=eval echo $LOCATION | tr '[:lower:]' '[:upper:]'
         echo "[customer-router]" >| quickstarts/docs/ansible/hosts
         echo `terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
         echo "[app-server]" >> quickstarts/docs/ansible/hosts

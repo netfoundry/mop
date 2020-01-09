@@ -356,9 +356,9 @@ pipeline {
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
                   jq . main.tf.json
-                  //eval terraform state list
-                  //removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
-                  // if [ -n "${removeRg}" ]; then  terraform state rm $removeRg; fi
+                  #eval terraform state list
+                  #removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
+                  #if [ -n "${removeRg}" ]; then  terraform state rm $removeRg; fi
                   eval terraform state list
                   eval terraform destroy --auto-approve
                   eval terraform state list

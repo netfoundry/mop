@@ -9,6 +9,7 @@ nav:
       - Mobile User To Cloud Application Connectivity: azure/connectUser2App.md
       - Branch Application To Cloud Application Connectivity: azure/connectApp2App.md
       - Bastion Replacement Removal: azure/azure-bastion.md
+      - NFN Access with Azure Stack: azure/azure-nfn.md
     - GCP:
       - Overview: gcp/intro.md
     - NetFoundry:

@@ -89,6 +89,8 @@ resource "azurerm_virtual_machine" "terraformvm" {
     network_interface_ids = ["${azurerm_network_interface.terraformnic.id}"]
     vm_size               = "Standard_B1ms"
 
+    delete_os_disk_on_termination = true
+
     storage_os_disk {
         name              = "${var.vmName}OsDisk"
         caching           = "ReadWrite"

@@ -1,0 +1,20 @@
+gateway_list:
+- action: add
+  cloud: vwan
+  count: 1
+  names:
+  - netfoundryVpnSite
+  region: centralus
+  regionalCidr:
+  - 10.10.10.0/24
+  regkeys:
+  - AA403237AB888D67BB546DBC27F7AF16CC752BA6
+  resourceGroup:
+    name: clouddev-smoke
+    region: westus2
+  tag: test
+terraform:
+  bin: terraform
+  output: false
+  source: ./quickstarts/docs/terraform
+  work_dir: .

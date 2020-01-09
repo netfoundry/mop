@@ -20,7 +20,7 @@ def writelog(message):
     logfile.close()
 
 
-def create_gateway(env, netUrl, loc, type, index, token):
+def create_gateway(env, netUrl, loc, type, index, token, **kargs):
     # Create AWS GW(s)
     url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/dataCenters'
     # find dc id based on location code
@@ -36,7 +36,12 @@ def create_gateway(env, netUrl, loc, type, index, token):
         gwType = 'AZCPEGW'
     if type == 'vwan':
         gwType = 'AVWGW'
-    new_gw = nfreq.post_data(gwUrl, {"name": gwType +'x'+ str(index) +'x'+ loc.upper(),
+    # checking if gateway name was passed as one of **kargs
+    try:
+        gwName = kargs['gwName']
+    except KeyError:
+        gwName = gwType +'x'+ str(index) +'x'+ loc.upper()
+    new_gw = nfreq.post_data(gwUrl, {"name": gwName,
                              "endpointType": gwType,
                              "geoRegionId": None,
                              "dataCenterId": dcId,
@@ -65,12 +70,15 @@ def create_gateway(env, netUrl, loc, type, index, token):
 
 def find_gateway(netUrl, name, token):
     gwsUrl = netUrl + '/endpoints'
-    gateways = nfreq.get_data(gwsUrl, token)['_embedded']['endpoints']
-    gwUrl = ''
-    for gateway in gateways:
-        if gateway['name'] == name:
-            gwUrl = gateway['_links']['self']['href']
-    return gwUrl
+    try:
+        gateways = nfreq.get_data(gwsUrl, token)['_embedded']['endpoints']
+        gwUrl = ''
+        for gateway in gateways:
+            if gateway['name'] == name:
+                gwUrl = gateway['_links']['self']['href']
+        return gwUrl
+    except KeyError:
+        return None
 
 
 def delete_gateway(gwUrl, token):

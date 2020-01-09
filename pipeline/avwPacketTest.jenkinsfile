@@ -28,6 +28,7 @@ pipeline {
     string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
     string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
     string(name: 'AVW_LOCATION', defaultValue: 'westus2', description: 'avw region')
+    string(name: 'AVW_SITE_NAME', defaultValue: 'netfoundry-vpn-site', description: 'NetFoundry Vpn Site Name')
   }
   environment {
     // Azure Credentials
@@ -37,6 +38,7 @@ pipeline {
     // Test Input Variables
     ENVIRONMENT = "${params.ENVIRONMENT}"
     GROUP_NAME = "clouddev-smoke"
+    GROUP_LOC = "westus2"
     VNET_NAME = "AVW-PT-vnet"
     VNET_PREFIX = "${params.VNET_PREFIX}"
     SUBNET_PREFIX = "${params.SUBNET_PREFIX}"
@@ -48,6 +50,7 @@ pipeline {
     VHUB_NAME = "AVW-PT-VHUB"
     VPNG_NAME = "AVW-PT-VPNG"
     NFN_NAME = "AVW-PT-NFN"
+    AVW_SITE_NAME = "${params.AVW_SITE_NAME}
   }
   stages {
     stage('Set up WORKSPACE'){
@@ -67,7 +70,7 @@ pipeline {
         echo "  regkeys: []" >>  nf_resources.yaml
         echo "  resourceGroup:" >>  nf_resources.yaml
         echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
-        echo "    region: ${LOCATION}" >>  nf_resources.yaml
+        echo "    region: ${GROUP_LOC}" >>  nf_resources.yaml
         echo "  tag: Azure-Server-Gateway" >>  nf_resources.yaml
         echo "  action:" >>  nf_resources.yaml
         echo "- cloud: azure" >>  nf_resources.yaml
@@ -78,19 +81,8 @@ pipeline {
         echo "  regkeys: []" >>  nf_resources.yaml
         echo "  resourceGroup:" >>  nf_resources.yaml
         echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
-        echo "    region: ${LOCATION}" >>  nf_resources.yaml
+        echo "    region: ${GROUP_LOC}" >>  nf_resources.yaml
         echo "  tag: Azure-Client-Gateway" >>  nf_resources.yaml
-        echo "  action:" >>  nf_resources.yaml
-        echo "- cloud: vwan" >>  nf_resources.yaml
-        echo "  count: 1" >>  nf_resources.yaml
-        echo "  names: []" >>  nf_resources.yaml
-        echo "  region: centralus" >>  nf_resources.yaml
-        echo "  regionalCidr: [10.20.10.0/24]" >>  nf_resources.yaml
-        echo "  regkeys: []" >>  nf_resources.yaml
-        echo "  resourceGroup:" >>  nf_resources.yaml
-        echo "    name: ${GROUP_NAME}" >>  nf_resources.yaml
-        echo "    region: ${LOCATION}" >>  nf_resources.yaml
-        echo "  tag: Azure-Site-Gateway" >>  nf_resources.yaml
         echo "  action:" >>  nf_resources.yaml
         echo "terraform:" >>  nf_resources.yaml
         echo "  bin: terraform" >>  nf_resources.yaml
@@ -98,6 +90,28 @@ pipeline {
         echo "  source: ./quickstarts/docs/terraform" >>  nf_resources.yaml
         echo "  work_dir: ." >>  nf_resources.yaml
         cat nf_resources.yaml
+        '''
+        sh '''
+        set -Eeuxo pipefail
+        echo "gateway_list:" >|  nf_avw_vpn_site.yaml
+        echo "- cloud: vwan" >>  nf_avw_vpn_site.yaml
+        echo "  count: 1" >>  nf_avw_vpn_site.yaml
+        echo "  names:" >>  nf_avw_vpn_site.yaml
+        echo "  - ${AVW_SITE_NAME}
+        echo "  region: centralus" >>  nf_avw_vpn_site.yaml
+        echo "  regionalCidr: [10.20.10.0/24]" >>  nf_avw_vpn_site.yaml
+        echo "  regkeys: []" >>  nf_avw_vpn_site.yaml
+        echo "  resourceGroup:" >>  nf_avw_vpn_site.yaml
+        echo "    name: ${GROUP_NAME}" >>  nf_avw_vpn_site.yaml
+        echo "    region: ${GROUP_LOC}" >>  nf_avw_vpn_site.yaml
+        echo "  tag: Azure-Site-Gateway" >>  nf_avw_vpn_site.yaml
+        echo "  action:" >>  nf_avw_vpn_site.yaml
+        echo "terraform:" >>  nf_avw_vpn_site.yaml
+        echo "  bin: terraform" >>  nf_avw_vpn_site.yaml
+        echo "  output: no" >>  nf_avw_vpn_site.yaml
+        echo "  source: ./quickstarts/docs/terraform" >>  nf_avw_vpn_site.yaml
+        echo "  work_dir: ." >>  nf_avw_vpn_site.yaml
+        cat nf_avw_vpn_site.yaml
         '''
         sh '''
         set -Eeuxo pipefail
@@ -139,7 +153,7 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval python3 quickstarts/docs/python/nfn_create.py
+                  eval python3 quickstarts/docs/python/nfnk_create.py
                   eval cat logoutput.txt
                   '''
                 }
@@ -153,7 +167,7 @@ pipeline {
                   sh '''
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
-                  eval python3 quickstarts/docs/python/nfg_manage.py --action create --file nf_resources.yaml
+                  eval python3 quickstarts/docs/python/nfgw_manage.py --action create --file nf_resources.yaml
                   cat logoutput.txt
                   cat nf_resources.yaml
                   '''
@@ -169,12 +183,14 @@ pipeline {
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
                   rm -Rf terraform.tfstate.d
-                  eval python3 quickstarts/docs/python/nfg_manage.py --action create-terraform --file nf_resources.yaml
+                  eval python3 quickstarts/docs/python/nfgw_manage.py --action create-terraform --file nf_resources.yaml
                   cat logoutput.txt
                   jq . main.tf.json
+                  eval terraform init
                   eval terraform apply --auto-approve
                   eval terraform state list
-                  eval terraform state rm module.westus2_rg.azurerm_resource_group.terraformgroup
+                  removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
+                  eval terraform state rm $removeRg
                   eval terraform state list
                   cat nf_resources.yaml
                   '''
@@ -191,13 +207,28 @@ pipeline {
         // the build steps to create NF AVW VPN Site
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS'],
                         usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+
+          // Trying to create NF vpn site gateway and deploy it to Azure
           sh '''
           set -Eeuxo pipefail
-          export AVW_SITE_PRIVATE_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_private_ips.value[][]`
-          export AVW_SITE_PUBLIC_IP=`terraform output -json | jq -j .AVWGWx0xCENTRALUS_public_ips.value[][]`
+          cat nf_avw_vpn_site.yaml
+          eval python3 quickstarts/docs/python/nfgw_manage.py --action add --file nf_avw_vpn_site.yaml
+          cat logoutput.txt
+          cat nf_avw_vpn_site.yaml
+          eval python3 quickstarts/docs/python/nfgw_manage.py --action add-terraform --file nf_avw_vpn_site.yaml
+          cat logoutput.txt
+          jq . main.tf.json
+          eval terraform init
+          eval terraform apply --auto-approve
+          eval terraform state list
+          '''
+          sh '''
+          set -Eeuxo pipefail
+          export AVW_SITE_PRIVATE_IP=`terraform output -json | jq -j .${AVW_SITE_NAME}_private_ips.value[][]`
+          export AVW_SITE_PUBLIC_IP=`terraform output -json | jq -j .${AVW_SITE_NAME}_public_ips.value[][]`
           export AVW_SITE_PEER_PRIVATE_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
-          export VW_SITE_PEER_PUBLIC_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]`
-          eval python3 quickstarts/docs/python/nf_avwsite.py --action create --file nf_resources.yaml
+          export AVW_SITE_PEER_PUBLIC_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]`
+          eval python3 quickstarts/docs/python/nf_avwsite.py --action create --file nf_avw_vpn_site.yaml
           eval cat logoutput.txt
           '''
           // Attaching Server vNet to vHub in Azure and creating a route to server
@@ -210,8 +241,8 @@ pipeline {
           response=`eval az network route-table route create -g $GROUP_NAME  --route-table-name centralus-routeTable -n $ROUTE_NAME \
               --next-hop-type VirtualAppliance --address-prefix $VNET_PREFIX --next-hop-ip-address $AVW_SITE_PRIVATE_IP`
           echo $response | jq .
-          vNetId=`eval az network vnet show --resource-group $GROUP_NAME --name westus2-vNet | jq -j .id`
-          response=`eval az network vhub connection create --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet --remote-vnet $vNetId --internet-security true`
+          vNetId=`eval az network vnet show --resource-group $GROUP_NAME --name ${LOCATION}-vNet | jq -j .id`
+          response=`eval az network vhub connection create --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name ${LOCATION}-vNet --remote-vnet $vNetId --internet-security true`
           echo $response | jq .
           '''
         }
@@ -290,6 +321,14 @@ pipeline {
           eval az network vhub connection delete --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet
           eval az network route-table route delete -g $GROUP_NAME --route-table-name centralus-routeTable -n $ROUTE_NAME
           '''
+          // Delete NF AVW Site Gateway from NF Network
+          sh '''
+          set -Eeuxo pipefail
+          cat nf_avw_vpn_site.yaml
+          eval python3 quickstarts/docs/python/nfgw_manage.py --action delete --file nf_avw_vpn_site.yaml
+          cat logoutput.txt
+          cat nf_avw_vpn_site.yaml
+          '''
         }
       }
     }
@@ -318,6 +357,9 @@ pipeline {
                   cat nf_resources.yaml
                   jq . main.tf.json
                   eval terraform state list
+                  removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
+                  eval terraform state rm $removeRg
+                  eval terraform state list
                   eval terraform destroy --auto-approve
                   eval terraform state list
                   cat nf_resources.yaml
@@ -334,7 +376,7 @@ pipeline {
                   sh '''
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
-                  python3 quickstarts/docs/python/nfg_manage.py --action delete --file nf_resources.yaml
+                  python3 quickstarts/docs/python/nfgw_manage.py --action delete --file nf_resources.yaml
                   cat logoutput.txt
                   cat nf_resources.yaml
                   '''
@@ -348,7 +390,7 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval python3 quickstarts/docs/python/nfn_delete.py
+                  eval python3 quickstarts/docs/python/nfnk_delete.py
                   eval cat logoutput.txt
                   '''
                 }

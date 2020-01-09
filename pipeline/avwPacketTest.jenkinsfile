@@ -50,7 +50,7 @@ pipeline {
     VHUB_NAME = "AVW-PT-VHUB"
     VPNG_NAME = "AVW-PT-VPNG"
     NFN_NAME = "AVW-PT-NFN"
-    AVW_SITE_NAME = "${params.AVW_SITE_NAME}
+    AVW_SITE_NAME = "${params.AVW_SITE_NAME}"
   }
   stages {
     stage('Set up WORKSPACE'){

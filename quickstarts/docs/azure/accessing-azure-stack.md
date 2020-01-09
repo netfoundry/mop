@@ -17,11 +17,8 @@ Please locate the offering “Application Connection Gateway” and make it avai
 Once the download is complete, the image can now be used by the local user.
 
 # 2 Setup a VCPE Gateway on the Azure stack
-## 2.1 Create an Azure Stack Gateway in the NetFoundry Console
-* Sign in to your NetFoundry organization;
-* Navigate to the Gateways page and create a new Azure Stack gateway. Give it a name and location, then click the Create button;
-* Take note of the registration key. You will need it to register the gateway later.
-![image](../images/AzureStack01.png)
+
+{!common/create-azurestack-gateway.md!}
 
 ## 2.2 Launch a NetFoundry Gateway Instance Inside of Your Azure Stack
 * Sign in to your account on the Azure portal and go to → Resource groups. 

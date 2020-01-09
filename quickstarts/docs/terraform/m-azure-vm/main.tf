@@ -81,8 +81,9 @@ resource "azurerm_storage_account" "storageaccount" {
     }
 }
 
-# Create virtual machine
+# Create virtual machine from marketplace image
 resource "azurerm_virtual_machine" "terraformvm" {
+    count                 = "${var.imageType == "marketplace" ? 1 : 0}"
     name                  = "${var.vmName}"
     location              = "${var.region}"
     resource_group_name   = "${var.resourceGroupName}"
@@ -134,7 +135,56 @@ resource "azurerm_virtual_machine" "terraformvm" {
     }
 }
 
+# Create virtual machine from private image
+resource "azurerm_virtual_machine" "terraformvm_private" {
+    count                 = "${var.imageType == "private" ? 1 : 0}"
+    name                  = "${var.vmName}"
+    location              = "${var.region}"
+    resource_group_name   = "${var.resourceGroupName}"
+    network_interface_ids = ["${azurerm_network_interface.terraformnic.id}"]
+    vm_size               = "Standard_B1ms"
+
+    delete_os_disk_on_termination = true
+
+    storage_os_disk {
+      name              = "${var.vmName}OsDisk"
+      os_type           = "${var.osType}"
+      caching           = "ReadWrite"
+      create_option     = "FromImage"
+      managed_disk_type = "Premium_LRS"
+    }
+
+    storage_image_reference {
+      id = "${var.imageId}"
+    }
+
+    os_profile {
+      # managed image field vs offer, sku, etc
+      computer_name  = "${var.vmName}"
+      admin_username = "${var.userName}"
+    }
+
+    os_profile_linux_config {
+        disable_password_authentication = true
+        ssh_keys {
+            path     = "/home/${var.userName}/.ssh/authorized_keys"
+            key_data = "${file("${var.publicSshKeyPath}")}"
+        }
+    }
+
+    boot_diagnostics {
+        enabled = "true"
+        storage_uri = "${azurerm_storage_account.storageaccount.primary_blob_endpoint}"
+    }
+
+    tags = {
+        environment = "${var.tagEnvironment}"
+    }
+}
+
 resource "null_resource" "gateway_registration" {
+
+  depends_on = [azurerm_virtual_machine.terraformvm_private, azurerm_virtual_machine.terraformvm]
 
   connection {
     host = "${element(azurerm_public_ip.terraformpublicip.*.ip_address, 0)}"

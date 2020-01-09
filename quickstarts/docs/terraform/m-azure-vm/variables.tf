@@ -77,3 +77,17 @@ variable "tagEnvironment" {
 }
 
 variable "publicSubnetId" {}
+
+variable "imageType" {
+  type    = "string"
+  default = "marketplace"
+}
+
+variable "osType" {
+  type    = "string"
+  default = "linux"
+}
+
+variable "imageId" {
+  type    = "string"
+}

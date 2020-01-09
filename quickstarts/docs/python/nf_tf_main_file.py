@@ -115,7 +115,8 @@ def add_to_file(config):
                                           module['regkeys'][index],
                                           module['region']+'_vnet',
                                           module['tag'],
-                                          os.path.expanduser(config['terraform']['source']))
+                                          os.path.expanduser(config['terraform']['source']),
+                                          module.get('imageType', 'marketplace'))
                     tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
                     for item in ['public_ips', 'private_ips']:
                         output = str(module['names'][index]) + '_' + item

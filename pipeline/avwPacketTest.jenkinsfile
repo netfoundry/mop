@@ -29,6 +29,8 @@ pipeline {
     string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'vHub Subnet')
     string(name: 'AVW_LOCATION', defaultValue: 'westus2', description: 'vWan/vHub region, Test Server Location')
     string(name: 'AVW_SITE_NAME', defaultValue: 'NetFoundryVpnSite', description: 'NetFoundry Vpn Site Name')
+    string(name: 'NF_IMAGE_VERSION', description: 'New Image version to be released to Marketplace')
+    string(name: 'AZURE_IMAGE_SUFFIX_ID', description: 'The Suffix id that is attached to the disk after it was built with packer')
   }
   environment {
     // Azure Credentials
@@ -51,6 +53,8 @@ pipeline {
     VPNG_NAME = "AVW-PT-VPNG"
     NFN_NAME = "AVW-PT-NFN"
     AVW_SITE_NAME = "${params.AVW_SITE_NAME}"
+    IMAGE_VERSION = "${params.NF_IMAGE_VERSION}"
+    IMAGE_ID = "${params.AZURE_IMAGE_SUFFIX_ID}"
   }
   stages {
     stage('Set up WORKSPACE'){
@@ -106,6 +110,9 @@ pipeline {
         echo "    region: ${GROUP_LOC}" >>  nf_avw_vpn_site.yaml
         echo "  tag: Azure-Site-Gateway" >>  nf_avw_vpn_site.yaml
         echo "  action:" >>  nf_avw_vpn_site.yaml
+        echo "  imageType: private" >>  nf_avw_vpn_site.yaml
+        echo "  imageId: default ="/subscriptions/${ARM_SUBSCRIPTION_ID}/resourceGroups/${GROUP_NAME}/ \
+                providers/Microsoft.Compute/images/nf-gw-${IMAGE_VERSION}" >>  nf_avw_vpn_site.yaml
         echo "terraform:" >>  nf_avw_vpn_site.yaml
         echo "  bin: terraform" >>  nf_avw_vpn_site.yaml
         echo "  output: no" >>  nf_avw_vpn_site.yaml
@@ -205,6 +212,12 @@ pipeline {
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS'],
                         usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
 
+          // Download the NF Gateway image under test from the edgeimages blob container
+          sh '''
+          set -Eeuxo pipefail
+          export DISK_LOC=centralus
+          python3 quickstarts/docs/python/azure/azure_manage_disk_operations.py --action create
+          '''
           // Trying to create NF vpn site gateway and deploy it to Azure
           sh '''
           set -Eeuxo pipefail
@@ -222,6 +235,7 @@ pipeline {
           eval terraform state rm $removeRg
           eval terraform state list
           '''
+          // Trying to create avw vpn site with ip addresses queried from the Terraform state data
           sh '''
           set -Eeuxo pipefail
           export AVW_SITE_PRIVATE_IP=`terraform output -json | jq -j .${AVW_SITE_NAME}_private_ips.value[][]`
@@ -261,7 +275,7 @@ pipeline {
         echo "[customer-router]" >| quickstarts/docs/ansible/hosts
         echo `terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
         echo "[app-server]" >> quickstarts/docs/ansible/hosts
-        echo `terraform output -json | jq -j .AZCPEGWx0xWESTUS2_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
+        echo `terraform output -json | jq -j .AZCPEGWx0x${SERVER_LOC}_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
         cat quickstarts/docs/ansible/hosts
         '''
         sh '''
@@ -419,6 +433,9 @@ pipeline {
           // the build steps require for Azure
           sh '''set +x; set -e -u -o pipefail
           eval python3 quickstarts/docs/python/azure/azure_cleanup.py
+          '''
+          sh '''set +x; set -e -u -o pipefail
+          python3 quickstarts/docs/python/azure/azure_manage_disk_operations.py --action delete
           '''
         }
       }

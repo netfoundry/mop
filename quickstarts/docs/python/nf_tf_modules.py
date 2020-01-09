@@ -49,7 +49,7 @@ def create_vnet_azure(rg, region, regionalCidr, tag, source):
     }
     return tf_module_vnet
 
-def create_vm_azure(rg, region, vmName, nfkey, subnet, tag, source):
+def create_vm_azure(rg, region, vmName, nfkey, subnet, tag, source, imageType):
     tf_module_vm = {
         "source" : "%s/m-azure-vm" % source,
         "resourceGroupName": "${module.%s.rgName}" % rg,
@@ -60,7 +60,8 @@ def create_vm_azure(rg, region, vmName, nfkey, subnet, tag, source):
         "publicIp": vmName + '-publicIp',
         "securityGroup": vmName + '-securityGroup',
         "publicSubnetId": "${module.%s.publicSubnetId}" % subnet,
-        "tagEnvironment": tag
+        "tagEnvironment": tag,
+        "imageType": imageType
     }
     return tf_module_vm
 

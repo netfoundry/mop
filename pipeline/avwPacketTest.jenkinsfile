@@ -97,7 +97,7 @@ pipeline {
         echo "- cloud: vwan" >>  nf_avw_vpn_site.yaml
         echo "  count: 1" >>  nf_avw_vpn_site.yaml
         echo "  names:" >>  nf_avw_vpn_site.yaml
-        echo "  - ${AVW_SITE_NAME}
+        echo "  - ${AVW_SITE_NAME}" >>  nf_avw_vpn_site.yaml
         echo "  region: centralus" >>  nf_avw_vpn_site.yaml
         echo "  regionalCidr: [10.20.10.0/24]" >>  nf_avw_vpn_site.yaml
         echo "  regkeys: []" >>  nf_avw_vpn_site.yaml

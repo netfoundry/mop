@@ -57,7 +57,7 @@ pipeline {
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         // check out the mop git repo where python3 scripts are housed
-        checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
+        checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124B"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
         // fill the gateways details to be deployed
         sh '''
         set -Eeuxo pipefail

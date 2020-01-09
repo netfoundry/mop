@@ -28,7 +28,7 @@ pipeline {
     string(name: 'SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'subnet prefix')
     string(name: 'VHUB_PREFIX', defaultValue: '172.168.10.0/24', description: 'virtual hub subnet')
     string(name: 'AVW_LOCATION', defaultValue: 'westus2', description: 'avw region')
-    string(name: 'AVW_SITE_NAME', defaultValue: 'netfoundry-vpn-site', description: 'NetFoundry Vpn Site Name')
+    string(name: 'AVW_SITE_NAME', defaultValue: 'NetFoundryVpnSite', description: 'NetFoundry Vpn Site Name')
   }
   environment {
     // Azure Credentials
@@ -189,9 +189,6 @@ pipeline {
                   eval terraform init
                   eval terraform apply --auto-approve
                   eval terraform state list
-                  removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
-                  eval terraform state rm $removeRg
-                  eval terraform state list
                   cat nf_resources.yaml
                   '''
                 }
@@ -220,6 +217,9 @@ pipeline {
           jq . main.tf.json
           eval terraform init
           eval terraform apply --auto-approve
+          eval terraform state list
+          removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
+          eval terraform state rm $removeRg
           eval terraform state list
           '''
           sh '''

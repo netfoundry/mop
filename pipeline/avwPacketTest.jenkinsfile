@@ -111,7 +111,7 @@ pipeline {
         echo "  tag: Azure-Site-Gateway" >>  nf_avw_vpn_site.yaml
         echo "  action:" >>  nf_avw_vpn_site.yaml
         echo "  imageType: private" >>  nf_avw_vpn_site.yaml
-        echo "  imageId: default ="/subscriptions/${ARM_SUBSCRIPTION_ID}/resourceGroups/${GROUP_NAME}/ \
+        echo "  imageId: "/subscriptions/${ARM_SUBSCRIPTION_ID}/resourceGroups/${GROUP_NAME}/ \
                 providers/Microsoft.Compute/images/nf-gw-${IMAGE_VERSION}" >>  nf_avw_vpn_site.yaml
         echo "terraform:" >>  nf_avw_vpn_site.yaml
         echo "  bin: terraform" >>  nf_avw_vpn_site.yaml

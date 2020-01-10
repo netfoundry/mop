@@ -49,7 +49,7 @@ def create_gateway(env, netUrl, loc, type, index, token, **kargs):
     try:
         gwName = new_gw['name']
     except TypeError as terr:
-        print(terr.args[0])
+        print(terr.args)
         sys.exit(1)
     gwRegKey = new_gw['registrationKey']
     gwUrl = new_gw['_links']['self']['href']

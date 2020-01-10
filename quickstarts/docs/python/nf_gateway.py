@@ -5,6 +5,7 @@ import sys
 import time
 import datetime
 import logging
+import traceback
 import argparse
 import nf_requests as nfreq
 
@@ -50,6 +51,7 @@ def create_gateway(env, netUrl, loc, type, index, token, **kargs):
         gwName = new_gw['name']
     except TypeError as terr:
         print(terr.args)
+        logging.debug(traceback.format_exc())
         sys.exit(1)
     gwRegKey = new_gw['registrationKey']
     gwUrl = new_gw['_links']['self']['href']

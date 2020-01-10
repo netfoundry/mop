@@ -90,6 +90,7 @@ def main(filename, action):
         token = nftn.get_token(env, os.environ.get('SMOKE_TEST_USER'), os.environ.get('SMOKE_TEST_PASS'))
         writelog('Searching for network id')
         netUrl = nfnk.find_network(env, os.environ.get('NFN_NAME'), token)
+        print(netUrl)
 
         # manage gateways (list of gateways)
         for gateway in config['gateway_list']:

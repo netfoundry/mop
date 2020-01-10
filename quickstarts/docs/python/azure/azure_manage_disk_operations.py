@@ -48,6 +48,7 @@ def image_create():
         imageName,
         {
             'location': os.environ.get('DISK_LOC'),
+            'hyper_vgeneration': 'v1',
             'storage_profile': {
                'os_disk': {
                   'os_type': 'Linux',

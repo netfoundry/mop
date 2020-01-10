@@ -90,4 +90,5 @@ variable "osType" {
 
 variable "imageId" {
   type    = "string"
+  default = ""
 }

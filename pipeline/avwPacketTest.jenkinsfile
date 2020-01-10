@@ -273,7 +273,8 @@ pipeline {
         '''
         sh '''
         set -Eeuxo pipefail
-        SERVER_LOC=eval echo $LOCATION | tr '[:lower:]' '[:upper:]'
+        SERVER_LOC=$(echo $LOCATION | tr '[:lower:]' '[:upper:]')
+        echo $SERVER_LOC
         echo "[customer-router]" >| quickstarts/docs/ansible/hosts
         echo `terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
         echo "[app-server]" >> quickstarts/docs/ansible/hosts

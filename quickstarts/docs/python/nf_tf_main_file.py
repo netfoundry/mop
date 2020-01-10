@@ -54,7 +54,8 @@ def create_file(config):
                                           module['region']+'_vnet',
                                           module['tag'],
                                           os.path.expanduser(config['terraform']['source']),
-                                          module.get('imageType', 'marketplace'))
+                                          module.get('imageType', 'marketplace'),
+                                          module.get('imageId', ''))
                     tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
                     for item in ['public_ips', 'private_ips']:
                         output = str(module['names'][index]) + '_' + item
@@ -117,7 +118,8 @@ def add_to_file(config):
                                           module['region']+'_vnet',
                                           module['tag'],
                                           os.path.expanduser(config['terraform']['source']),
-                                          module.get('imageType', 'marketplace'))
+                                          module.get('imageType', 'marketplace'),
+                                          module.get('imageId', ''))
                     tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
                     for item in ['public_ips', 'private_ips']:
                         output = str(module['names'][index]) + '_' + item

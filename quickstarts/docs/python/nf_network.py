@@ -53,7 +53,7 @@ def create_network(env, name, token):
             if result['status'] == 300:
                 writelog('\nnetwork build status = FINISHED, time waited = ' + str(minutes) + 'Minutes')
                 net_status = True
-            if minutes > 20:
+            if minutes > 30:
                 writelog('\nExcesive time waitng for Network to transition!\n')
                 writelog('deleting network: ' + url)
                 nfreq.delete_nf(url, token)

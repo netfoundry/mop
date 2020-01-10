@@ -196,6 +196,9 @@ pipeline {
                   eval terraform init
                   eval terraform apply --auto-approve
                   eval terraform state list
+                  removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
+                  eval terraform state rm $removeRg
+                  eval terraform state list
                   cat nf_resources.yaml
                   '''
                 }

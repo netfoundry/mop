@@ -53,7 +53,7 @@ def image_create():
                   'os_type': 'Linux',
                   'os_state': "Generalized",
                   'blob_uri': "https://edgeimages.blob.core.windows.net/system/Microsoft.Compute/Images/builds/%s-osDisk.%s.vhd" % (imageName, imageId),
-                  'caching': "ReadWrite",
+                  'caching': "ReadWrite"
                }
             }
         }

@@ -142,6 +142,9 @@ def create_avw_site(filename):
                                   }, token)
 
             avwSiteUrl = data['_links']['self']['href']+'/virtualWanSites'
+    except TypeError as terr:
+        print(str(e))
+        sys.exit(1)
     print(avwSiteUrl)
     # create avw vpn site
     azureVirtualWanId = "/subscriptions/"+os.environ.get('ARM_SUBSCRIPTION_ID')+"/resourceGroups/"+os.environ.get('GROUP_NAME')+"/providers/Microsoft.Network/virtualWans/"+os.environ.get('VWAN_NAME')

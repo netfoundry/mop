@@ -129,6 +129,7 @@ def create_avw_site(filename):
     azureSubscriptionsURL = 'https://gateway.' + env + '.netfoundry.io/rest/v1/azureSubscriptions'
     # get Azure Subscriptions url of the first one, the assumption is that there is only one.
     print(nfreq.get_data(azureSubscriptionsURL, token))
+    print('--------------------------------------------')
     try:
         avwSiteUrl = nfreq.get_data(azureSubscriptionsURL, token)['_embedded']['azureSubscriptions'][0]['_links']['self']['href']+'/virtualWanSites'
     except KeyError as kerr:
@@ -144,7 +145,7 @@ def create_avw_site(filename):
 
             avwSiteUrl = data['_links']['self']['href']+'/virtualWanSites'
     except TypeError as terr:
-        print(str(e))
+        print(terr.args)
         sys.exit(1)
     print(avwSiteUrl)
     # create avw vpn site

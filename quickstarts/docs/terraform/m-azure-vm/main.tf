@@ -9,6 +9,7 @@ resource "azurerm_public_ip" "terraformpublicip" {
     location              = "${var.region}"
     resource_group_name   = "${var.resourceGroupName}"
     allocation_method     = "Static"
+    domain_name_label     = "${var.domainNameLabel}"
 
     tags = {
         environment = "${var.tagEnvironment}"
@@ -90,6 +91,10 @@ resource "azurerm_virtual_machine" "terraformvm" {
     network_interface_ids = ["${azurerm_network_interface.terraformnic.id}"]
     vm_size               = "Standard_B1ms"
 
+    identity {
+        type              = "SystemAssigned"
+    }
+
     delete_os_disk_on_termination = true
 
     storage_os_disk {
@@ -144,6 +149,10 @@ resource "azurerm_virtual_machine" "terraformvm_private" {
     network_interface_ids = ["${azurerm_network_interface.terraformnic.id}"]
     vm_size               = "Standard_B1ms"
 
+    identity {
+        type              = "SystemAssigned"
+    }
+
     delete_os_disk_on_termination = true
 
     storage_os_disk {
@@ -185,6 +194,7 @@ resource "azurerm_virtual_machine" "terraformvm_private" {
 resource "null_resource" "gateway_registration" {
 
   depends_on = [azurerm_virtual_machine.terraformvm_private, azurerm_virtual_machine.terraformvm]
+  count      = "${var.noKeyRegistration == "false" ? 1 : 0}"
 
   connection {
     host = "${element(azurerm_public_ip.terraformpublicip.*.ip_address, 0)}"

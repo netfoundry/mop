@@ -13,6 +13,20 @@ def create_list_keys(list):
             new_list = new_list + [key]
     return new_list
 
+
+def check_for_dict_key(dict, key, **additional_params):
+    if dict.get(key):
+        if additional_params.get('index') is not None:
+            return dict[key][additional_params['index']]
+        else:
+            return dict[key]
+    else:
+        if additional_params.get('default') is not None:
+            return additional_params.get('default')
+        else:
+            return None
+
+
 def create_file(config):
     tf_main = {"module":[],"output":[]}
     for module in config['gateway_list']:
@@ -28,7 +42,7 @@ def create_file(config):
                                           module['region'],
                                           module['ami'],
                                           module['names'][index],
-                                          module['regkeys'][index],
+                                          check_for_dict_key(module, 'regkeys', index=index),
                                           os.path.expanduser(config['terraform']['source']))
                     tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
                     output = str(module['names'][index])
@@ -50,12 +64,14 @@ def create_file(config):
                     vm = nftm.create_vm_azure(module['resourceGroup']['region']+'_rg',
                                           module['region'],
                                           module['names'][index],
-                                          module['regkeys'][index],
+                                          check_for_dict_key(module, 'regkeys', index=index),
                                           module['region']+'_vnet',
                                           module['tag'],
                                           os.path.expanduser(config['terraform']['source']),
-                                          module.get('imageType', 'marketplace'),
-                                          module.get('imageId', ''))
+                                          check_for_dict_key(module, 'imageType', default='marketplace'),
+                                          check_for_dict_key(module, 'imageId'),
+                                          check_for_dict_key(module, 'noKeyRegistration', default='false'),
+                                          check_for_dict_key(module, 'domainNameLabel', default=None))
                     tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
                     for item in ['public_ips', 'private_ips']:
                         output = str(module['names'][index]) + '_' + item
@@ -92,7 +108,7 @@ def add_to_file(config):
                                           module['region'],
                                           module['ami'],
                                           module['names'][index],
-                                          module['regkeys'][index],
+                                          check_for_dict_key(module, 'regkeys', index=index),
                                           os.path.expanduser(config['terraform']['source']))
                     tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
                     output = str(module['names'][index])
@@ -114,12 +130,14 @@ def add_to_file(config):
                     vm = nftm.create_vm_azure(module['resourceGroup']['region']+'_rg',
                                           module['region'],
                                           module['names'][index],
-                                          module['regkeys'][index],
+                                          check_for_dict_key(module, 'regkeys', index=index),
                                           module['region']+'_vnet',
                                           module['tag'],
                                           os.path.expanduser(config['terraform']['source']),
-                                          module.get('imageType', 'marketplace'),
-                                          module.get('imageId', ''))
+                                          check_for_dict_key(module, 'imageType', default='marketplace'),
+                                          check_for_dict_key(module, 'imageId'),
+                                          check_for_dict_key(module, 'noKeyRegistration', default='false'),
+                                          check_for_dict_key(module, 'domainNameLabel', default=None))
                     tf_main["module"] = tf_main["module"] + [{module['names'][index]: vm}]
                     for item in ['public_ips', 'private_ips']:
                         output = str(module['names'][index]) + '_' + item

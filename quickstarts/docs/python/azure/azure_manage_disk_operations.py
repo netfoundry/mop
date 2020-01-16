@@ -23,7 +23,7 @@ def connect():
     #storage_client = StorageManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
     compute_client = ComputeManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
 
-    imageName = 'nf-gw-' + os.environ.get('IMAGE_VERSION')
+    imageName = 'nf-' + os.environ.get('IMAGE_TYPE') + '-' + os.environ.get('IMAGE_VERSION')
     return compute_client, imageName
 
 # Trying to create a managed disk from a blob storage disk

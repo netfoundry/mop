@@ -92,3 +92,12 @@ variable "imageId" {
   type    = "string"
   default = ""
 }
+
+variable "noKeyRegistration" {
+  type    = "string"
+  default = "false"
+}
+
+variable "domainNameLabel" {
+  type    = "string"
+}

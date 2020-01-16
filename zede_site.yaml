@@ -1,0 +1,45 @@
+gateway_list:
+- cloud: azure
+  count: 1
+  names:
+  - VMwestus201
+  region: westus2
+  regionalCidr: [10.10.10.0/24]
+  resourceGroup:
+    name: clouddev-smoke
+    region: westus2
+  tag: Client-Gateway
+  action: create-terraform
+  noKeyRegistration: true
+- cloud: azure
+  count: 1
+  names:
+  - VMcentralus01
+  region: centralus
+  regionalCidr: [10.20.10.0/24]
+  resourceGroup:
+    name: clouddev-smoke
+    region: westus2
+  tag: Server-Gateway
+  action: create-terraform
+  noKeyRegistration: true
+- cloud: azure
+  count: 1
+  names:
+  - zedeapptest01
+  region: centralus
+  regionalCidr: [10.20.10.0/24]
+  resourceGroup:
+    name: clouddev-smoke
+    region: westus2
+  tag: ZEDE-Gateway
+  action: create-terraform
+  imageType: private
+  imageId: /subscriptions/8699c8dd-f425-46fa-85ef-cefe299aeb4f/resourceGroups/clouddev-smoke/providers/Microsoft.Compute/images/nf-zede-0.5.18-2627
+  noKeyRegistration: true
+  domainNameLabel: zedeapptest01
+terraform:
+  bin: terraform
+  output: no
+  source: ./quickstarts/docs/terraform
+  work_dir: .

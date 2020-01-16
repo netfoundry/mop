@@ -55,6 +55,7 @@ pipeline {
     AVW_SITE_NAME = "${params.AVW_SITE_NAME}"
     IMAGE_VERSION = "${params.NF_IMAGE_VERSION}"
     IMAGE_ID = "${params.AZURE_IMAGE_SUFFIX_ID}"
+    IMAGE_TYPE = "gw"
   }
   stages {
     stage('Set up WORKSPACE'){

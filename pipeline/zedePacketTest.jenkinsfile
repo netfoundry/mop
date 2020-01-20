@@ -13,21 +13,20 @@ pipeline {
   }
   parameters {
     choice(name: 'CLOUD', choices: ['azure','aws'], description: 'Select cloud the ZEDE image will be tested in')
-    booleanParam(name: 'DEPLOY_DEPLOY_RESOURCES', defaultValue: true, description: 'Deploy Test Client and Server to use for traffic generation and termination')
-    booleanParam(name: 'DESTROY_DEPLOY_RESOURCES', defaultValue: true, description: 'Destroy Test Client and Server to use for traffic generation and termination')
+    booleanParam(name: 'DEPLOY_RESOURCES', defaultValue: true, description: 'Deploy Test Client and Server to use for traffic generation and termination')
+    booleanParam(name: 'DESTROY_RESOURCES', defaultValue: true, description: 'Destroy Test Client and Server to use for traffic generation and termination')
     booleanParam(name: 'CREATE_ZEDE', defaultValue: true, description: 'Create NetFoundry ZEDE Site')
-    booleanParam(name: 'DELETE_ZEDE', defaultValue: true, description: 'Delete NetFoundry ZEDE Site')
     booleanParam(name: 'SETUP_CLIENT_SERVER', defaultValue: true, description: 'Set up Test Client and Server for all test cases')
     booleanParam(name: 'TEST_CASE01', defaultValue: true, description: 'Test Case 01')
     booleanParam(name: 'CLEANUP', defaultValue: true, description: 'Clean up after Tests are run')
     // Client Side Details - Customized Parameters
     string(name: 'CLIENT_VNET_PREFIX', defaultValue: '10.10.10.0/16', description: 'Test vNet in Client Region; Entire IP block')
     string(name: 'CLIENT_SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'Test Subnet in Client Region')
-    string(name: 'CLIENT_LOCATION', defaultValue: 'centralus', description: 'Location of the Client')
+    string(name: 'CLIENT_LOCATION', defaultValue: 'westus2', description: 'Location of the Client')
     // Server Side Details
     string(name: 'SERVER_VNET_PREFIX', defaultValue: '10.20.10.0/16', description: 'Test vNet in Server Region; Entire IP block')
     string(name: 'SERVER_SUBNET_PREFIX', defaultValue: '10.20.10.0/24', description: 'Test Subnet in Server Region')
-    string(name: 'SERVER_LOCATION', defaultValue: 'westus2', description: 'Location of the Server')
+    string(name: 'SERVER_LOCATION', defaultValue: 'centralus', description: 'Location of the Server')
     // Image Details to be tested
     string(name: 'ZEDE_NAME', defaultValue: 'zedeapptest01', description: 'Name to be used for ZEDE VM')
     string(name: 'IMAGE_VERSION', description: 'New Image version to be released to Marketplace')
@@ -89,7 +88,7 @@ pipeline {
         echo "  names:" >>  zede_site.yaml
         echo "  - VM${SERVER_LOCATION}01" >>  zede_site.yaml
         echo "  region: ${SERVER_LOCATION}" >>  zede_site.yaml
-        echo "  regionalCidr: [${SERVER_VNET_PREFIX}]" >>  zede_site.yaml
+        echo "  regionalCidr: [${SERVER_SUBNET_PREFIX}]" >>  zede_site.yaml
         echo "  resourceGroup:" >>  zede_site.yaml
         echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
         echo "    region: ${GROUP_LOC}" >>  zede_site.yaml

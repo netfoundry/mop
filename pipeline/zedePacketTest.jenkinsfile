@@ -153,7 +153,7 @@ pipeline {
       when { expression { params.CREATE_ZEDE }}
       steps {
         // the build steps to configure ZEDE Gateway
-        withCredentials(usernamePassword([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           // Set up security rules to allow tcp/1280, tcp/3022, tcp/443
           sh '''
           set -Eeuxo pipefail

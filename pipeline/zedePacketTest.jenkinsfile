@@ -295,6 +295,10 @@ pipeline {
           sh '''
           set -Eeuxo pipefail
           jq . main.tf.json
+          removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
+          if [[ $removeRg ]]; then
+            eval terraform state rm $removeRg
+          fi
           eval terraform state list
           eval terraform destroy --auto-approve
           eval terraform state list

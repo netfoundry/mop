@@ -121,11 +121,6 @@ pipeline {
         ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
         eval touch logoutput.txt
         '''
-        sh '''
-        set +ex
-        rm -Rf terraform.tfstate.d
-        rm -Rf .terraform
-        '''
       }
     }
     stage('Deploy Gateway Resources to Cloud') {

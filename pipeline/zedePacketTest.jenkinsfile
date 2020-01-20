@@ -43,12 +43,12 @@ pipeline {
     GROUP_LOC = "westus2"
     // Client Side Details - Customized Environment Variables
     CLIENT_VNET_NAME = "${params.CLIENT_LOCATION}-vnet"
-    CLIENT_VNET_PREFIX = "${params.CLIENT_VNET_PREFIX'}"
+    CLIENT_VNET_PREFIX = "${params.CLIENT_VNET_PREFIX}"
     CLIENT_SUBNET_PREFIX = "${params.CLIENT_SUBNET_PREFIX}"
     CLIENT_LOCATION = "${params.CLIENT_LOCATION}"
     // Server Side Details - Customized Environment Variables
     SERVER_VNET_NAME = "${params.SERVER_LOCATION}-vnet"
-    SERVER_VNET_PREFIX = "${params.SERVER_VNET_PREFIX'}"
+    SERVER_VNET_PREFIX = "${params.SERVER_VNET_PREFIX}"
     SERVER_SUBNET_PREFIX = "${params.SERVER_SUBNET_PREFIX}"
     SERVER_LOCATION = "${params.SERVER_LOCATION}"
     // Common Customized Environment Variables

@@ -17,6 +17,7 @@ resource "azurerm_virtual_network" "terraformnetwork" {
 
 # Create virtual subnet
 resource "azurerm_subnet" "terraformsubnet" {
+    depends_on = [azurerm_virtual_network.terraformnetwork]
     name                 = "${var.virtualSubnetName}"
     resource_group_name  = "${var.resourceGroupName}"
     virtual_network_name = "${azurerm_virtual_network.terraformnetwork.name}"
@@ -25,6 +26,7 @@ resource "azurerm_subnet" "terraformsubnet" {
 
 # Create route table
 resource "azurerm_route_table" "terraformroutetable" {
+  depends_on = [azurerm_virtual_network.terraformnetwork]
   name                          = "${var.virtualRouteTable}"
   location                      = "${azurerm_virtual_network.terraformnetwork.location}"
   resource_group_name           = "${var.resourceGroupName}"
@@ -36,6 +38,7 @@ resource "azurerm_route_table" "terraformroutetable" {
 }
 
 resource "azurerm_subnet_route_table_association" "terraformsubnetroutetable" {
+  depends_on = [azurerm_route_table.terraformroutetable, azurerm_subnet.terraformsubnet]
   subnet_id      = "${azurerm_subnet.terraformsubnet.id}"
   route_table_id = "${azurerm_route_table.terraformroutetable.id}"
 }

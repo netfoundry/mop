@@ -68,59 +68,58 @@ pipeline {
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         // check out the mop git repo where python3 scripts are housed
-        checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124B"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]]) {
-          // fill the gateways details to be deployed
-          sh '''
-          set -Eeuxo pipefail
-          echo "gateway_list:" >|  zede_site.yaml
-          echo "- cloud: azure" >>  zede_site.yaml
-          echo "  count: 1" >>  zede_site.yaml
-          echo "  names:" >>  zede_site.yaml
-          echo "  - VM${CLIENT_LOCATION}01" >>  zede_site.yaml
-          echo "  region: ${CLIENT_LOCATION}" >>  zede_site.yaml
-          echo "  regionalCidr: [${CLIENT_SUBNET_PREFIX}]" >>  zede_site.yaml
-          echo "  resourceGroup:" >>  zede_site.yaml
-          echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
-          echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
-          echo "  tag: Client-Gateway" >>  zede_site.yaml
-          echo "  action: create-terraform" >>  zede_site.yaml
-          echo "- cloud: azure" >>  zede_site.yaml
-          echo "  count: 1" >>  zede_site.yaml
-          echo "  names:" >>  zede_site.yaml
-          echo "  - VM${SERVER_LOCATION}01" >>  zede_site.yaml
-          echo "  region: ${SERVER_LOCATION}" >>  zede_site.yaml
-          echo "  regionalCidr: [${SERVER_LOCATION_SUBNET_PREFIX}]" >>  zede_site.yaml
-          echo "  resourceGroup:" >>  zede_site.yaml
-          echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
-          echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
-          echo "  tag: Server-Gateway" >>  zede_site.yaml
-          echo "  action: create-terraform" >>  zede_site.yaml
-          echo "- cloud: azure" >>  zede_site.yaml
-          echo "  count: 1" >>  zede_site.yaml
-          echo "  names:" >>  zede_site.yaml
-          echo "  - ${ZEDE_NAME}" >>  zede_site.yaml
-          echo "  region: ${SERVER_LOCATION}" >>  zede_site.yaml
-          echo "  regionalCidr: [${SERVER_SUBNET_PREFIX}]" >>  zede_site.yaml
-          echo "  resourceGroup:" >>  zede_site.yaml
-          echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
-          echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
-          echo "  tag: ZEDE-Gateway" >>  zede_site.yaml
-          echo "  action: create-terraform" >>  zede_site.yaml
-          echo "  imageType: private" >>  zede_site.yaml
-          echo "  imageId: /subscriptions/${ARM_SUBSCRIPTION_ID}/resourceGroups/${GROUP_NAME}/providers/Microsoft.Compute/images/nf-gw-${IMAGE_VERSION}" >>  zede_site.yaml
-          echo "terraform:" >>  zede_site.yaml
-          echo "  bin: terraform" >>  zede_site.yaml
-          echo "  output: no" >>  zede_site.yaml
-          echo "  source: ./quickstarts/docs/terraform" >>  zede_site.yaml
-          echo "  work_dir: ." >>  zede_site.yaml
-          cat zede_site.yaml
-          '''
-          sh '''
-          set -Eeuxo pipefail
-          ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
-          eval touch logoutput.txt
-          '''
-        }
+        checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124B"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
+        // fill the gateways details to be deployed
+        sh '''
+        set -Eeuxo pipefail
+        echo "gateway_list:" >|  zede_site.yaml
+        echo "- cloud: azure" >>  zede_site.yaml
+        echo "  count: 1" >>  zede_site.yaml
+        echo "  names:" >>  zede_site.yaml
+        echo "  - VM${CLIENT_LOCATION}01" >>  zede_site.yaml
+        echo "  region: ${CLIENT_LOCATION}" >>  zede_site.yaml
+        echo "  regionalCidr: [${CLIENT_SUBNET_PREFIX}]" >>  zede_site.yaml
+        echo "  resourceGroup:" >>  zede_site.yaml
+        echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
+        echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
+        echo "  tag: Client-Gateway" >>  zede_site.yaml
+        echo "  action: create-terraform" >>  zede_site.yaml
+        echo "- cloud: azure" >>  zede_site.yaml
+        echo "  count: 1" >>  zede_site.yaml
+        echo "  names:" >>  zede_site.yaml
+        echo "  - VM${SERVER_LOCATION}01" >>  zede_site.yaml
+        echo "  region: ${SERVER_LOCATION}" >>  zede_site.yaml
+        echo "  regionalCidr: [${SERVER_LOCATION_SUBNET_PREFIX}]" >>  zede_site.yaml
+        echo "  resourceGroup:" >>  zede_site.yaml
+        echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
+        echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
+        echo "  tag: Server-Gateway" >>  zede_site.yaml
+        echo "  action: create-terraform" >>  zede_site.yaml
+        echo "- cloud: azure" >>  zede_site.yaml
+        echo "  count: 1" >>  zede_site.yaml
+        echo "  names:" >>  zede_site.yaml
+        echo "  - ${ZEDE_NAME}" >>  zede_site.yaml
+        echo "  region: ${SERVER_LOCATION}" >>  zede_site.yaml
+        echo "  regionalCidr: [${SERVER_SUBNET_PREFIX}]" >>  zede_site.yaml
+        echo "  resourceGroup:" >>  zede_site.yaml
+        echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
+        echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
+        echo "  tag: ZEDE-Gateway" >>  zede_site.yaml
+        echo "  action: create-terraform" >>  zede_site.yaml
+        echo "  imageType: private" >>  zede_site.yaml
+        echo "  imageId: /subscriptions/${ARM_SUBSCRIPTION_ID}/resourceGroups/${GROUP_NAME}/providers/Microsoft.Compute/images/nf-gw-${IMAGE_VERSION}" >>  zede_site.yaml
+        echo "terraform:" >>  zede_site.yaml
+        echo "  bin: terraform" >>  zede_site.yaml
+        echo "  output: no" >>  zede_site.yaml
+        echo "  source: ./quickstarts/docs/terraform" >>  zede_site.yaml
+        echo "  work_dir: ." >>  zede_site.yaml
+        cat zede_site.yaml
+        '''
+        sh '''
+        set -Eeuxo pipefail
+        ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
+        eval touch logoutput.txt
+        '''
       }
     }
     stage('Deploy Gateway Resources to Cloud') {

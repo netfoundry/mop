@@ -275,7 +275,7 @@ pipeline {
       steps {
         //Configure Client and Server between the network under test for the packet connectivity test
         sh '''
-        eval sleep 30m
+        eval sleep 20m
         '''
         sh '''
         set -Eeuxo pipefail
@@ -307,9 +307,6 @@ pipeline {
       when { expression { params.TEST_CASE01 }}
       steps {
         //Run test Cases to pass packet across the AVW Network
-        sh '''
-        eval sleep 5m
-        '''
         sh '''
         set +ex
         serverIp=`eval terraform output -json | jq -j .AZCPEGWx0xWESTUS2_private_ips.value[][]`

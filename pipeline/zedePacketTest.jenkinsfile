@@ -8,7 +8,7 @@ pipeline {
     }
   }
   parameters {
-    choice(name: 'CLOUD', choices: ['aws', 'azure'], defaultValue: 'azure', description: 'Select cloud the ZEDE image will be tested in')
+    choice(name: 'CLOUD', choices: ['azure','aws'], description: 'Select cloud the ZEDE image will be tested in')
     booleanParam(name: 'DEPLOY_DEPLOY_RESOURCES', defaultValue: true, description: 'Deploy Test Client and Server to use for traffic generation and termination')
     booleanParam(name: 'DESTROY_DEPLOY_RESOURCES', defaultValue: true, description: 'Destroy Test Client and Server to use for traffic generation and termination')
     booleanParam(name: 'CREATE_ZEDE', defaultValue: true, description: 'Create NetFoundry ZEDE Site')

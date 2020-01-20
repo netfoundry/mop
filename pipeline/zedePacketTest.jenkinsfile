@@ -143,11 +143,12 @@ pipeline {
           sh '''
           set -Eeuxo pipefail
           cat zede_site.yaml
-          eval python3 quickstarts/docs/python/nf_tf_main_file.py --action create --file zede_site.yaml
+           eval python3 quickstarts/docs/python/nfgw_manage.py --action create-terraform --file zede_site.yaml
           eval jq . main.tf.json
           cat logoutput.txt
+          // Run terraform to state to list resources already deployed
+          eval terraform state list
           // Run terraform to deploy resources to Azure Cloud
-          eval terraform init
           eval terraform apply --auto-approve
           eval terraform state list
           removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`

@@ -146,8 +146,8 @@ pipeline {
            eval python3 quickstarts/docs/python/nfgw_manage.py --action create-terraform --file zede_site.yaml
           eval jq . main.tf.json
           cat logoutput.txt
-          // Run terraform to state to list resources already deployed
-          eval terraform state list
+          // Run terraform to initialize
+          terraform init
           // Run terraform to deploy resources to Azure Cloud
           eval terraform apply --auto-approve
           eval terraform state list

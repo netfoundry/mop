@@ -147,7 +147,7 @@ pipeline {
           eval jq . main.tf.json
           cat logoutput.txt
           // Run terraform to initialize
-          terraform init
+          whereis terraform
           // Run terraform to deploy resources to Azure Cloud
           eval terraform apply --auto-approve
           eval terraform state list

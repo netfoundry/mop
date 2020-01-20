@@ -60,7 +60,7 @@ pipeline {
     ZITI_USERNAME = "admin"
   }
   stages {
-    stage('Set up WORKSPACE'){
+    stage('Set up WORKSPACE') {
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         // check out the mop git repo where python3 scripts are housed
@@ -298,10 +298,10 @@ pipeline {
         }
       }
     }
-    stage('Clean up After Test'){
+    stage('Clean up After Test') {
       when { expression { params.CLEANUP }}
       steps {
-        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           // Delete the Zede image from the cloddev-smoke RG
           sh '''set +x; set -e -u -o pipefail
           eval python3 quickstarts/docs/python/azure/azure_manage_disk_operations.py --action delete

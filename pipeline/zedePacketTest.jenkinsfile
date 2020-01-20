@@ -295,12 +295,10 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           sh '''
           set -Eeuxo pipefail
-          cat az_resources.yaml
           jq . main.tf.json
           eval terraform state list
           eval terraform destroy --auto-approve
           eval terraform state list
-          cat zede_site.yaml
           '''
         }
       }
@@ -318,6 +316,8 @@ pipeline {
           set -Eeuxo pipefail
           rm -Rf terraform.tfstate.d
           rm -Rf .terraform
+          rm zede_site.yaml
+          rm main.tf.json
           '''
         }
       }

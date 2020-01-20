@@ -89,7 +89,7 @@ pipeline {
         echo "  names:" >>  zede_site.yaml
         echo "  - VM${SERVER_LOCATION}01" >>  zede_site.yaml
         echo "  region: ${SERVER_LOCATION}" >>  zede_site.yaml
-        echo "  regionalCidr: [${SERVER_LOCATION_SUBNET_PREFIX}]" >>  zede_site.yaml
+        echo "  regionalCidr: [${SERVER_VNET_PREFIX}]" >>  zede_site.yaml
         echo "  resourceGroup:" >>  zede_site.yaml
         echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
         echo "    region: ${GROUP_LOC}" >>  zede_site.yaml

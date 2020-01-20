@@ -33,7 +33,10 @@ pipeline {
     // Azure Credentials
     ARM_TENANT_ID = "25445e86-2ae6-4434-b116-25c66c27168d"
     ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
+    // AWS Credentials
     AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
+    // JFROG credentials
+    ARTIFACTORY_API_KEY = credentials('mop_ami_artifactory_api_key')
     // Test Input Variables
     CLOUD = "${params.CLOUD}"
     GROUP_NAME = "clouddev-smoke"
@@ -54,6 +57,7 @@ pipeline {
     IMAGE_VERSION = "${params.IMAGE_VERSION}"
     IMAGE_ID = "${params.IMAGE_SUFFIX_ID}"
     IMAGE_TYPE = "zede"
+    ZITI_USERNAME = "admin"
   }
   stages {
     stage('Set up WORKSPACE'){
@@ -129,7 +133,6 @@ pipeline {
           sh '''
           set -Eeuxo pipefail
           cat zede_site.yaml
-          rm -Rf terraform.tfstate.d
           eval python3 quickstarts/docs/python/nfgw_manage.py --action create-terraform --file zede_site.yaml
           eval jq . main.tf.json
           cat logoutput.txt
@@ -153,12 +156,18 @@ pipeline {
           // Set up security rules to allow tcp/1280, tcp/3022, tcp/443
           sh '''
           set -Eeuxo pipefail
-          eval python3 quickstarts/docs/python/azure/azure_manage_security_group.py --action update --rules "tcp,3022" "tcp,443" "tcp,1280"
+          eval python3 quickstarts/docs/python/azure/azure_manage_security_group.py --action update --rules "tcp,3022" "tcp,443" "tcp,1280" --sg_name $ZEDE_NAME
+          '''
+          // Get Principal ID for the assigned identity to VM and assigned network contributor role
+          sh '''
+          set -Eeuxo pipefail
+          principalId=`eval python3 quickstarts/docs/python/azure/azure_manage_vm.py --action get`
+          eval python3 quickstarts/docs/python/azure/azure_manage_rbac.py --action create --role_name Network_Contributor --principal_id $principalId
           '''
           // Reboot Zede GW
           sh '''
           set -Eeuxo pipefail
-
+          eval python3 quickstarts/docs/python/azure/azure_manage_vm.py --action restart
           '''
         }
       }
@@ -166,9 +175,96 @@ pipeline {
     stage('Set up Test Client and Server for all test cases') {
       when { expression { params.SETUP_CLIENT_SERVER }}
       steps {
-        //Configure Client and Server between the network under test for the packet connectivity test
+        // Wait 5 min for the Ziti Controller to boot up and configure itself
         sh '''
-        eval sleep 1m
+        eval sleep 5m
+        '''
+        // Set up security rules to allow tcp/5201 on App Server
+        sh '''
+        set -Eeuxo pipefail
+        eval python3 quickstarts/docs/python/azure/azure_manage_security_group.py --action update --rules "tcp,5201" --sg_name VM${SERVER_LOCATION}01
+        '''
+        // Add Public Client, Server and ZEDE IPs to the hosts file for Ansible
+        sh '''
+        set -Eeuxo pipefail
+        echo "[zede]" >> quickstarts/docs/ansible/hosts
+        echo `terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
+        echo "[zede-client]" >| quickstarts/docs/ansible/hosts
+        echo `terraform output -json | jq -j .VM${CLIENT_LOCATION}01_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
+        echo "[app-server]" >> quickstarts/docs/ansible/hosts
+        echo `terraform output -json | jq -j .VM${SERVER_LOCATION}01_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
+        cat quickstarts/docs/ansible/hosts
+        '''
+        //Configure vars for Private Server IP to be used in client -> server testing
+        sh '''
+        set -Eeuxo pipefail
+        serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
+        echo "serverIp: ${serverIp}" >| quickstarts/docs/ansible/roles/zede-client/vars/ip.yml
+        cat quickstarts/docs/ansible/roles/zede-client/vars/ip.yml
+        echo "serverIp: ${serverIp}" >| quickstarts/docs/ansible/roles/zede/vars/ip.yml
+        cat quickstarts/docs/ansible/roles/zede/vars/ip.yml
+        '''
+        // Run ansible playbook to configure client and zede
+        sh '''
+        set -Eeuxo pipefail
+        eval export ANSIBLE_HOST_KEY_CHECKING=False
+        cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags zede,zede-client -u nfadmin -e zede=True -e zedeClient=True -e artifactoryApiKey=$ARTIFACTORY_API_KEY -e zitiVersion=$IMAGE_VERSION -e controllerIp=$cip -vv
+        '''
+        // Run ansible playbook to configure server
+        sh '''
+        set -Eeuxo pipefail
+        eval export ANSIBLE_HOST_KEY_CHECKING=False
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags app-server -u nfadmin -e appServer=True
+        '''
+        // Configure iperf Service and add it to appwan
+        sh'''
+        set set -Eeuxo pipefail
+        serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
+        cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
+        export ZITI_PASSWORD=`eval jq -j .password ~/credentials.json`
+        # ziti edge controller login
+        token=`curl -sSX POST -H "Content-Type: application/json" -d "{\"username\": \"$ZITI_USERNAME\", \"password\": \"$ZITI_PASSWORD\"}" \
+              "https://$cip:1280/authenticate?method=password" --insecure  | jq -j ".data.token"`
+        # build a header with the session token
+        declare -a curlArgs=('-H' "Content-Type: application/json" '-H' "zt-session: $token")
+        clusters=`curl -sSX GET "${curlArgs[@]}" "https://$cip:1280/clusters" --insecure  | jq -j ".data"`
+        if [[ $clusters ]]; then
+          # find cluster uuid  for cluster demo-c01
+          cuuid=`echo $clusters | jq -j '.[] | select(.name=="demo-c01") | .id'`
+        else
+          echo " could not find cluster with name demo-c01"
+          exit 1
+        fi
+        gateways=`curl -sSX GET "${curlArgs[@]}" "https://$cip:1280/gateways" --insecure  | jq -j ".data"`
+        guuid=`echo $gateways | jq -j '.[] | select(.name=="ziti-gw01") | .id'`
+        if [[ $gateways ]]; then
+          # find the gateway uuid
+          guuid=`echo $gateways | jq -j '.[] | select(.name=="ziti-gw01") | .id'`
+        else
+          echo " could not find gateway with name ziti-gw01"
+          exit 1
+        fi
+        verified=`curl "https://$cip:1280/gateways/$guuid" -sSX GET "${curlArgs[@]}"  --insecure  | jq -j ".data.isVerified"`
+        online=`curl "https://$cip:1280/gateways/$guuid" -sSX GET "${curlArgs[@]}"  --insecure  | jq -j ".data.isOnline"`
+        echo "Ziti Edge GW is verified - $verified"
+        echo "Ziti Edge GW is online - $online"
+        # Create Ziti Service named iperf3
+        declare -a data="{\"name\": \"iperf3\",\"protocols\": [\"tls\"],\"dns\":{\"hostname\":\"$serverIp\",\"port\": 5201},\"egressRouter\":\"$guuid\",\"endpointAddress\":\"tcp://$serverIp:5201\",\"clusters\": [\"$cuuid\"]}"
+        serviceId=`curl -sSX POST "${curlArgs[@]}" -d "${data}" "https://$cip:1280/services" --insecure | jq -j ".data.id"`
+        # Find ziti-tunnel Id for the Ziti Client
+        identities=`curl -sSX GET "${curlArgs[@]}" "https://$cip:1280/identities" --insecure  | jq -j ".data"`
+        if [[ $identities ]]; then
+          # find the identity uuid
+          tunnelId=`echo $identities | jq -j '.[] | select(.name=="ziti-tunnel") | .id'`
+        else
+          echo " could not find identity with name ziti-tunnel"
+          exit 1
+        fi
+        # Create AppWan named appwan01
+        declare -a data="{\"name\":\"appwan01\",\"identities\":[\"$tunnelId\"],\"services\":[\"$serviceId\"]}"
+        appwanId=`curl -sSX POST "${curlArgs[@]}" -d "${data}" "https://$cip:1280/app-wans" --insecure | jq -j ".data.id"`
+        echo "Appwan with ID $appwanId has been created"
         '''
       }
     }
@@ -177,7 +273,10 @@ pipeline {
       steps {
         //Run test Cases to pass packet across the ZEDE Network
         sh '''
-        eval sleep 1m
+        set +ex
+        eval sleep 3m
+        serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
+        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/zede.yml --tags zede-tc-01 -u nfadmin -e zedeTC01=True -e serverIp=$serverIp
         '''
       }
     }
@@ -205,6 +304,12 @@ pipeline {
           // Delete the Zede image from the cloddev-smoke RG
           sh '''set +x; set -e -u -o pipefail
           eval python3 quickstarts/docs/python/azure/azure_manage_disk_operations.py --action delete
+          '''
+          // Clean up Terraform state files
+          sh '''
+          set -Eeuxo pipefail
+          rm -Rf terraform.tfstate.d
+          rm -Rf .terraform
           '''
         }
       }

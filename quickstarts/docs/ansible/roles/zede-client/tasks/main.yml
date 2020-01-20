@@ -1,0 +1,7 @@
+---
+# tasks for application client
+- include_vars: network.yml
+- include_vars: ziti.yml
+- include_tasks: ziti.yml
+- include_tasks: ziti-services.yml
+- include_tasks: config.yml

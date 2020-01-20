@@ -17,8 +17,8 @@ def connect():
 
     return network_client
 
-def update_security_group(rules):
-    sgName = os.environ.get('ZEDE_NAME') + '-securityGroup'
+def update_security_group(rules, sg_name):
+    sgName = sg_name + '-securityGroup'
     network_client = connect()
     # Trying to update  security group named as sgName
     for index, rule in enumerate(rules):
@@ -47,7 +47,8 @@ def update_security_group(rules):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Security Group Operations')
     parser.add_argument("--action", choices=['update'], help="Action you want to do on a given security group", required=True)
-    parser.add_argument("--rules", nargs='+', help='List of rule (port, protocol) to add to a given security group , e.g. [ "tcp,22" "tcp,443" ]', required=True)
+    parser.add_argument("--sg_name", help="Security Group Name, more specificaly the prefix, e.g. ${PREFIX}-securityGroup.", required=True)
+    parser.add_argument("--rules", nargs='+', help='List of rules (port, protocol) to add to a given security group , e.g. [ "tcp,22" "tcp,443" ]', required=True)
     args = parser.parse_args()
     if args.action == 'update':
-        update_security_group(args.rules)
+        update_security_group(args.rules, args.sg_name)

@@ -1,0 +1,17 @@
+---
+# handlers
+- name: full restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted
+    enabled: true
+  become: true
+  listen: "restart rsyslog"
+
+- name: full restart ziti-tunnel
+  service:
+    name: ziti-tunnel.service
+    state: restarted
+    enabled: true
+  become: true
+  listen: restart_ziti_tunnel

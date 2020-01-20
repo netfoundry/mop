@@ -1,6 +1,7 @@
-[zede]
-40.78.134.245
-[zede-client]
-52.191.165.127
+[customer-router]
+
 [app-server]
-13.67.230.26
+
+[zede]
+
+[zede-client]

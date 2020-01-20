@@ -7,6 +7,10 @@ pipeline {
       alwaysPull true
     }
   }
+  options {
+    disableConcurrentBuilds()
+    parallelsAlwaysFailFast()
+  }
   parameters {
     choice(name: 'ENVIRONMENT', choices: ['sandbox', 'staging'], description: 'Select NF Console Environment to spin the network and gateways in')
     booleanParam(name: 'CREATE_AVWH', defaultValue: true, description: 'Create Azure VWAN along with all the resources needed, e.g, vhub')

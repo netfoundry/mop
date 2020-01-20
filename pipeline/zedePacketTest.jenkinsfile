@@ -40,7 +40,7 @@ pipeline {
     // AWS Credentials
     AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
     // JFROG credentials
-    // ARTIFACTORY_API_KEY = credentials('mop_ami_artifactory_api_key')
+    ARTIFACTORY_API_KEY = credentials('mop_ami_artifactory_api_key')
     // Test Input Variables
     CLOUD = "${params.CLOUD}"
     GROUP_NAME = "clouddev-smoke"
@@ -68,7 +68,7 @@ pipeline {
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         // check out the mop git repo where python3 scripts are housed
-        checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]]) {
+        checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124B"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]]) {
           // fill the gateways details to be deployed
           sh '''
           set -Eeuxo pipefail

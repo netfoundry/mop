@@ -85,6 +85,7 @@ pipeline {
         echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
         echo "  tag: Client-Gateway" >>  zede_site.yaml
         echo "  action: create-terraform" >>  zede_site.yaml
+        echo "  noKeyRegistration: true" >>  zede_site.yaml
         echo "- cloud: azure" >>  zede_site.yaml
         echo "  count: 1" >>  zede_site.yaml
         echo "  names:" >>  zede_site.yaml
@@ -96,6 +97,7 @@ pipeline {
         echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
         echo "  tag: Server-Gateway" >>  zede_site.yaml
         echo "  action: create-terraform" >>  zede_site.yaml
+        echo "  noKeyRegistration: true" >>  zede_site.yaml
         echo "- cloud: azure" >>  zede_site.yaml
         echo "  count: 1" >>  zede_site.yaml
         echo "  names:" >>  zede_site.yaml
@@ -109,6 +111,8 @@ pipeline {
         echo "  action: create-terraform" >>  zede_site.yaml
         echo "  imageType: private" >>  zede_site.yaml
         echo "  imageId: /subscriptions/${ARM_SUBSCRIPTION_ID}/resourceGroups/${GROUP_NAME}/providers/Microsoft.Compute/images/nf-${IMAGE_TYPE}-${IMAGE_VERSION}" >>  zede_site.yaml
+        echo "  noKeyRegistration: true" >>  zede_site.yaml
+        echo "  domainNameLabel: ${ZEDE_NAME}" >>  zede_site.yaml
         echo "terraform:" >>  zede_site.yaml
         echo "  bin: terraform" >>  zede_site.yaml
         echo "  output: no" >>  zede_site.yaml

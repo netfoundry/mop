@@ -295,12 +295,10 @@ pipeline {
         // Steps to Destroy All Resources in Azure based on Terraform plan
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           sh '''
-          set -Eeuxo pipefail
+          -Eeuxo pipefail
           jq . main.tf.json
           removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
-          if [[ $removeRg ]]; then
-            eval terraform state rm $removeRg
-          fi
+          if [[ -n $removeRg ]]; then eval terraform state rm $removeRg; fi
           eval terraform state list
           eval terraform destroy --auto-approve
           eval terraform state list

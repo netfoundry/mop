@@ -237,12 +237,16 @@ pipeline {
           eval python3 quickstarts/docs/python/nfgw_manage.py --action add-terraform --file nf_avw_vpn_site.yaml
           cat logoutput.txt
           jq . main.tf.json
-          eval terraform init
+          eval terraform refresh
           eval terraform apply --auto-approve
           eval terraform state list
           removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
           eval terraform state rm $removeRg
           eval terraform state list
+          eval terraform refresh
+          eval terraform apply --auto-approve
+          removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
+          eval terraform state rm $removeRg
           '''
           // Trying to create avw vpn site with ip addresses queried from the Terraform state data
           sh '''

@@ -21,4 +21,10 @@
     state: started
     enabled: true
   become: true
-...
+
+- name:  Get | Ziti Tunnel Service Status
+  shell: systemctl status ziti-tunnel
+  become: True
+  register: statusZitiTunnelService
+
+- debug: msg="{{ statusZitiTunnelService.stdout_lines }}"

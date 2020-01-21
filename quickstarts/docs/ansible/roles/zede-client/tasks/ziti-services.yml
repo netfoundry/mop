@@ -6,7 +6,7 @@
   with_items:
   - nmcli con mod "System eth0" ipv4.ignore-auto-dns true
   - nmcli con mod "System eth0" ipv4.dns 127.0.0.1,1.1.1.1
-  become: True
+  become: true
 
 - name: ReStart | Network Service
   service:
@@ -23,5 +23,6 @@
 - name:  Show | Ziti Tunnel Service Status
   shell: systemctl status ziti-tunnel.service
   register: show_ziti_tunnel_status
+  become: true
 
 - debug: msg="{{ show_ziti_tunnel_status.stdout_lines }}"

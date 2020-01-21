@@ -209,13 +209,13 @@ pipeline {
           sh ''' set -Eeuxo pipefail
           eval export ANSIBLE_HOST_KEY_CHECKING=False
           cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
-          eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags zede,zede-client -u nfadmin -e zede=True -e zedeClient=True -e artifactoryApiKey=$ARTIFACTORY_API_KEY -e zitiVersion=$IMAGE_VERSION -e controllerIp=$cip -e workspace=$WORKSPACE -vv
+          eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/zede.yml --tags zede,zede-client -u nfadmin -e zede=True -e zedeClient=True -e artifactoryApiKey=$ARTIFACTORY_API_KEY -e zitiVersion=$IMAGE_VERSION -e controllerIp=$cip -e workspace=$WORKSPACE -vv
           '''
           // Run ansible playbook to configure server
           sh '''
           set -Eeuxo pipefail
           eval export ANSIBLE_HOST_KEY_CHECKING=False
-          eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags app-server -u nfadmin -e appServer=True
+          eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/zede.yml --tags app-server -u nfadmin -e appServer=True
           '''
           // Configure iperf Service and add it to appwan
           sh'''

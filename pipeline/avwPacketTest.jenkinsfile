@@ -238,6 +238,7 @@ pipeline {
           cat logoutput.txt
           jq . main.tf.json
           eval terraform refresh
+          eval terraform state list
           eval terraform apply --auto-approve
           eval terraform state list
           removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
@@ -247,6 +248,7 @@ pipeline {
           eval terraform apply --auto-approve
           removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
           eval terraform state rm $removeRg
+          eval terraform state list
           '''
           // Trying to create avw vpn site with ip addresses queried from the Terraform state data
           sh '''

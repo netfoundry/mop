@@ -185,7 +185,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           // Wait 5 min for the Ziti Controller to boot up and configure itself
           sh ''' #!/bin/bash
-          eval sleep 5m
+          eval sleep 3m
           '''
           // Set up security rules to allow tcp/5201 on App Server
           sh ''' #!/bin/bash

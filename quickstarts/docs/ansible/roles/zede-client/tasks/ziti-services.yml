@@ -19,10 +19,3 @@
   register: show_network_status
 
 - debug: msg="{{ show_network_status.stdout_lines }}"
-
-- name:  Show | Ziti Tunnel Service Status
-  shell: systemctl status ziti-tunnel.service
-  register: show_ziti_tunnel_status
-  become: true
-
-- debug: msg="{{ show_ziti_tunnel_status.stdout_lines }}"

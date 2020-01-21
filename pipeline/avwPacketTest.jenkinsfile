@@ -308,6 +308,9 @@ pipeline {
       steps {
         //Run test Cases to pass packet across the AVW Network
         sh '''
+        eval sleep 5m
+        '''
+        sh '''
         set +ex
         serverIp=`eval terraform output -json | jq -j .AZCPEGWx0xWESTUS2_private_ips.value[][]`
         eval export ANSIBLE_HOST_KEY_CHECKING=False

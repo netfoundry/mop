@@ -71,8 +71,7 @@ pipeline {
         // check out the mop git repo where python3 scripts are housed
         checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124B"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
         // fill the gateways details to be deployed
-        sh '''
-        set -Eeuxo pipefail
+        sh ''' set -Eeuxo pipefail
         echo "gateway_list:" >|  zede_site.yaml
         echo "- cloud: azure" >>  zede_site.yaml
         echo "  count: 1" >>  zede_site.yaml
@@ -120,8 +119,7 @@ pipeline {
         echo "  work_dir: ." >>  zede_site.yaml
         cat zede_site.yaml
         '''
-        sh '''
-        set -Eeuxo pipefail
+        sh ''' set -Eeuxo pipefail
         ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
         eval touch logoutput.txt
         '''
@@ -133,8 +131,7 @@ pipeline {
         // Steps to Deploy NF Gateways VMs in Azure based on Terraform plan
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           // Download the NF ZEDE image under test from the edgeimages blob container
-          sh '''
-          set -Eeuxo pipefail
+          sh ''' set -Eeuxo pipefail
           export DISK_LOC=centralus
           eval python3 quickstarts/docs/python/azure/azure_manage_disk_operations.py --action create
           '''
@@ -161,19 +158,16 @@ pipeline {
         // the build steps to configure ZEDE Gateway
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           // Set up security rules to allow tcp/1280, tcp/3022, tcp/443
-          sh '''
-          set -Eeuxo pipefail
+          sh ''' set -Eeuxo pipefail
           eval python3 quickstarts/docs/python/azure/azure_manage_security_group.py --action update --rules "tcp,3022" "tcp,443" "tcp,1280" --sg_name $ZEDE_NAME
           '''
           // Get Principal ID for the assigned identity to VM and assigned network contributor role
-          sh '''
-          set -Eeuxo pipefail
+          sh ''' set -Eeuxo pipefail
           principalId=`eval python3 quickstarts/docs/python/azure/azure_manage_vm.py --action get`
           eval python3 quickstarts/docs/python/azure/azure_manage_rbac.py --action create --role_name Network_Contributor --principal_id $principalId
           '''
           // Reboot Zede GW
-          sh '''
-          set -Eeuxo pipefail
+          sh ''' set -Eeuxo pipefail
           eval python3 quickstarts/docs/python/azure/azure_manage_vm.py --action restart
           '''
         }
@@ -188,8 +182,7 @@ pipeline {
           eval sleep 5m
           '''
           // Set up security rules to allow tcp/5201 on App Server
-          sh '''
-          set -Eeuxo pipefail
+          sh ''' set -Eeuxo pipefail
           eval python3 quickstarts/docs/python/azure/azure_manage_security_group.py --action update --rules "tcp,5201" --sg_name VM${SERVER_LOCATION}01
           '''
           // Add Public Client, Server and ZEDE IPs to the hosts file for Ansible
@@ -213,8 +206,7 @@ pipeline {
           cat quickstarts/docs/ansible/roles/zede/vars/ip.yml
           '''
           // Run ansible playbook to configure client and zede
-          sh '''
-          set -Eeuxo pipefail
+          sh ''' set -Eeuxo pipefail
           eval export ANSIBLE_HOST_KEY_CHECKING=False
           cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
           eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags zede,zede-client -u nfadmin -e zede=True -e zedeClient=True -e artifactoryApiKey=$ARTIFACTORY_API_KEY -e zitiVersion=$IMAGE_VERSION -e controllerIp=$cip -vv
@@ -281,8 +273,7 @@ pipeline {
       when { expression { params.TEST_CASE01 }}
       steps {
         //Run test Cases to pass packet across the ZEDE Network
-        sh '''
-        set +ex
+        sh ''' set +ex
         eval sleep 3m
         serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
         eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/zede.yml --tags zede-tc-01 -u nfadmin -e zedeTC01=True -e serverIp=$serverIp
@@ -294,8 +285,7 @@ pipeline {
       steps {
         // Steps to Destroy All Resources in Azure based on Terraform plan
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
-          sh '''
-          -Eeuxo pipefail
+          sh ''' set -Eeuxo pipefail
           jq . main.tf.json
           removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
           if [[ -n $removeRg ]]; then eval terraform state rm $removeRg; fi

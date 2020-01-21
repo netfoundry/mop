@@ -232,7 +232,7 @@ pipeline {
           cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
           export ZITI_PASSWORD=`eval jq -j .password ${WORKSPACE}/credentials.json`
           # ziti edge controller login
-          token=`curl -sSX POST -H "Content-Type: application/json" -d "{'username': '$ZITI_USERNAME', 'password': '$ZITI_PASSWORD'}" \
+          token=`curl -sSX POST -H "Content-Type: application/json" -d "{"username": "$ZITI_USERNAME", "password": "$ZITI_PASSWORD"}" \
                 "https://$cip:1280/authenticate?method=password" --insecure  | jq -j ".data.token"`
           # build a header with the session token
           declare -a curlArgs=('-H' "Content-Type: application/json" '-H' "zt-session: $token")
@@ -258,7 +258,7 @@ pipeline {
           echo "Ziti Edge GW is verified - $verified"
           echo "Ziti Edge GW is online - $online"
           # Create Ziti Service named iperf3
-          declare -a data="{'name': 'iperf3','protocols': ['tls'],'dns':{'hostname':'$serverIp','port': 5201},'egressRouter':'$guuid','endpointAddress':'tcp://$serverIp:5201','clusters': ['$cuuid']}"
+          declare -a data="{"name": "iperf3","protocols": ["tls"],"dns":{"hostname":"$serverIp","port": 5201},"egressRouter":"$guuid","endpointAddress":"tcp://$serverIp:5201","clusters": ["$cuuid"]}"
           serviceId=`curl -sSX POST "${curlArgs[@]}" -d "${data}" "https://$cip:1280/services" --insecure | jq -j ".data.id"`
           # Find ziti-tunnel Id for the Ziti Client
           identities=`curl -sSX GET "${curlArgs[@]}" "https://$cip:1280/identities" --insecure  | jq -j ".data"`
@@ -270,7 +270,7 @@ pipeline {
             exit 1
           fi
           # Create AppWan named appwan01
-          declare -a data="{'name':'appwan01','identities':['$tunnelId'],'services':['$serviceId']}"
+          declare -a data="{"name":"appwan01","identities":["$tunnelId"],"services":["$serviceId"]}"
           appwanId=`curl -sSX POST "${curlArgs[@]}" -d "${data}" "https://$cip:1280/app-wans" --insecure | jq -j ".data.id"`
           echo "Appwan with ID $appwanId has been created"
           '''

@@ -194,8 +194,7 @@ pipeline {
           '''
           // Add Public Client, Server and ZEDE IPs to the hosts file for Ansible
           sh ''' #!/bin/bash
-          set
-          -Eeuxo pipefail
+          set -Eeuxo pipefail
           echo "[zede]" >| quickstarts/docs/ansible/hosts
           echo `terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
           echo "[zede-client]" >> quickstarts/docs/ansible/hosts
@@ -206,8 +205,7 @@ pipeline {
           '''
           //Configure vars for Private Server IP to be used in client -> server testing
           sh ''' #!/bin/bash
-          set
-          -Eeuxo pipefail
+          set -Eeuxo pipefail
           serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
           echo "serverIp: ${serverIp}" >| quickstarts/docs/ansible/roles/zede-client/vars/ip.yml
           cat quickstarts/docs/ansible/roles/zede-client/vars/ip.yml
@@ -228,7 +226,7 @@ pipeline {
           eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/zede.yml --tags app-server -u nfadmin -e appServer=True
           '''
           // Configure iperf Service and add it to appwan
-          sh'''
+          sh''' #!/bin/bash
           set -Eeuxo pipefail
           serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
           cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`

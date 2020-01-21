@@ -20,5 +20,5 @@
 - name: Download | Credentials file from Zede
   fetch:
     src: /home/nfadmin/.config/ziti/ziti-controller/credentials.json
-    dest: ~/
+    dest: "{{ workspace }}/"
     flat: yes

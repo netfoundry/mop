@@ -209,7 +209,7 @@ pipeline {
           sh ''' set -Eeuxo pipefail
           eval export ANSIBLE_HOST_KEY_CHECKING=False
           cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
-          eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags zede,zede-client -u nfadmin -e zede=True -e zedeClient=True -e artifactoryApiKey=$ARTIFACTORY_API_KEY -e zitiVersion=$IMAGE_VERSION -e controllerIp=$cip -vv
+          eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/local.yml --tags zede,zede-client -u nfadmin -e zede=True -e zedeClient=True -e artifactoryApiKey=$ARTIFACTORY_API_KEY -e zitiVersion=$IMAGE_VERSION -e controllerIp=$cip -e workspace=$WORKSPACE -vv
           '''
           // Run ansible playbook to configure server
           sh '''
@@ -222,7 +222,7 @@ pipeline {
           set set -Eeuxo pipefail
           serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
           cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
-          export ZITI_PASSWORD=`eval jq -j .password ~/credentials.json`
+          export ZITI_PASSWORD=`eval jq -j .password ${WORKSPACE}/credentials.json`
           # ziti edge controller login
           token=`curl -sSX POST -H "Content-Type: application/json" -d "{\"username\": \"$ZITI_USERNAME\", \"password\": \"$ZITI_PASSWORD\"}" \
                 "https://$cip:1280/authenticate?method=password" --insecure  | jq -j ".data.token"`

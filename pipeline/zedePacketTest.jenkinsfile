@@ -195,9 +195,9 @@ pipeline {
           // Add Public Client, Server and ZEDE IPs to the hosts file for Ansible
           sh '''
           set -Eeuxo pipefail
-          echo "[zede]" >> quickstarts/docs/ansible/hosts
+          echo "[zede]" >| quickstarts/docs/ansible/hosts
           echo `terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
-          echo "[zede-client]" >| quickstarts/docs/ansible/hosts
+          echo "[zede-client]" >> quickstarts/docs/ansible/hosts
           echo `terraform output -json | jq -j .VM${CLIENT_LOCATION}01_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
           echo "[app-server]" >> quickstarts/docs/ansible/hosts
           echo `terraform output -json | jq -j .VM${SERVER_LOCATION}01_public_ips.value[][]` >> quickstarts/docs/ansible/hosts

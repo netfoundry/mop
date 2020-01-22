@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-This module is to create ziti identity and erollit for the loacal endpoint
+This module is to create ziti services and appwans based on pre-configured
+indetities, edge routers, and clusters.
 """
 import os
 import json

@@ -45,8 +45,9 @@ def delete(roleName):
                                 os.environ.get("ARM_SUBSCRIPTION_ID"),
                                 os.environ.get("GROUP_NAME"))
     roleGUID, roleDefinitionId = list_role_definitions(roleName)
+    print(roleGUID, roleDefinitionId)
     auth_management_client = connect()
-    # Trying to assign role to VM
+    # Trying to delete assigned role
     async_rbac_delete = auth_management_client.role_assignments.delete(
         scope,
         roleGUID

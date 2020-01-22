@@ -232,49 +232,7 @@ pipeline {
           serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
           cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
           export ZITI_PASSWORD=`eval jq -j .password ${WORKSPACE}/credentials.json`
-          # ziti edge controller login
-          data=\''{"username": "'"$ZITI_USERNAME"'", "password": "'"$ZITI_PASSWORD"'"}'\'
-          token=`curl -sSX POST -H "Content-Type: application/json" -d "${data}" "https://$cip:1280/authenticate?method=password" --insecure  | jq -j ".data.token"`
-          # build a header with the session token
-          declare -a curlArgs=('-H' "Content-Type: application/json" '-H' "zt-session: $token")
-          clusters=`curl -sSX GET "${curlArgs[@]}" "https://$cip:1280/clusters" --insecure  | jq -j ".data"`
-          if [[ $clusters ]]; then
-            # find cluster uuid  for cluster demo-c01
-            cuuid=`echo $clusters | jq -j '.[] | select(.name=="demo-c01") | .id'`
-          else
-            echo " could not find cluster with name demo-c01"
-            exit 1
-          fi
-          gateways=`curl -sSX GET "${curlArgs[@]}" "https://$cip:1280/gateways" --insecure  | jq -j ".data"`
-          guuid=`echo $gateways | jq -j '.[] | select(.name=="ziti-gw01") | .id'`
-          if [[ $gateways ]]; then
-            # find the gateway uuid
-            guuid=`echo $gateways | jq -j '.[] | select(.name=="ziti-gw01") | .id'`
-          else
-            echo " could not find gateway with name ziti-gw01"
-            exit 1
-          fi
-          verified=`curl "https://$cip:1280/gateways/$guuid" -sSX GET "${curlArgs[@]}"  --insecure  | jq -j ".data.isVerified"`
-          online=`curl "https://$cip:1280/gateways/$guuid" -sSX GET "${curlArgs[@]}"  --insecure  | jq -j ".data.isOnline"`
-          echo "Ziti Edge GW is verified - $verified"
-          echo "Ziti Edge GW is online - $online"
-          # Create Ziti Service named iperf3
-          data=\''{"name":"iperf3","protocols": ["tls"],"dns":{"hostname":"'"$serverIp"'","port": 5201},"egressRouter":"'"$guuid"'","'"endpointAddress":"tcp://$serverIp:5201"'","clusters": ["'"$cuuid"'"]}'\'
-          serviceId=`curl -sSX POST "${curlArgs[@]}" -d "${data}" "https://$cip:1280/services" --insecure | jq -j ".data.id"`
-          # Find ziti-tunnel Id for the Ziti Client
-          identities=`curl -sSX GET "${curlArgs[@]}" "https://$cip:1280/identities" --insecure  | jq -j ".data"`
-          if [[ $identities ]]; then
-            # find the identity uuid
-            tunnelId=`echo $identities | jq -j '.[] | select(.name=="ziti-tunnel") | .id'`
-          else
-            echo " could not find identity with name ziti-tunnel"
-            exit 1
-          fi
-          # Create AppWan named appwan01
-          data=\''{"name":"appwan01","identities":["'"$tunnelId"'"],"services":["'"$serviceId"'"]}'\'
-          appwanId=`curl -sSX POST "${curlArgs[@]}" -d "${data}" "https://$cip:1280/app-wans" --insecure | jq -j ".data.id"`
-          echo "Appwan with ID $appwanId has been created"
-          '''
+          python3 quickstarts/docs/ansible/roles/zede-client/files/create_ziti_services.py -u admin -p $ZITI_PASSWORD -cip $cip --cluster_name demo-c01 --gateway_name ziti-gw01 --identity_name ziti-tunnel --service_dns $serverIp
         }
       }
     }

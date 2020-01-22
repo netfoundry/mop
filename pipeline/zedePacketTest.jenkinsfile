@@ -240,13 +240,17 @@ pipeline {
     stage('Test Case 01') {
       when { expression { params.TEST_CASE01 }}
       steps {
-        //Run test Cases to pass packet across the ZEDE Network
-        sh ''' #!/bin/bash
-        set +ex
-        eval sleep 3m
-        serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
-        eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/zede.yml --tags zede-tc-01 -u nfadmin -e zedeTC01=True -e serverIp=$serverIp
-        '''
+        script {
+          catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+            //Run test Cases to pass packet across the ZEDE Network
+            sh ''' #!/bin/bash
+            set -Eeuxo pipefail
+            eval sleep 3m
+            serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
+            eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/zede.yml --tags zede-tc-01 -u nfadmin -e zedeTC01=True -e serverIp=$serverIp
+            '''
+          }
+        }
       }
     }
     stage('Destroy All Resource built in Azure') {

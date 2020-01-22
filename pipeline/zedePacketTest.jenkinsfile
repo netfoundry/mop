@@ -285,7 +285,7 @@ pipeline {
           // Delete Network Network Contributor added in stage "Configure ZEDE Gateway"
           sh ''' #!/bin/bash
           eval python3 quickstarts/docs/python/azure/azure_manage_rbac.py --action delete --role_name Network_Contributor
-
+          '''
         }
       }
     }

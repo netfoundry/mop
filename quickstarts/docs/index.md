@@ -8,6 +8,7 @@ We will provide series of quickstart guides on how to quickly deploy and configu
     1. [Mobile User to Cloud Application Connectivity](azure/connectUser2App.md)
     1. [Branch Application to Cloud Application Connectivity](azure/connectApp2App.md)
     1. [Bastion Host](azure/azure-bastion.md)
+    1. [Accessing Azure Stack](azure/accessing-azure-stack.md)
 1. AWS Cloud Connectivity
     1. [Overview](aws/intro.md)
     1. [Bastion Host](aws/aws-bastion.md)

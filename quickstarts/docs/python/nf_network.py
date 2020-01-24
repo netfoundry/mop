@@ -72,6 +72,8 @@ def find_network(env, name, token):
     writelog('\nNetworks found are\n')
     writelog(networks)
     for network in networks:
+        writelog('\nNetwork name searched is ' + network['name'])
+        writelog('\nNetwork name given is ' + name)
         if network['name'] == name:
             net_url = (network['_links']['self']['href'])
         else:

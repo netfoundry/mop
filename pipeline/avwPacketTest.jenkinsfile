@@ -162,51 +162,76 @@ pipeline {
             stage('Create NF Network') {
               when { expression { params.CREATE_NFNK }}
               steps {
-                // the build steps to create NF Network
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
-                  sh '''
-                  set -Eeuxo pipefail
-                  eval python3 quickstarts/docs/python/nfnk_create.py
-                  eval cat logoutput.txt
-                  '''
+                script {
+                  try {
+                    // the build steps to create NF Network
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+                      sh '''
+                      set -Eeuxo pipefail
+                      eval python3 quickstarts/docs/python/nfnk_create.py
+                      '''
+                    }
+                  } catch(e) {
+                    sh '''
+                    cat logoutput.txt
+                    exit 1
+                    '''
+                  }
                 }
               }
             }
             stage('Create NF Gateways') {
               when { expression { params.CREATE_NFGW }}
               steps {
-                // the build steps to create NF Gateways
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
-                  sh '''
-                  set -Eeuxo pipefail
-                  cat nf_resources.yaml
-                  eval python3 quickstarts/docs/python/nfgw_manage.py --action create --file nf_resources.yaml
-                  cat logoutput.txt
-                  cat nf_resources.yaml
-                  '''
+                script {
+                    try {
+                      // the build steps to create NF Gateways
+                      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
+                        sh '''
+                        set -Eeuxo pipefail
+                        cat nf_resources.yaml
+                        eval python3 quickstarts/docs/python/nfgw_manage.py --action create --file nf_resources.yaml
+                        cat nf_resources.yaml
+                        '''
+                      }
+                    } catch(e) {
+                      sh '''
+                      cat logoutput.txt
+                      exit 1
+                      '''
+                    }
+                  }
                 }
               }
             }
             stage('Deploy NF Gateways') {
               when { expression { params.DEPLOY_AZGW }}
               steps {
-                // Steps to Deploy NF Gateways VMs in Azure based on Terraform plan
-                withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
-                  sh '''
-                  set -Eeuxo pipefail
-                  cat nf_resources.yaml
-                  rm -Rf terraform.tfstate.d
-                  eval python3 quickstarts/docs/python/nfgw_manage.py --action create-terraform --file nf_resources.yaml
-                  cat logoutput.txt
-                  jq . main.tf.json
-                  eval terraform init
-                  eval terraform apply --auto-approve
-                  eval terraform state list
-                  removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
-                  eval terraform state rm $removeRg
-                  eval terraform state list
-                  cat nf_resources.yaml
-                  '''
+                script {
+                  try {
+                    // Steps to Deploy NF Gateways VMs in Azure based on Terraform plan
+                    withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+                      sh '''
+                      set -Eeuxo pipefail
+                      cat nf_resources.yaml
+                      rm -Rf terraform.tfstate.d
+                      eval python3 quickstarts/docs/python/nfgw_manage.py --action create-terraform --file nf_resources.yaml
+                      jq . main.tf.json
+                      eval terraform init
+                      eval terraform apply --auto-approve
+                      eval terraform state list
+                      removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
+                      eval terraform state rm $removeRg
+                      eval terraform state list
+                      cat nf_resources.yaml
+                      '''
+                    }
+                  } catch(e) {
+                    sh '''
+                    cat logoutput.txt
+                    exit 1
+                    '''
+                  }
                 }
               }
             }

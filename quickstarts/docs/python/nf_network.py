@@ -69,7 +69,8 @@ def create_network(env, name, token):
 def find_network(env, name, token):
     url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/networks'
     networks = nfreq.get_data(url, token)['_embedded']['networks']
-    writelog('\nNetworks found are\n' + networks)
+    writelog('\nNetworks found are\n')
+    writelog(networks)
     for network in networks:
         if network['name'] == name:
             net_url = (network['_links']['self']['href'])

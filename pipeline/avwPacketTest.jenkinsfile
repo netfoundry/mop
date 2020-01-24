@@ -184,22 +184,21 @@ pipeline {
               when { expression { params.CREATE_NFGW }}
               steps {
                 script {
-                    try {
-                      // the build steps to create NF Gateways
-                      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
-                        sh '''
-                        set -Eeuxo pipefail
-                        cat nf_resources.yaml
-                        eval python3 quickstarts/docs/python/nfgw_manage.py --action create --file nf_resources.yaml
-                        cat nf_resources.yaml
-                        '''
-                      }
-                    } catch(e) {
+                  try {
+                    // the build steps to create NF Gateways
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                       sh '''
-                      cat logoutput.txt
-                      exit 1
+                      set -Eeuxo pipefail
+                      cat nf_resources.yaml
+                      eval python3 quickstarts/docs/python/nfgw_manage.py --action create --file nf_resources.yaml
+                      cat nf_resources.yaml
                       '''
                     }
+                  } catch(e) {
+                    sh '''
+                    cat logoutput.txt
+                    exit 1
+                    '''
                   }
                 }
               }

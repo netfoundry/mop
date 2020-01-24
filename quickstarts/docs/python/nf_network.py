@@ -76,11 +76,9 @@ def find_network(env, name, token):
         writelog('\nNetwork name given is ' + name)
         if network['name'] == name:
             net_url = (network['_links']['self']['href'])
-        else:
-            writelog('network not found!')
-            net_url = ''
-    return net_url
-
+            return net_url
+    writelog('network not found!')
+    return None
 
 def delete_network(netUrl, token):
     data = nfreq.delete_nf(netUrl, token)

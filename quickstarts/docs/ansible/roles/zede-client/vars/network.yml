@@ -1,0 +1,3 @@
+---
+serverIp: 10.20.10.5
+dns: "{{ ansible_facts['dns']['nameservers'] }}"

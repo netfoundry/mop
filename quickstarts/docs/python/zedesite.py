@@ -95,7 +95,7 @@ def vpn_site_connection_deletion(siteName):
     print('VPN Site Connection to VPNG Deleted')
 
 
-def create_avw_site(filename):
+def create_zede_site(filename):
     # environment used
     env = os.environ.get('ENVIRONMENT')
     # clear logoutput file
@@ -128,8 +128,6 @@ def create_avw_site(filename):
     # build Azure Subscriptions Url for a given NF Enviroment API
     azureSubscriptionsURL = 'https://gateway.' + env + '.netfoundry.io/rest/v1/azureSubscriptions'
     # get Azure Subscriptions url of the first one, the assumption is that there is only one.
-    print(nfreq.get_data(azureSubscriptionsURL, token))
-    print('--------------------------------------------')
     try:
         avwSiteUrl = nfreq.get_data(azureSubscriptionsURL, token)['_embedded']['azureSubscriptions'][0]['_links']['self']['href']+'/virtualWanSites'
     except KeyError as kerr:
@@ -144,9 +142,6 @@ def create_avw_site(filename):
                                   }, token)
 
             avwSiteUrl = data['_links']['self']['href']+'/virtualWanSites'
-    except TypeError as terr:
-        print(terr.args)
-        sys.exit(1)
     print(avwSiteUrl)
     # create avw vpn site
     azureVirtualWanId = "/subscriptions/"+os.environ.get('ARM_SUBSCRIPTION_ID')+"/resourceGroups/"+os.environ.get('GROUP_NAME')+"/providers/Microsoft.Network/virtualWans/"+os.environ.get('VWAN_NAME')

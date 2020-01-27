@@ -1,0 +1,27 @@
+---
+- name: app-server
+  hosts: app-server
+  become: True
+  roles:
+    - { role: app-server, tags: ["app-server"], when: appServer is defined }
+
+- name: zede
+  hosts: zede
+  become: True
+  roles:
+    - { role: zede, tags: ["zede"], when: zede is defined }
+
+- name: zede-client
+  hosts: zede-client
+  become: True
+  gather_facts: True
+  roles:
+    - role: zede-client
+      tags: ["zede-client"]
+      controllerPassword: "{{hostvars['zede1']['controllerPassword']}}"
+      when: zedeClient is defined
+
+- name: test case 01 - client server connectivity
+  hosts: zede-client
+  roles:
+    - { role: zede-tc-01, tags: ["zede-tc-01"], when: zedeTC01 is defined }

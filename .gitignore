@@ -6,4 +6,4 @@ logoutput.txt
 .terraform
 terraform.tfstate.d
 main.tf.json
-resources.yaml
+**/modules

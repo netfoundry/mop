@@ -13,6 +13,11 @@ This quickstart guide will provide all the steps to create a secure service betw
 
 {!common/create-appwan-client.md!}
 
+### Test Connectivity to Application Server
+
+!!! example "To test connectivity, log in to the DemoClinet01 and run ssh username@privateIp"
+    ![Image](../images/CreateService06.png)
+
 ## Programmatically
 
 ### via Python and Terraform

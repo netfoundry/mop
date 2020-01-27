@@ -8,7 +8,7 @@ This section will guide a user through the steps on how to enable service connec
     1. Click on "Component Builder Appwan"
     ![Image](../images/CreateAppWan02.png)
     1. Move the desired gateway (e.g. DemoGateway01) from "Available" Gateways to "Selected" Endpoints. Move the desired service (e.g. DemoServiceSsh) from "Available" to "Selected" Services.
-    ![Image](../images/CreateAppWan03.png)
+    ![Image](../images/BranchGW2AzureGWappWanServiceSsh.png)
     1. Click on "Create".
-    ![Image](../images/CreateAppWan04.png)
+    ![Image](../images/BranchGW2AzureGWappWanServiceSshResult.png)
     1. Done

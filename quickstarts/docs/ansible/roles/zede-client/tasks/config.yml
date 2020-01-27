@@ -1,0 +1,30 @@
+---
+- name: install the iperf3 rpm from a remote repo
+  yum:
+    name: https://iperf.fr/download/fedora/iperf3-3.1.3-1.fc24.x86_64.rpm
+    state: present
+
+- debug: msg="{{ controllerPassword }}"
+
+- debug: msg="{{ controllerIp }}"
+
+- name:  Config | Enroll Tunneler
+  shell: python /home/nfadmin/.config/enroll_ziti_tunneler.py -u admin -p {{ controllerPassword }} -cip {{ controllerIp }} -i ziti-tunnel -d
+  register: show_enrollment_status
+  notify: restart_ziti_tunnel
+
+- debug: msg="{{ show_enrollment_status.stdout_lines }}"
+
+- name: Start | Ziti-Tunnel Service
+  service:
+    name: ziti-tunnel.service
+    state: started
+    enabled: true
+  become: true
+
+- name:  Get | Ziti Tunnel Service Status
+  shell: systemctl status ziti-tunnel
+  become: True
+  register: statusZitiTunnelService
+
+- debug: msg="{{ statusZitiTunnelService.stdout_lines }}"

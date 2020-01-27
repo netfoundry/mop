@@ -1,0 +1,297 @@
+pipeline {
+  agent {
+    docker {
+      image "netfoundry/jenkins-slave-edge:py3"
+      registryCredentialsId 'dockerhub'
+      registryUrl 'https://index.docker.io/v1/'
+      alwaysPull true
+    }
+  }
+  options {
+    disableConcurrentBuilds()
+    parallelsAlwaysFailFast()
+  }
+  parameters {
+    choice(name: 'CLOUD', choices: ['azure','aws'], description: 'Select cloud the ZEDE image will be tested in')
+    booleanParam(name: 'DEPLOY_RESOURCES', defaultValue: true, description: 'Deploy Test Client and Server to use for traffic generation and termination')
+    booleanParam(name: 'DESTROY_RESOURCES', defaultValue: true, description: 'Destroy Test Client and Server to use for traffic generation and termination')
+    booleanParam(name: 'CREATE_ZEDE', defaultValue: true, description: 'Create NetFoundry ZEDE Site')
+    booleanParam(name: 'SETUP_CLIENT_SERVER', defaultValue: true, description: 'Set up Test Client and Server for all test cases')
+    booleanParam(name: 'TEST_CASE01', defaultValue: true, description: 'Test Case 01')
+    booleanParam(name: 'CLEANUP', defaultValue: true, description: 'Clean up after Tests are run')
+    // Client Side Details - Customized Parameters
+    string(name: 'CLIENT_VNET_PREFIX', defaultValue: '10.10.10.0/16', description: 'Test vNet in Client Region; Entire IP block')
+    string(name: 'CLIENT_SUBNET_PREFIX', defaultValue: '10.10.10.0/24', description: 'Test Subnet in Client Region')
+    string(name: 'CLIENT_LOCATION', defaultValue: 'westus2', description: 'Location of the Client')
+    // Server Side Details
+    string(name: 'SERVER_VNET_PREFIX', defaultValue: '10.20.10.0/16', description: 'Test vNet in Server Region; Entire IP block')
+    string(name: 'SERVER_SUBNET_PREFIX', defaultValue: '10.20.10.0/24', description: 'Test Subnet in Server Region')
+    string(name: 'SERVER_LOCATION', defaultValue: 'centralus', description: 'Location of the Server')
+    // Image Details to be tested
+    string(name: 'ZEDE_NAME', defaultValue: 'zedeapptest01', description: 'Name to be used for ZEDE VM')
+    string(name: 'IMAGE_VERSION', description: 'New Image version to be released to Marketplace')
+    string(name: 'IMAGE_SUFFIX_ID', description: 'The Suffix id that is attached to the disk after it was built with packer')
+  }
+  environment {
+    // Need this for terraform workspace setup only
+    ENVIRONMENT='sandbox'
+    // Azure Credentials
+    ARM_TENANT_ID = "25445e86-2ae6-4434-b116-25c66c27168d"
+    ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
+    // AWS Credentials
+    AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
+    // JFROG credentials
+    ARTIFACTORY_API_KEY = credentials('mop_ami_artifactory_api_key')
+    // Test Input Variables
+    CLOUD = "${params.CLOUD}"
+    GROUP_NAME = "clouddev-smoke"
+    GROUP_LOC = "westus2"
+    // Client Side Details - Customized Environment Variables
+    CLIENT_VNET_NAME = "${params.CLIENT_LOCATION}-vnet"
+    CLIENT_VNET_PREFIX = "${params.CLIENT_VNET_PREFIX}"
+    CLIENT_SUBNET_PREFIX = "${params.CLIENT_SUBNET_PREFIX}"
+    CLIENT_LOCATION = "${params.CLIENT_LOCATION}"
+    // Server Side Details - Customized Environment Variables
+    SERVER_VNET_NAME = "${params.SERVER_LOCATION}-vnet"
+    SERVER_VNET_PREFIX = "${params.SERVER_VNET_PREFIX}"
+    SERVER_SUBNET_PREFIX = "${params.SERVER_SUBNET_PREFIX}"
+    SERVER_LOCATION = "${params.SERVER_LOCATION}"
+    // Common Customized Environment Variables
+    KEY1 = "ZEDE Packet Test"
+    ZEDE_NAME = "${params.ZEDE_NAME}"
+    IMAGE_VERSION = "${params.IMAGE_VERSION}"
+    IMAGE_ID = "${params.IMAGE_SUFFIX_ID}"
+    IMAGE_TYPE = "zede"
+    ZITI_USERNAME = "admin"
+  }
+  stages {
+    stage('Set up WORKSPACE') {
+      steps {
+        // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
+        // check out the mop git repo where python3 scripts are housed
+        checkout([$class: 'GitSCM', userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
+        // fill the gateways details to be deployed
+        sh ''' #!/bin/bash
+        set -Eeuxo pipefail
+        echo "gateway_list:" >|  zede_site.yaml
+        echo "- cloud: azure" >>  zede_site.yaml
+        echo "  count: 1" >>  zede_site.yaml
+        echo "  names:" >>  zede_site.yaml
+        echo "  - VM${CLIENT_LOCATION}01" >>  zede_site.yaml
+        echo "  region: ${CLIENT_LOCATION}" >>  zede_site.yaml
+        echo "  regionalCidr: [${CLIENT_SUBNET_PREFIX}]" >>  zede_site.yaml
+        echo "  resourceGroup:" >>  zede_site.yaml
+        echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
+        echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
+        echo "  tag: Client-Gateway" >>  zede_site.yaml
+        echo "  action: create-terraform" >>  zede_site.yaml
+        echo "  noKeyRegistration: true" >>  zede_site.yaml
+        echo "- cloud: azure" >>  zede_site.yaml
+        echo "  count: 1" >>  zede_site.yaml
+        echo "  names:" >>  zede_site.yaml
+        echo "  - VM${SERVER_LOCATION}01" >>  zede_site.yaml
+        echo "  region: ${SERVER_LOCATION}" >>  zede_site.yaml
+        echo "  regionalCidr: [${SERVER_SUBNET_PREFIX}]" >>  zede_site.yaml
+        echo "  resourceGroup:" >>  zede_site.yaml
+        echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
+        echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
+        echo "  tag: Server-Gateway" >>  zede_site.yaml
+        echo "  action: create-terraform" >>  zede_site.yaml
+        echo "  noKeyRegistration: true" >>  zede_site.yaml
+        echo "- cloud: azure" >>  zede_site.yaml
+        echo "  count: 1" >>  zede_site.yaml
+        echo "  names:" >>  zede_site.yaml
+        echo "  - ${ZEDE_NAME}" >>  zede_site.yaml
+        echo "  region: ${SERVER_LOCATION}" >>  zede_site.yaml
+        echo "  regionalCidr: [${SERVER_SUBNET_PREFIX}]" >>  zede_site.yaml
+        echo "  resourceGroup:" >>  zede_site.yaml
+        echo "    name: ${GROUP_NAME}" >>  zede_site.yaml
+        echo "    region: ${GROUP_LOC}" >>  zede_site.yaml
+        echo "  tag: ZEDE-Gateway" >>  zede_site.yaml
+        echo "  action: create-terraform" >>  zede_site.yaml
+        echo "  imageType: private" >>  zede_site.yaml
+        echo "  imageId: /subscriptions/${ARM_SUBSCRIPTION_ID}/resourceGroups/${GROUP_NAME}/providers/Microsoft.Compute/images/nf-${IMAGE_TYPE}-${IMAGE_VERSION}" >>  zede_site.yaml
+        echo "  noKeyRegistration: true" >>  zede_site.yaml
+        echo "  domainNameLabel: ${ZEDE_NAME}" >>  zede_site.yaml
+        echo "terraform:" >>  zede_site.yaml
+        echo "  bin: terraform" >>  zede_site.yaml
+        echo "  output: no" >>  zede_site.yaml
+        echo "  source: ./quickstarts/docs/terraform" >>  zede_site.yaml
+        echo "  work_dir: ." >>  zede_site.yaml
+        cat zede_site.yaml
+        '''
+        sh ''' #!/bin/bash
+        set -Eeuxo pipefail
+        ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
+        cat ~/.ssh/id_rsa
+        eval touch logoutput.txt
+        '''
+      }
+    }
+    stage('Deploy Gateway Resources to Cloud') {
+      when { expression { params.DEPLOY_RESOURCES }}
+      steps {
+        // Steps to Deploy NF Gateways VMs in Azure based on Terraform plan
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+          // Download the NF ZEDE image under test from the edgeimages blob container
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          export DISK_LOC=centralus
+          eval python3 quickstarts/docs/python/azure/azure_manage_disk_operations.py --action create
+          '''
+          // Create terraform plan for all 3 gateways, i.e. Client, Server, ZEDE
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          cat zede_site.yaml
+          eval python3 quickstarts/docs/python/nfgw_manage.py --action create-terraform --file zede_site.yaml
+          eval jq . main.tf.json
+          cat logoutput.txt
+          eval terraform apply --auto-approve
+          eval terraform state list
+          removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
+          eval terraform state rm $removeRg
+          eval terraform state list
+          cat zede_site.yaml
+          '''
+        }
+      }
+    }
+    stage('Configure ZEDE Gateway') {
+      when { expression { params.CREATE_ZEDE }}
+      steps {
+        // the build steps to configure ZEDE Gateway
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+          // Set up security rules to allow tcp/1280, tcp/3022, tcp/443
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          eval python3 quickstarts/docs/python/azure/azure_manage_security_group.py --action update --rules "tcp,3022" "tcp,443" "tcp,1280" --sg_name $ZEDE_NAME
+          '''
+          // Get Principal ID for the assigned identity to VM and assigned network contributor role
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          principalId=`eval python3 quickstarts/docs/python/azure/azure_manage_vm.py --action get`
+          eval python3 quickstarts/docs/python/azure/azure_manage_rbac.py --action create --role_name Network_Contributor --principal_id $principalId
+          '''
+          // Reboot Zede GW
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          eval python3 quickstarts/docs/python/azure/azure_manage_vm.py --action restart
+          '''
+        }
+      }
+    }
+    stage('Set up Test Client and Server for all test cases') {
+      when { expression { params.SETUP_CLIENT_SERVER }}
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+          // Wait 5 min for the Ziti Controller to boot up and configure itself
+          sh ''' #!/bin/bash
+          eval sleep 3m
+          '''
+          // Set up security rules to allow tcp/5201 on App Server
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          eval python3 quickstarts/docs/python/azure/azure_manage_security_group.py --action update --rules "tcp,5201" --sg_name VM${SERVER_LOCATION}01
+          '''
+          // Add Public Client, Server and ZEDE IPs to the hosts file for Ansible
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          echo "[zede]" >| quickstarts/docs/ansible/hosts
+          echo `terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
+          echo "[zede-client]" >> quickstarts/docs/ansible/hosts
+          echo `terraform output -json | jq -j .VM${CLIENT_LOCATION}01_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
+          echo "[app-server]" >> quickstarts/docs/ansible/hosts
+          echo `terraform output -json | jq -j .VM${SERVER_LOCATION}01_public_ips.value[][]` >> quickstarts/docs/ansible/hosts
+          cat quickstarts/docs/ansible/hosts
+          '''
+          //Configure vars for Private Server IP to be used in client -> server testing
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
+          echo "serverIp: ${serverIp}" >| quickstarts/docs/ansible/roles/zede-client/vars/ip.yml
+          cat quickstarts/docs/ansible/roles/zede-client/vars/ip.yml
+          echo "serverIp: ${serverIp}" >| quickstarts/docs/ansible/roles/zede/vars/ip.yml
+          cat quickstarts/docs/ansible/roles/zede/vars/ip.yml
+          '''
+          // Run ansible playbook to configure client and zede
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          eval export ANSIBLE_HOST_KEY_CHECKING=False
+          cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
+          eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/zede.yml --tags zede,zede-client -u nfadmin -e zede=True -e zedeClient=True -e artifactoryApiKey=$ARTIFACTORY_API_KEY -e zitiVersion=$IMAGE_VERSION -e controllerIp=$cip -e workspace=$WORKSPACE -vv
+          '''
+          // Run ansible playbook to configure server
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          eval export ANSIBLE_HOST_KEY_CHECKING=False
+          eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/zede.yml --tags app-server -u nfadmin -e appServer=True
+          '''
+          // Configure iperf Service and add it to appwan
+          sh''' #!/bin/bash
+          set -Eeuxo pipefail
+          serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
+          cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
+          export ZITI_PASSWORD=`eval jq -j .password ${WORKSPACE}/credentials.json`
+          eval python3 quickstarts/docs/ansible/roles/zede-client/files/create_ziti_services.py -u admin -p $ZITI_PASSWORD -cip $cip --cluster_name demo-c01 --gateway_name ziti-gw01 --identity_name ziti-tunnel --service_dns $serverIp
+          '''
+        }
+      }
+    }
+    stage('Test Case 01') {
+      when { expression { params.TEST_CASE01 }}
+      steps {
+        script {
+          catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+            //Run test Cases to pass packet across the ZEDE Network
+            sh ''' #!/bin/bash
+            set -Eeuxo pipefail
+            eval sleep 3m
+            serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
+            eval ansible-playbook -i quickstarts/docs/ansible/hosts quickstarts/docs/ansible/zede.yml --tags zede-tc-01 -u nfadmin -e zedeTC01=True -e serverIp=$serverIp
+            '''
+          }
+        }
+      }
+    }
+    stage('Destroy All Resource built in Azure') {
+      when { expression { params.DESTROY_RESOURCES }}
+      steps {
+        // Steps to Destroy All Resources in Azure based on Terraform plan
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+          sh ''' #!/bin/bash
+          set +ex
+          removeRg=`eval terraform state list | xargs -L 1  | grep ${GROUP_LOC}_rg.`
+          if [[ -n "${removeRg}" ]]; then eval terraform state rm $removeRg; fi
+          eval terraform state list
+          eval terraform destroy --auto-approve
+          eval terraform state list
+          '''
+        }
+      }
+    }
+    stage('Clean up After Test') {
+      when { expression { params.CLEANUP }}
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
+          // Delete the Zede image from the cloddev-smoke RG
+          sh ''' #!/bin/bash
+          set +x; set -e -u -o pipefail
+          eval python3 quickstarts/docs/python/azure/azure_manage_disk_operations.py --action delete
+          '''
+          // Clean up Terraform state files
+          sh ''' #!/bin/bash
+          set -Eeuxo pipefail
+          rm -Rf terraform.tfstate.d
+          rm -Rf .terraform
+          rm zede_site.yaml
+          rm main.tf.json
+          '''
+          // Delete Network Network Contributor added in stage "Configure ZEDE Gateway"
+          sh ''' #!/bin/bash
+          eval python3 quickstarts/docs/python/azure/azure_manage_rbac.py --action delete --role_name Network_Contributor
+          '''
+        }
+      }
+    }
+  }
+}

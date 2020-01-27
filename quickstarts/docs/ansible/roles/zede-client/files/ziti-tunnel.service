@@ -1,0 +1,21 @@
+[Unit]
+Description=ziti tunnel service
+Documentation=https://developer.netfoundry.io
+Wants=network-online.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/home/nfadmin/
+Type=simple
+ExecStart=/usr/local/bin/ziti-tunnel run .config/ziti/ziti-identities/ziti-tunnel.json --log-formatter pfxlog
+Restart=always
+TimeoutStartSec=1min
+RestartSec=1min
+KillMode=process
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=ziti-tunnel
+
+[Install]
+WantedBy=multi-user.target

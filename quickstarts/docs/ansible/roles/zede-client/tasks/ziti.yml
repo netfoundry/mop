@@ -1,0 +1,140 @@
+---
+- name: Create .config directory
+  file:
+    path: "{{ ziti.directory }}"
+    state: directory
+
+- name: Create ziti directory
+  file:
+    path: "{{ ziti.directory }}ziti/"
+    state: directory
+
+- name: Create bin directory
+  file:
+    path: "{{ ziti.directory }}ziti/bin/"
+    state: directory
+
+- name: Create ziti-identities directory
+  file:
+    path: "{{ ziti.directory }}ziti/ziti-identities/"
+    state: directory
+
+- name: change ownership of .config directory to nfadmin user
+  file:
+    dest: "{{ ziti.directory }}"
+    owner: nfadmin
+    group: wheel
+    recurse: yes
+
+- name: Create /var/log/ziti/ directory
+  file:
+    path: /var/log/ziti/
+    state: directory
+
+- name: change ownership of /var/log/ziti/ directory to nfadmin user
+  file:
+    dest: /var/log/ziti/
+    owner: nfadmin
+    group: wheel
+    recurse: yes
+
+- name:  Get Checksum for Ziti Enroller
+  shell: "{{ ziti.enroller.sum }}"
+  register: enrollerSum
+
+- name: download the ziti-enroller archive
+  get_url:
+    url: "{{ ziti.enroller.url }}"
+    dest: "{{ ziti.directory }}"
+    checksum: "sha256:{{ enrollerSum.stdout }}"
+    headers:
+        X-JFrog-Art-Api: "{{ artifactoryApiKey }}"
+  register: enrollertgz
+
+- name:  Get Checksum for Ziti Tunnel
+  shell: "{{ ziti.tunnel.sum }}"
+  register: tunnelSum
+
+- name: download the ziti-tunnel archive
+  get_url:
+    url: "{{ ziti.tunnel.url  }}"
+    dest: "{{ ziti.directory }}"
+    checksum: "sha256:{{ tunnelSum.stdout }}"
+    headers:
+        X-JFrog-Art-Api: "{{ artifactoryApiKey }}"
+  register: tunneltgz
+
+- name: install Ziti Enroller from archive
+  unarchive:
+    src="{{ enrollertgz.dest }}"
+    dest="{{ ziti.directory }}ziti/bin/"
+    remote_src=yes
+
+- name: install Ziti Tunnel from archive
+  unarchive:
+    src="{{ tunneltgz.dest }}"
+    dest="{{ ziti.directory }}ziti/bin/"
+    remote_src=yes
+
+- name: delete Ziti Enroller archive
+  file:
+    path: "{{ enrollertgz.dest }}"
+    state: absent
+  when: enrollertgz
+
+- name: delete Ziti Tunnel archive
+  file:
+    path: "{{ tunneltgz.dest }}"
+    state: absent
+  when: tunneltgz
+
+- name: Create Symlink to Ziti Enroller
+  file:
+    src: "{{ ziti.directory }}ziti/bin/ziti-enroller"
+    dest: "/usr/local/bin/ziti-enroller"
+    state: link
+
+- name: Create Symlink tp Ziti Tunnel
+  file:
+    src: "{{ ziti.directory }}ziti/bin/ziti-tunnel"
+    dest: "/usr/local/bin/ziti-tunnel"
+    state: link
+
+- name: config | Configuring syslog
+  copy:
+    src: syslog
+    dest: /etc/logrotate.d/
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify:
+    - restart rsyslog
+
+- name: config | Configuring ziti-syslog.conf
+  copy:
+    src: ziti-syslog.conf
+    dest: /etc/rsyslog.d/
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify:
+    - restart rsyslog
+
+- name: config | Configuring ziti-tunnel
+  copy:
+    src: ziti-tunnel.service
+    dest: /usr/lib/systemd/system/ziti-tunnel.service
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
+- name: config | Configuring enroll_ziti_tunneler script
+  copy:
+    src: enroll_ziti_tunneler.py
+    dest: "{{ ziti.directory }}"
+    owner: nfadmin
+    group: wheel
+    mode: 0644

@@ -78,7 +78,8 @@ def find_gateway(netUrl, name, token):
         for gateway in gateways:
             if gateway['name'] == name:
                 gwUrl = gateway['_links']['self']['href']
-        return gwUrl
+                return gwUrl
+        return None
     except KeyError:
         return None
 

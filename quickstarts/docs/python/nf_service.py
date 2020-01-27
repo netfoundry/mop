@@ -92,7 +92,8 @@ def find_service(netUrl, serviceName, token):
     for service in services:
         if service['name'] == serviceName:
             serviceUrl = service['_links']['self']['href']
-    return serviceUrl
+            return serviceUrl
+    return None
 
 
 def delete_service(serviceUrl, token):

@@ -1,0 +1,24 @@
+---
+- name:  Get | Controller Password
+  shell: jq -j .password .config/ziti/ziti-controller/credentials.json
+  register: controllerPassword
+
+- debug: msg="{{ controllerPassword.stdout }}"
+
+- name: register controllerPassword variable to be used in host
+  add_host:
+    name: zede1
+    controllerPassword: "{{ controllerPassword.stdout }}"
+
+- name:  Get | Ziti Services Status
+  shell: systemctl status ziti*
+  become: True
+  register: statusZitiService
+
+- debug: msg="{{ statusZitiService.stdout_lines }}"
+
+- name: Download | Credentials file from Zede
+  fetch:
+    src: /home/nfadmin/.config/ziti/ziti-controller/credentials.json
+    dest: "{{ workspace }}/"
+    flat: yes

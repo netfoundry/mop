@@ -1,0 +1,9 @@
+---
+ziti:
+  enroller:
+    url: https://netfoundry.jfrog.io/netfoundry/ziti-release/ziti-enroller/amd64/linux/{{ zitiVersion }}/ziti-enroller.tar.gz
+    sum: "eval curl -sSfH 'X-JFrog-Art-Api:{{ artifactoryApiKey }}' https://netfoundry.jfrog.io/netfoundry/api/storage/ziti-release/ziti-enroller/amd64/linux/{{ zitiVersion }}/ziti-enroller.tar.gz | jq -r .checksums.sha256"
+  tunnel:
+    url: https://netfoundry.jfrog.io/netfoundry/ziti-release/ziti-tunnel/amd64/linux/{{ zitiVersion }}/ziti-tunnel.tar.gz
+    sum: "eval curl -sSfH 'X-JFrog-Art-Api:{{ artifactoryApiKey }}' https://netfoundry.jfrog.io/netfoundry/api/storage/ziti-release/ziti-tunnel/amd64/linux/{{ zitiVersion }}/ziti-tunnel.tar.gz | jq -r .checksums.sha256"
+  directory: /home/nfadmin/.config/

@@ -430,6 +430,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#test_connectivity_to_application_server" class="md-nav__link">
+    Test Connectivity to Application Server
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -479,6 +486,18 @@
   <li class="md-nav__item">
     <a href="../azure-bastion/" title="Bastion Replacement Removal" class="md-nav__link">
       Bastion Replacement Removal
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../accessing-azure-stack/" title="Accessing Azure Stack" class="md-nav__link">
+      Accessing Azure Stack
     </a>
   </li>
 
@@ -694,6 +713,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#test_connectivity_to_application_server" class="md-nav__link">
+    Test Connectivity to Application Server
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -833,10 +859,24 @@
 <li>Click on "Component Builder Appwan"
 <img alt="Image" src="../../images/CreateAppWan02.png" /></li>
 <li>Move the desired gateway (e.g. DemoGateway01) from "Available" Gateways to "Selected" Endpoints. Move the desired service (e.g. DemoServiceSsh) from "Available" to "Selected" Services.
-<img alt="Image" src="../../images/CreateAppWan03.png" /></li>
+<img alt="Image" src="../../images/BranchGW2AzureGWappWanServiceSsh.png" /></li>
 <li>Click on "Create".
-<img alt="Image" src="../../images/CreateAppWan04.png" /></li>
+<img alt="Image" src="../../images/BranchGW2AzureGWappWanServiceSshResult.png" /></li>
 <li>Done</li>
+</ol>
+</div>
+<h4 id="test_connectivity_to_application_server">Test Connectivity to Application Server<a class="headerlink" href="#test_connectivity_to_application_server" title="Permanent link">@</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Route to vNet</p>
+<p>The private IP of NF Gateway (e.g. YourBranchGatewayName) needs to be the next hop to reach the vNet in Azure (e.g. 10.0.8.0/24).
+Thus, a static route will need to be configured in one of the branch routers. NF Gateway can support dynamic routing if needed (e.g.bgp, ospf)</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Steps</p>
+<ol>
+<li>Log in to a Client App Host in Branch DataCenter</li>
+<li>Run ssh username@privateIpOfServerAppHostInAzure
+<img alt="Image" src="../../images/CreateService06.png" /></li>
 </ol>
 </div>
 <h3 id="programmatically">Programmatically<a class="headerlink" href="#programmatically" title="Permanent link">@</a></h3>

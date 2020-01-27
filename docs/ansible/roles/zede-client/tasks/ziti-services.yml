@@ -1,0 +1,21 @@
+---
+- debug: msg="{{ dns[0] }}"
+
+- name:  Set | DNS settings - Ignore DHCP DNS
+  shell: "{{ item }}"
+  with_items:
+  - nmcli con mod "System eth0" ipv4.ignore-auto-dns true
+  - nmcli con mod "System eth0" ipv4.dns 127.0.0.1,1.1.1.1
+  become: true
+
+- name: ReStart | Network Service
+  service:
+    name: network.service
+    state: restarted
+  become: true
+
+- name:  Show | DNS settings
+  shell: nmcli dev show
+  register: show_network_status
+
+- debug: msg="{{ show_network_status.stdout_lines }}"

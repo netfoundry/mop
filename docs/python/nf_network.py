@@ -53,7 +53,7 @@ def create_network(env, name, token):
             if result['status'] == 300:
                 writelog('\nnetwork build status = FINISHED, time waited = ' + str(minutes) + 'Minutes')
                 net_status = True
-            if minutes > 20:
+            if minutes > 30:
                 writelog('\nExcesive time waitng for Network to transition!\n')
                 writelog('deleting network: ' + url)
                 nfreq.delete_nf(url, token)
@@ -69,14 +69,16 @@ def create_network(env, name, token):
 def find_network(env, name, token):
     url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/networks'
     networks = nfreq.get_data(url, token)['_embedded']['networks']
+    writelog('\nNetworks found are\n')
+    writelog(networks)
     for network in networks:
+        writelog('\nNetwork name searched is ' + network['name'])
+        writelog('\nNetwork name given is ' + name)
         if network['name'] == name:
             net_url = (network['_links']['self']['href'])
-        else:
-            writelog('network not found!')
-            net_url = ''
-    return net_url
-
+            return net_url
+    writelog('network not found!')
+    return None
 
 def delete_network(netUrl, token):
     data = nfreq.delete_nf(netUrl, token)

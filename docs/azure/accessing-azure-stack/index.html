@@ -1,0 +1,864 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../images/fav.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
+    
+    
+      
+        <title>Accessing Azure Stack - QuickStart Guides</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
+      
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,400i,700|Ubuntu+Mono&display=fallback">
+        <style>body,input{font-family:"Ubuntu","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Ubuntu Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../../extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#1_administrator_setup" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="QuickStart Guides" class="md-header-nav__button md-logo">
+          
+            <img src="../../images/wide_logo.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              QuickStart Guides
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Accessing Azure Stack
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+        
+
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href="../.." class="md-tabs__link">
+        Home
+      </a>
+    
+  </li>
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../aws/intro/" class="md-tabs__link">
+          AWS
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../intro/" class="md-tabs__link md-tabs__link--active">
+          Azure
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../gcp/intro/" class="md-tabs__link">
+          GCP
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../netfoundry/intro/" class="md-tabs__link">
+          NetFoundry
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../vcpe/intro/" class="md-tabs__link">
+          VCPE
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="QuickStart Guides" class="md-nav__button md-logo">
+      
+        <img src="../../images/wide_logo.png" width="48" height="48">
+      
+    </a>
+    QuickStart Guides
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      AWS
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        AWS
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../aws/intro/" title="Use Case Overview" class="md-nav__link">
+      Use Case Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../aws/aws-bastion/" title="Bastion Replacement Removal" class="md-nav__link">
+      Bastion Replacement Removal
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Azure
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Azure
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../intro/" title="Use Cases Overview" class="md-nav__link">
+      Use Cases Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../connectUser2App/" title="Mobile User To Cloud Application Connectivity" class="md-nav__link">
+      Mobile User To Cloud Application Connectivity
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../connectApp2App/" title="Branch Application To Cloud Application Connectivity" class="md-nav__link">
+      Branch Application To Cloud Application Connectivity
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../azure-bastion/" title="Bastion Replacement Removal" class="md-nav__link">
+      Bastion Replacement Removal
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Accessing Azure Stack
+      </label>
+    
+    <a href="./" title="Accessing Azure Stack" class="md-nav__link md-nav__link--active">
+      Accessing Azure Stack
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1_administrator_setup" class="md-nav__link">
+    1 Administrator setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2_setup_a_vcpe_gateway_on_the_azure_stack" class="md-nav__link">
+    2 Setup a VCPE Gateway on the Azure stack
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21_create_an_azure_stack_gateway_in_the_netfoundry_console" class="md-nav__link">
+    2.1 Create an Azure Stack Gateway in the NetFoundry Console
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22_launch_a_netfoundry_gateway_instance_inside_of_your_azure_stack" class="md-nav__link">
+    2.2 Launch a NetFoundry Gateway Instance Inside of Your Azure Stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23_register_the_gateway_with_your_netfoundry_network" class="md-nav__link">
+    2.3 Register the gateway with your NetFoundry Network
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3_create_service_to_reach_the_server" class="md-nav__link">
+    3 Create Service to Reach the server
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      GCP
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        GCP
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gcp/intro/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      NetFoundry
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        NetFoundry
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../netfoundry/intro/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../netfoundry/fabric/" title="NF Fabric" class="md-nav__link">
+      NF Fabric
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../netfoundry/client/" title="NF Clients" class="md-nav__link">
+      NF Clients
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../netfoundry/gateway/" title="NF Gateways" class="md-nav__link">
+      NF Gateways
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      VCPE
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        VCPE
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../vcpe/intro/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1_administrator_setup" class="md-nav__link">
+    1 Administrator setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2_setup_a_vcpe_gateway_on_the_azure_stack" class="md-nav__link">
+    2 Setup a VCPE Gateway on the Azure stack
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21_create_an_azure_stack_gateway_in_the_netfoundry_console" class="md-nav__link">
+    2.1 Create an Azure Stack Gateway in the NetFoundry Console
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22_launch_a_netfoundry_gateway_instance_inside_of_your_azure_stack" class="md-nav__link">
+    2.2 Launch a NetFoundry Gateway Instance Inside of Your Azure Stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23_register_the_gateway_with_your_netfoundry_network" class="md-nav__link">
+    2.3 Register the gateway with your NetFoundry Network
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3_create_service_to_reach_the_server" class="md-nav__link">
+    3 Create Service to Reach the server
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>Accessing Azure Stack</h1>
+                
+                <h2 id="1_administrator_setup">1 Administrator setup<a class="headerlink" href="#1_administrator_setup" title="Permanent link">@</a></h2>
+<p>Before the Netfoundry’s “Application Connection Gateway” can be consumed by the user, the administrator must download the image from Azure marketplace to the stack marketplace.</p>
+<p>There is comprehensive guide from azure stack documentation on how to make image available for the local consumption.  The document can be found here:</p>
+<p><a href="https://docs.microsoft.com/en-us/azure-stack/operator/azure-stack-download-azure-marketplace-item?view=azs-1908">Download Azure marketplace</a></p>
+<p>Please locate the offering “Application Connection Gateway” and make it available via download to the azure stack.</p>
+<p>Once the download is complete, the image can now be used by the local user.</p>
+<h2 id="2_setup_a_vcpe_gateway_on_the_azure_stack">2 Setup a VCPE Gateway on the Azure stack<a class="headerlink" href="#2_setup_a_vcpe_gateway_on_the_azure_stack" title="Permanent link">@</a></h2>
+<h3 id="21_create_an_azure_stack_gateway_in_the_netfoundry_console">2.1 Create an Azure Stack Gateway in the NetFoundry Console<a class="headerlink" href="#21_create_an_azure_stack_gateway_in_the_netfoundry_console" title="Permanent link">@</a></h3>
+<ul>
+<li>Sign in to your NetFoundry organization;</li>
+<li>Navigate to the Gateways page and create a new Azure Stack gateway. Give it a name and location, then click the Create button;</li>
+<li>Take note of the registration key. You will need it to register the gateway later.
+<img alt="image" src="../../images/AzureStack01.png" /></li>
+</ul>
+<h3 id="22_launch_a_netfoundry_gateway_instance_inside_of_your_azure_stack">2.2 Launch a NetFoundry Gateway Instance Inside of Your Azure Stack<a class="headerlink" href="#22_launch_a_netfoundry_gateway_instance_inside_of_your_azure_stack" title="Permanent link">@</a></h3>
+<ul>
+<li>Sign in to your account on the Azure portal and go to → Resource groups. </li>
+<li>Once inside the resource group, Click the "+ Add" button on the toolbar.</li>
+<li>Search for " Application Connection Gateway (Azure Stack)". Click on the result, the description should be shown.
+<img alt="image" src="../../images/AzureStack02.png" /></li>
+<li>Click the "Create" button to launch the wizard.</li>
+<li>Enter basics information:</li>
+<li>Enter the Username as "nfadmin". </li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The username must be <strong>nfadmin</strong> to gain access to this gateway; (<em>the username restriction will be removed soon</em>)</p>
+</div>
+<p><img alt="image" src="../../images/AzureStack03.png" /></p>
+<ul>
+<li>Click OK to continue</li>
+<li>Next page, on choosing the compute size, it varies depends on your need. We are using a 2 VCPUs and 4 GB RAM for this example.
+<img alt="image" src="../../images/AzureStack04.png" /></li>
+<li>Continue to finish setup and let system bring up the VM.</li>
+</ul>
+<h3 id="23_register_the_gateway_with_your_netfoundry_network">2.3 Register the gateway with your NetFoundry Network<a class="headerlink" href="#23_register_the_gateway_with_your_netfoundry_network" title="Permanent link">@</a></h3>
+<p>Once the resource is created, go to the resource group &amp; click on the virtual machine name to view the details. Locate the machine's public IP address.</p>
+<p>Using an SSH client, log in to the machine using its public IP address as the user "nfadmin", using the SSH key or password specified earlier.</p>
+<pre><code>&gt; ssh -i [path/to/private/key] nfadmin@[public_ip_address]
+</code></pre>
+<hr />
+<p><strong><em>What to do if you cannot login to the VM?</em></strong></p>
+<p><code>It has been discovered that when using some version of Azure Stack (i.e. 1.1908.0.20) that after launching the VM, the user must reset the SSH key via the Azure console.</code></p>
+<p><code>This is accomplished by selecting the newly created VM and clicking "reset password" in the bottom left hand corner of the console.</code></p>
+<p><code>Here, you will find two fields to fill in; the first being the username (nfadmin), followed by the ssh key field where the user will enter the contents of their public ssh key.</code></p>
+<p><code>Once the fields are populated properly, select "update".</code></p>
+<p><img alt="image" src="../../images/AzureStack05.png" /></p>
+<hr />
+<p>Once you are logged in to the gateway, run these commands to register it to your NetFoundry Network. Look for errors in the registration process output, or "Success" if registration completes successfully. <strong>[registration key]</strong> is the key you captured earlier.</p>
+<pre><code>&gt; sudo nfnreg [registration key]
+&gt; sudo systemctl status dvn.service
+</code></pre>
+<p><img alt="image" src="../../images/AzureStack06.png" /></p>
+<p>The output should report <strong>ACTIVE</strong>.</p>
+<p>Most common causes for registration to fail are: Not having an IP assigned (correctly), Not having a working default gateway for Internet access, Not having a valid DNS resolver.</p>
+<p>It may take up to 5 minutes to register and come online. Once the Gateway Instance has started up, switch back to the NetFoundry Console and locate the Gateway Endpoint.</p>
+<p>Confirm that the status indicator is green, which means that it has successfully registered and is online. If the status indicator remains grey, then the gateway has failed to register. If it is red, the gateway has registered, but is offline.</p>
+<h2 id="3_create_service_to_reach_the_server">3 Create Service to Reach the server<a class="headerlink" href="#3_create_service_to_reach_the_server" title="Permanent link">@</a></h2>
+<p>Here is an example on how to reach the server on the Azure stack side by using the AppWan provisioning on the NetFoundry Console.</p>
+<p>In this example, we are going to assume the client you are using to connect to the server is called <strong>NFCLIENT1</strong>.</p>
+<p>On the NFCONSOLE, choose <strong>MANAGE APPWANS</strong> button.</p>
+<p><img alt="image" src="../../images/AzureStack07.png" /></p>
+<p>On the MANAGE APPWANS screen, hit the <strong>+</strong> button.</p>
+<p>Choose <strong>CREATE APPWAN</strong>, a form will display for you to create the AppWAN.</p>
+<pre><code>1 Fill in the Application Name (Examples can be: Access US WEST STACK, Access Webpage)
+2 Choose your GW
+3 Fill in the Connection information.  This is where you want the traffic to go once it reaches the Azure Stack GW (in our example, we fill in a subnet: 192.168.2.0/24)
+4 Add your client to the APPWAN
+</code></pre>
+<p><img alt="image" src="../../images/AzureStack08.png" /></p>
+<p>Hit <strong>Create your APPWAN</strong>, and your AppWAN will be created.</p>
+<p>Once the AppWAN is created, your client <strong>NFCLIENT1</strong> should be able to access the network “192.168.2.0/24” via the Azure Stack GW.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../azure-bastion/" title="Bastion Replacement Removal" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Bastion Replacement Removal
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../gcp/intro/" title="Overview" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Overview
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/netfoundry" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/netfoundry" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://linkedin.com/company/netfoundry" class="md-footer-social__link fa fa-linkedin"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.a8b5e56f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>

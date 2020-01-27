@@ -57,6 +57,21 @@ def update_config_file(filename, new_config):
         writelog(str(e))
 
 
+def gateway_delete_update(netUrl, name, token, action, **kargs):
+    # checking to see if gateway exist
+    gwUrl = nfgw.find_gateway(netUrl, name, token)
+    if gwUrl:
+        # action is to delete the existing gateway
+        if action == 'delete':
+            nfgw.delete_gateway(gwUrl, token)
+    else:
+        # action is to add a new gateway if one does not exist
+        if action == 'add':
+            name, regkey = nfgw.create_gateway(kargs['env'], netUrl, kargs['region'],
+                                                        kargs['cloud'], kargs['index'], token, gwName=name)
+            return regkey
+
+
 def main(filename, action):
     # when processing string from POPEN need to strip escape characters
     ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
@@ -70,11 +85,12 @@ def main(filename, action):
         writelog(str(e))
     # initialized env variable with the passed Environment Variable
     env = os.environ.get('ENVIRONMENT')
-    if action == 'create' or action == 'delete':
+    if action == 'create' or action == 'delete' or action == 'add':
         # get network url
         token = nftn.get_token(env, os.environ.get('SMOKE_TEST_USER'), os.environ.get('SMOKE_TEST_PASS'))
         writelog('Searching for network id')
         netUrl = nfnk.find_network(env, os.environ.get('NFN_NAME'), token)
+        print(netUrl)
 
         # manage gateways (list of gateways)
         for gateway in config['gateway_list']:
@@ -83,6 +99,8 @@ def main(filename, action):
                 gateway['action'] = 'create-terraform'
             if action == 'delete-terraform':
                 gateway['action'] = 'delete-terraform'
+            if action == 'add-terraform':
+                gateway['action'] = 'add-terraform'
             if action == 'create':
                 gateway['action'] = 'create'
                 index = 0
@@ -95,13 +113,18 @@ def main(filename, action):
             if action == 'delete' and gateway['names']:
                 gateway['action'] = 'delete'
                 for name in gateway['names']:
-                    try :
-                        gwUrl = nfgw.find_gateway(netUrl, name, token)
-                        nfgw.delete_gateway(gwUrl, token)
-                    except Exception as e:
-                        writelog(str(e))
+                    gateway_delete_update(netUrl, name, token, gateway['action'])
                 gateway['names'] = []
                 gateway['regkeys'] = []
+            if action == 'add' and gateway['names']:
+                gateway['action'] = 'add'
+                for name in gateway['names']:
+                    regkey = gateway_delete_update(netUrl, name, token, gateway['action'],
+                                            region = gateway['region'],
+                                            cloud = gateway['cloud'],
+                                            index = gateway['count'],
+                                            env = env)
+                    gateway['regkeys'] = gateway['regkeys'] + [regkey]
         # update config file
         update_config_file(filename, config)
     if action == 'create-terraform':
@@ -117,7 +140,7 @@ def main(filename, action):
         if newSerr == ('workspace %s already exists' % env):
             command = "terraform workspace select %s" % env
             terraform_command(command)
-            
+
         #command = "terraform apply --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
         #terraform_command(command)
 
@@ -132,6 +155,23 @@ def main(filename, action):
         terraform_command(command)
 
         #command = "terraform destroy --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
+        #terraform_command(command)
+
+    if action == 'add-terraform':
+        # create template for terraform
+        nftmf.add_to_file(config)
+
+        command = "terraform init -no-color %s" % os.path.expanduser(config['terraform']['work_dir'])
+        terraform_command(command)
+
+        command = "terraform workspace new -state=%s %s" % (os.path.expanduser(config['terraform']['work_dir']), env)
+        sout, serr = terraform_command(command)
+        newSerr = ansi_escape.sub('', serr).rstrip().lower().replace('\"', '')
+        if newSerr == ('workspace %s already exists' % env):
+            command = "terraform workspace select %s" % env
+            terraform_command(command)
+
+        #command = "terraform apply --auto-approve %s" % os.path.expanduser(config['terraform']['work_dir'])
         #terraform_command(command)
 
     # manage deployment of gateways with terraform
@@ -154,6 +194,6 @@ def main(filename, action):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Network build script')
     parser.add_argument("--file", help="json file with netfoundry resources details to create/update/delete", required=True)
-    parser.add_argument("--action", choices=['create', 'delete', 'create-terraform', 'delete-terraform'], help="json file with netfoundry resources details to create/update/delete", required=True)
+    parser.add_argument("--action", choices=['create', 'delete', 'add', 'create-terraform', 'delete-terraform', 'add-terraform'], help="json file with netfoundry resources details to create/add/delete", required=True)
     args = parser.parse_args()
     main(args.file, args.action)

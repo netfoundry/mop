@@ -77,6 +77,12 @@ def main(filename):
         token = nftn.get_token(env)
         writelog('Searching for network id')
         netUrl = nfnk.find_network(env, netName, token)
+        if netUrl:
+            writelog('Network Url found: %s' % netUrl)
+        else:
+            writelog('Network Url not found for the network "%s"' % netName)
+            writelog('Create one if not already done so')
+            sys.exit(1)
     elif netAction == 'create':
         # get a session token from mop environmnet that is used for this
         token = nftn.get_token(env)
@@ -197,11 +203,18 @@ def main(filename):
                     writelog('Searching for Service Urls')
                     for service in appwan['services']:
                         serviceUrls = serviceUrls + [nfsrv.find_service(netUrl, service, token)]
+                    items = []
                     if appwan['action'] == 'create':
                         writelog('Adding endpoints and services to appwan')
-                        items = gwUrls + serviceUrls
+                        if gwUrls is not None:
+                            items = items + gwUrls
+                        if serviceUrls is not None:
+                            items = items + serviceUrls
                         for item in items:
-                            nfaw.add_item2appwan(appwanUrl, item, token)
+                            if item:
+                                nfaw.add_item2appwan(appwanUrl, item, token)
+                            else:
+                                writelog('Item will not be added to Appwan, not found')
                     if appwan['action'] == 'delete' and appwan['name']:
                         writelog('Deleting appwan')
                         nfaw.delete_appwan(appwanUrl, token)

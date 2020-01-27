@@ -899,6 +899,7 @@
 <li>
 <p>Export Azure Credentials (e.g, <code>export ARM_TENANT_ID, ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID</code>) to enable resource gateway creation in Azure Resource Group via Terraform.</p>
 </li>
+<li>Terraform and Python3 installed in path.</li>
 </ol>
 <p>Additional Information:</p>
 <ol>
@@ -992,13 +993,13 @@ Required Configuration Parameters for Gateway Creation
   <span class="nt">output</span><span class="p">:</span> <span class="s">&#39;no&#39;</span>
   <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./quickstarts/docs/terraform</span>
   <span class="nt">work_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
-  <span class="nt">services</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
-    <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
-    <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
-    <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
-    <span class="nt">name</span><span class="p">:</span>
-    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
+  <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
+  <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+  <span class="nt">name</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
 </pre></div></li>
 <li>After the script run again successfully, the service section should have been populated with the service name as so.
 <div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
@@ -1019,7 +1020,7 @@ Required Configuration Parameters for Gateway Creation
   <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
   <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
   <span class="nt">names</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
   <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
   <span class="nt">regionalCidr</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.0/24</span>
@@ -1033,7 +1034,7 @@ Required Configuration Parameters for Gateway Creation
 <span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
 <span class="nt">services</span><span class="p">:</span>
 <span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
-  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
   <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
   <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS--10.20.10.5--22</span>
   <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
@@ -1046,11 +1047,11 @@ Required Configuration Parameters for Gateway Creation
 <span class="nt">appwans</span><span class="p">:</span>
 <span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
   <span class="nt">endpoints</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGW-0-WESTUS</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DemoClient01</span>
   <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">appwan-ssh-22</span>
   <span class="nt">services</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS--10.20.10.5</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS--10.20.10.5--22</span>
 </pre></div></li>
 <li>After the script ran again successfully, the connectivity should have been up.
 <img alt="Image" src="../../images/CreateAppWan06.png" /></li>
@@ -1076,9 +1077,8 @@ Required Configuration Parameters for Gateway Creation
   <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
 </pre></div></li>
 <li>Endpoints - will delete all resources in Azure as well.<ol>
-<li><code>terraform state rm "{tf resource name for RG}" // run this before the python script if Resource Group needs to be preserved</code>
-1.
-<div class="highlight"><pre><span></span><span class="nt">gateway_list</span><span class="p">:</span>
+<li><code>terraform state rm "{tf resource name for RG}" // run this before the python script if Resource Group needs to be preserved</code></li>
+<li><div class="highlight"><pre><span></span><span class="nt">gateway_list</span><span class="p">:</span>
 <span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
   <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
   <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>

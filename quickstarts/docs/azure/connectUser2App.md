@@ -113,13 +113,13 @@ This quickstart guide will provide all the steps to create a secure service betw
       output: 'no'
       source: ./quickstarts/docs/terraform
       work_dir: .
-      services:
-      - action: create
-        gateway: AZCPEGWx0xWESTUS
-        ip: 10.20.10.5
-        port: 22
-        name:
-        type: host
+    services:
+    - action: create
+      gateway: AZCPEGWx0xWESTUS
+      ip: 10.20.10.5
+      port: 22
+      name:
+      type: host
     ```
     1. After the script run again successfully, the service section should have been populated with the service name as so.
     ``` yaml
@@ -142,7 +142,7 @@ This quickstart guide will provide all the steps to create a secure service betw
       cloud: azure
       count: 1
       names:
-      - AZCPEGW-0-WESTUS
+      - AZCPEGWx0xWESTUS
       region: westus
       regionalCidr:
       - 10.20.10.0/24
@@ -156,7 +156,7 @@ This quickstart guide will provide all the steps to create a secure service betw
     network_name: DemoNet01
     services:
     - action: get
-      gateway: AZCPEGW-0-WESTUS
+      gateway: AZCPEGWx0xWESTUS
       ip: 10.20.10.5
       name: AZCPEGWx0xWESTUS--10.20.10.5--22
       port: 22
@@ -169,11 +169,11 @@ This quickstart guide will provide all the steps to create a secure service betw
     appwans:
     - action: create
       endpoints:
-      - AZCPEGW-0-WESTUS
+      - AZCPEGWx0xWESTUS
       - DemoClient01
       name: appwan-ssh-22
       services:
-      - AZCPEGWx0xWESTUS--10.20.10.5
+      - AZCPEGWx0xWESTUS--10.20.10.5--22
     ```
     1. After the script ran again successfully, the connectivity should have been up.
     ![Image](../images/CreateAppWan06.png)
@@ -202,7 +202,7 @@ This quickstart guide will provide all the steps to create a secure service betw
     ```
     1. Endpoints - will delete all resources in Azure as well.
         1. `terraform state rm "{tf resource name for RG}" // run this before the python script if Resource Group needs to be preserved`
-        1.
+        1. 
     ``` yaml
     gateway_list:
     - action: delete

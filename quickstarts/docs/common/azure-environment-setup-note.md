@@ -3,6 +3,7 @@
     1. [~/.env](../../python/env) to store NF Credentials in (e.g. `clientId, clientSecret`) to obtain a session token for NF API
 
     1. Export Azure Credentials (e.g, `export ARM_TENANT_ID, ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID`) to enable resource gateway creation in Azure Resource Group via Terraform.
+    1. Terraform and Python3 installed in path.
 
     Additional Information:
 

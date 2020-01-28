@@ -1,8 +1,6 @@
 # Overview
 This quickstart guide will provide all the steps to create a secure service between a branch application and/or user and an application hosted in Azure Cloud using NetFoundry Overlay Fabric (NFOF).
 
-!!! info "PAGE UNDER CONSTRUCTION"
-
 {!common/fabric-only-important.md!}
 
 ## Through NF Web Console UI
@@ -33,3 +31,22 @@ This quickstart guide will provide all the steps to create a secure service betw
 {!common/python-module-note.md!}
 
 {!common/azure-environment-setup-note.md!}
+
+!!! example "Steps"
+    1. {!common/python-create-gateway.md!}
+    1. Create a test server vm on the same vNet if not already present.
+    ![Image](../images/CreateManagedGatewayAzure13.png)
+    1. {!common/python-create-service.md!}
+    1. Create a gateway in the branch as the steps in [the UI section indicated](#create_and_deploy_nf_gateway_in_branch_datacenter).
+    We will provide code snippets for private hypervisors deployment through python in later releases (e.g. vSphere)
+    ![Image](../images/GreenStatusBranchGatewayDetails.png)
+    1. {!common/python-create-appwan.md!}
+    1. To test connectivity, log in to the Remote Client or Branch App Server and run ssh "username"@"privateIp"
+    ![Image](../images/DemoClientTestSsh01.png)
+    1. {!common/python-delete-all.md!}
+
+### via Jenkins
+
+In this section, we will use [Resource yaml](../python/nf_resources.yml) along with Jenkinsfile to show how to automate the steps further by creating the Jenkins Job
+
+!!! info "Coming Soon"

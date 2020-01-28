@@ -1047,8 +1047,8 @@ Required Configuration Parameters for Gateway Creation
 <span class="nt">appwans</span><span class="p">:</span>
 <span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
   <span class="nt">endpoints</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DemoClient01</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BranchGatewayName</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ClientName</span>
   <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">appwan-ssh-22</span>
   <span class="nt">services</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS--10.20.10.5--22</span>
@@ -1061,8 +1061,8 @@ Required Configuration Parameters for Gateway Creation
 <div class="highlight"><pre><span></span><span class="nt">appwans</span><span class="p">:</span>
 <span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
   <span class="nt">endpoints</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DemoClient01</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BranchGatewayName</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ClientName</span>
   <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">null</span>
   <span class="nt">services</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS--10.20.10.5--22</span>
@@ -1077,8 +1077,9 @@ Required Configuration Parameters for Gateway Creation
   <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
 </pre></div></li>
 <li>Endpoints - will delete all resources in Azure as well.<ol>
-<li><code>terraform state rm "{tf resource name for RG}" // run this before the python script if Resource Group needs to be preserved</code></li>
-<li><div class="highlight"><pre><span></span><span class="nt">gateway_list</span><span class="p">:</span>
+<li><code>terraform state rm "{tf resource name for RG}" // run this before the python script if Resource Group needs to be preserved</code>
+1.
+<div class="highlight"><pre><span></span><span class="nt">gateway_list</span><span class="p">:</span>
 <span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
   <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
   <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
@@ -1103,7 +1104,7 @@ Required Configuration Parameters for Gateway Creation
 </ol>
 </div>
 <h4 id="via_jenkins">via Jenkins<a class="headerlink" href="#via_jenkins" title="Permanent link">@</a></h4>
-<p>In this section, we will replace <a href="../../python/nf_resources.yml">Resource yaml</a> with Jenkinsfile to show how to automate the steps further by creating the Jenkins Job</p>
+<p>In this section, we will use <a href="../../python/nf_resources.yml">Resource yaml</a> along with Jenkinsfile to show how to automate the steps further by creating the Jenkins Job</p>
 <div class="admonition info">
 <p class="admonition-title">Coming Soon</p>
 </div>

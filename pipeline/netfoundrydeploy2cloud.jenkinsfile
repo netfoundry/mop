@@ -13,4 +13,5 @@ pipeline {
         checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124E"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
       }
     }
+  }
 }

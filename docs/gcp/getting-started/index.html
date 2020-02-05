@@ -36,7 +36,7 @@
     
     
       
-        <title>Azure environment setup note - QuickStart Guides</title>
+        <title>Getting Started Guide - QuickStart Guides</title>
       
     
     
@@ -77,6 +77,10 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
+      <a href="#overview" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
@@ -99,7 +103,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Azure environment setup note
+                Getting Started Guide
               
             </span>
           
@@ -145,14 +149,16 @@
       
         
 
-<nav class="md-tabs" data-md-component="tabs">
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
   <div class="md-tabs__inner md-grid">
     <ul class="md-tabs__list">
       
         
   <li class="md-tabs__item">
     
-      <a href="../.." class="md-tabs__link md-tabs__link--active">
+      <a href="../.." class="md-tabs__link">
         Home
       </a>
     
@@ -190,7 +196,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="../../gcp/intro/" class="md-tabs__link">
+        <a href="../intro/" class="md-tabs__link md-tabs__link--active">
           GCP
         </a>
       
@@ -395,10 +401,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
     
     <label class="md-nav__link" for="nav-4">
       GCP
@@ -416,7 +424,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../gcp/intro/" title="Overview" class="md-nav__link">
+    <a href="../intro/" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -426,11 +434,85 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../gcp/getting-started/" title="Getting Started Guide" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Getting Started Guide
+      </label>
+    
+    <a href="./" title="Getting Started Guide" class="md-nav__link md-nav__link--active">
       Getting Started Guide
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lauching_an_instance_in_gcp" class="md-nav__link">
+    Lauching an instance in GCP
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre_deployment" class="md-nav__link">
+    Pre Deployment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    Deployment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post_deployment" class="md-nav__link">
+    Post Deployment
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -554,32 +636,108 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lauching_an_instance_in_gcp" class="md-nav__link">
+    Lauching an instance in GCP
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre_deployment" class="md-nav__link">
+    Pre Deployment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    Deployment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post_deployment" class="md-nav__link">
+    Post Deployment
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
                 
                 
-                  <h1>Azure environment setup note</h1>
+                  <h1>Getting Started Guide</h1>
                 
-                <div class="admonition note">
-<p class="admonition-title">Environment Setup Requirements</p>
-<ol>
-<li>
-<p><a href="../../python/env">~/.env</a> to store NF Credentials in (e.g. <code>clientId, clientSecret</code>) to obtain a session token for NF API</p>
-</li>
-<li>
-<p>Export Azure Credentials (e.g, <code>export ARM_TENANT_ID, ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID</code>) to enable resource gateway creation in Azure Resource Group via Terraform.</p>
-</li>
-<li>Terraform and Python3 installed in path.</li>
-</ol>
-<p>Additional Information:</p>
-<ol>
-<li>The new Resource Group in Azure is created based on then name provided in <a href="../../python/nf_resources.yml">Resource yaml</a>, if one does not exists already in the same region (e.g. centralus). The action delete gateway will delete the RG as well even if it was an existing RG. If one does not want to delete the RG, the command <code>terraform state rm "{tf resource name for RG}"</code> needs to be run before running the gateway delete step. This will ensure that the RG is not deleted.</li>
-<li>A new vNet will be created and NF Gateway will be placed in it.</li>
-<li>Environment means the NF Console Environment used (e.g. production), not Azure.</li>
-</ol>
+                <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">@</a></h2>
+<p>This getting started guide will explain how to launch a netfoundry application gateway in the GCP compute engine.</p>
+<h3 id="lauching_an_instance_in_gcp">Lauching an instance in GCP<a class="headerlink" href="#lauching_an_instance_in_gcp" title="Permanent link">@</a></h3>
+<h4 id="pre_deployment">Pre Deployment<a class="headerlink" href="#pre_deployment" title="Permanent link">@</a></h4>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Assumption is that the <a href="../../netfoundry/fabric/">NF Fabric</a> is already up and the <a href="../../netfoundry/client/">NF Client</a> is installed.</p>
 </div>
+<h4 id="deployment">Deployment<a class="headerlink" href="#deployment" title="Permanent link">@</a></h4>
+<ol>
+<li>Click on "Launch On Compute Engine"
+<img alt="Image" src="../../images/GCPLaunch.png" /></li>
+<li>Supply the information needed
+<img alt="Image" src="../../images/GCPLaunchOptions.png" /></li>
+<li>GatewayRegistrationKey: This field allows you provide the gateway registation key that will passed into the lanching image. Automating the registration portion of the setup.  <strong>This field is optional</strong>, you can access the gateway via ssh &amp; register after this deployment is complete.</li>
+<li>Once the fields have been suplied, Click on "Deploy"
+<img alt="Image" src="../../images/GCPLaunched.png" /></li>
+</ol>
+<h4 id="post_deployment">Post Deployment<a class="headerlink" href="#post_deployment" title="Permanent link">@</a></h4>
+<p>If you did not supply the registration key during the deployment, you can access the machine via ssh by Clicking on the "SSH" button:
+<img alt="Image" src="../../images/GCPSSH.png" />
+Use the following command to register the gateway with your network:</p>
+<blockquote>
+<p>sudo nfnreg {registration key}</p>
+</blockquote>
                 
                   
                 
@@ -596,6 +754,41 @@
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../intro/" title="Overview" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Overview
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../netfoundry/intro/" title="Overview" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Overview
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

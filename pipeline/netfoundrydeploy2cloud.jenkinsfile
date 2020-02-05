@@ -1,0 +1,16 @@
+pipeline {
+  agent {
+    docker {
+      image "[python:latest]"
+      alwaysPull true
+    }
+  }
+  stages {
+    stage('Set up WORKSPACE'){
+      steps {
+        // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
+        // check out the mop git repo where python3 scripts are housed
+        checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124E"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
+      }
+    }
+}

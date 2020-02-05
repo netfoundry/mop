@@ -13,7 +13,7 @@ We will provide series of quickstart guides on how to quickly deploy and configu
     1. [Overview](aws/intro.md)
     1. [Bastion Host](aws/aws-bastion.md)
 1. Google Cloud Connectivity
-    1. Coming soon
+    1. [Getting Started Guilde](gcp/getting-started.md)
 
 
 !!! note

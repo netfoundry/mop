@@ -12,6 +12,7 @@ nav:
       - Accessing Azure Stack: azure/accessing-azure-stack.md
     - GCP:
       - Overview: gcp/intro.md
+      - Getting Started Guide: gcp/getting-started.md
     - NetFoundry:
       - Overview: netfoundry/intro.md
       - NF Fabric: netfoundry/fabric.md

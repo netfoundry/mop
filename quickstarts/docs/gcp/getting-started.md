@@ -2,7 +2,7 @@
 This getting started guide will explain how to launch a NetFoundry application gateway in the GCP compute engine.
 
 
-## Lauching an instance in GCP
+## Launching an instance in GCP
 
 ### Pre Deployment
 

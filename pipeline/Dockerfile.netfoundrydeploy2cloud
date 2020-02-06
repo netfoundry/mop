@@ -3,3 +3,8 @@ RUN pip install requests
 RUN pip install argparse
 RUN pip install configparser
 RUN pip install PyYAML==5.1.2
+ARG TERRAFORM_VERSION=0.12.7
+RUN curl -fsSl \
+      https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+      -o /opt/terraform.zip \
+    && unzip /opt/terraform.zip -d /usr/local/bin && rm /opt/terraform.zip

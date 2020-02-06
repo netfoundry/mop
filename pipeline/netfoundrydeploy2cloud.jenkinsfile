@@ -93,7 +93,7 @@ pipeline {
               echo "    name: ${ARM_GROUP_NAME}" >>  nf_resources.yaml
               echo "    region: ${ARM_GROUP_LOC}" >>  nf_resources.yaml
               echo "  tag: Azure-Server-Gateway" >>  nf_resources.yaml
-              echo "  action:" >>  nf_resources.yaml
+              echo "  action: create" >>  nf_resources.yaml
               echo "terraform:" >>  nf_resources.yaml
               echo "  bin: terraform" >>  nf_resources.yaml
               echo "  output: no" >>  nf_resources.yaml

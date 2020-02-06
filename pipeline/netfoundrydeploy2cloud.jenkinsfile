@@ -37,7 +37,7 @@ pipeline {
           script {
             // fill the network details to be deployed
               sh '''
-              set -Eeuxo pipefail
+              set -Eeux
               echo "environment: ${ENVIRONMENT}" >|  nf_resources.yaml
               echo "network_action: ${NETWORK_ACTION}" >>  nf_resources.yaml
               echo "network_name: ${NETWORK_NAME}" >>  nf_resources.yaml
@@ -48,7 +48,7 @@ pipeline {
             try {
               // Create network based on the details filled in nf_resources.yaml
               sh '''
-              set -Eeuxo pipefail
+              set -Eeux
               eval python3 quickstarts/docs/python/nf_resources.py
               cat logoutput.txt
               '''
@@ -70,7 +70,7 @@ pipeline {
           script {
             // fill the network details to be deployed
               sh '''
-              set -Eeuxo pipefail
+              set -Eeux
               echo "environment: ${ENVIRONMENT}" >|  nf_resources.yaml
               echo "network_action: ${NETWORK_ACTION}" >>  nf_resources.yaml
               echo "network_name: ${NETWORK_NAME}" >>  nf_resources.yaml
@@ -81,7 +81,7 @@ pipeline {
             try {
               // Delete network based on the details filled in nf_resources.yaml
               sh '''
-              set -Eeuxo pipefail
+              set -Eeux
               eval python3 quickstarts/docs/python/nf_resources.py
               cat logoutput.txt
               '''

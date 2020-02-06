@@ -76,7 +76,7 @@ pipeline {
       when { expression { params.GATEWAY_ACTION == "create" && params.NETWORK_ACTION == "get"}}
       // the build steps to create NF Gateway
       steps {
-        withCredentials([usernamePassword(credentialsId: 'azure-user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
+        withCredentials([usernamePassword(credentialsId: 'azure_user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
                          usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
           script {
             // the details of gateway to be deployed
@@ -137,7 +137,7 @@ pipeline {
       when { expression { params.GATEWAY_ACTION == "delete" && params.NETWORK_ACTION == "get"}}
       // the destroy step to delete NF Gateway
       steps {
-        withCredentials([usernamePassword(credentialsId: 'azure-user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
+        withCredentials([usernamePassword(credentialsId: 'azure_user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
                          usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
           script {
             try {

@@ -73,7 +73,7 @@ def main(filename):
     netAction = config['network_action']
     # manage network (only one network)
     if netAction == 'get':
-        # get a session token from mop environmnet that is used for this
+        # get a session token from Mop Environment that is used for this
         if os.environ.get('CLIENT_ID') and os.environ.get('CLIENT_SECRET'):
             token = nftn.get_token(env, os.environ.get('CLIENT_ID'),
                                    os.environ.get('CLIENT_SECRET'))
@@ -88,12 +88,20 @@ def main(filename):
             writelog('Create one if not already done so')
             sys.exit(1)
     elif netAction == 'create':
-        # get a session token from mop environmnet that is used for this
-        token = nftn.get_token(env)
+        # get a session token from Mop Environment that is used for this
+        if os.environ.get('CLIENT_ID') and os.environ.get('CLIENT_SECRET'):
+            token = nftn.get_token(env, os.environ.get('CLIENT_ID'),
+                                   os.environ.get('CLIENT_SECRET'))
+        else:
+            token = nftn.get_token(env)
         netUrl = nfnk.create_network(env, netName, token)
     elif netAction == 'delete':
-        # get a session token from mop environmnet that is used for this
-        token = nftn.get_token(env)
+        # get a session token from Mop Environment that is used for this
+        if os.environ.get('CLIENT_ID') and os.environ.get('CLIENT_SECRET'):
+            token = nftn.get_token(env, os.environ.get('CLIENT_ID'),
+                                   os.environ.get('CLIENT_SECRET'))
+        else:
+            token = nftn.get_token(env)
         netUrl = nfnk.find_network(env, netName, token)
         nfnk.delete_network(netUrl, token)
 

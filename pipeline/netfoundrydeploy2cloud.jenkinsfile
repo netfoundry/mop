@@ -123,13 +123,15 @@ pipeline {
     stage('Save Resource Group'){
       when { expression { params.KEEP_RG }}
       // if true the RG resource in terraform state file will be deleted
-      sh '''
-      set -Eeux
-      eval terraform state list
-      removeRg=`eval terraform state list | xargs -L 1  | grep ${ARM_GROUP_LOC}_rg.`
-      eval terraform state rm $removeRg
-      eval terraform state list
-      '''
+      steps {
+        sh '''
+        set -Eeux
+        eval terraform state list
+        removeRg=`eval terraform state list | xargs -L 1  | grep ${ARM_GROUP_LOC}_rg.`
+        eval terraform state rm $removeRg
+        eval terraform state list
+        '''
+      }
     }
     stage('Delete Gateway'){
       when { expression { params.GATEWAY_ACTION == "delete" && params.NETWORK_ACTION == "get"}}

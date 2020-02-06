@@ -36,7 +36,6 @@ pipeline {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         // check out the mop git repo where python3 scripts are housed
         checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124E"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
-
       }
     }
     stage('Create Network'){
@@ -78,6 +77,14 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: 'azure_user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
                          usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
+          script {
+            // generate ssh key
+            sh '''
+            set -Eeuxo pipefail
+            ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
+            cat ~/.ssh/id_rsa
+            '''
+          }
           script {
             // the details of gateway to be deployed
               sh '''

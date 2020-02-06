@@ -106,7 +106,7 @@ pipeline {
           // change network action to get from create
             sh '''
             set -Eeux
-            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yml --item_key network_action --item_value get
+            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
             cat nf_resources.yaml
             '''
           }
@@ -152,8 +152,8 @@ pipeline {
           // change gateway action to delete from create
            sh '''
            set -Eeux
-           eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yml --item_key gateway_action --item_value delete
-           eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yml --item_key network_action --item_value get
+           eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key gateway_action --item_value delete
+           eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
            cat nf_resources.yaml
            '''
           }

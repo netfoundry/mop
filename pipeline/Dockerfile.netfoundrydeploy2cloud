@@ -2,3 +2,4 @@ FROM python:latest
 RUN pip install requests
 RUN pip install argparse
 RUN pip install configparser
+RUN pip install PyYAML==5.1.2

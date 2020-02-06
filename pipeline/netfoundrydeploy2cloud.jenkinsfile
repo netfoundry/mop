@@ -103,6 +103,14 @@ pipeline {
               '''
           }
           script {
+          // change network action to get from create
+            sh '''
+            set -Eeux
+            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yml --item_key network_action --item_value get
+            cat nf_resources.yaml
+            '''
+          }
+          script {
             try {
               // Create Gateway based on the details filled in nf_resources.yaml
               sh '''
@@ -113,6 +121,7 @@ pipeline {
             } catch(e) {
               sh '''
               cat logoutput.txt
+              cat nf_resources.yaml
               exit 1
               '''
             }
@@ -140,6 +149,15 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'azure_user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
                          usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
           script {
+          // change gateway action to delete from create
+           sh '''
+           set -Eeux
+           eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yml --item_key gateway_action --item_value delete
+           eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yml --item_key network_action --item_value get
+           cat nf_resources.yaml
+           '''
+          }
+          script {
             try {
               // Delete gateway based on the details filled in nf_resources.yaml
               sh '''
@@ -162,6 +180,14 @@ pipeline {
       // the destroy step to delete NF Network
       steps {
         withCredentials([usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
+          script {
+          // change network action to delete from create/get
+            sh '''
+            set -Eeux
+            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yml --item_key network_action --item_value delete
+            cat nf_resources.yaml
+            '''
+          }
           script {
             try {
               // Delete gateway based on the details filled in nf_resources.yaml

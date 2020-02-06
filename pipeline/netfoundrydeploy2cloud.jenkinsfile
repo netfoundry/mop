@@ -9,15 +9,23 @@ pipeline {
   parameters {
     string(name: 'AZURE_TENANT_ID', description: 'Tenant ID in Azure')
     string(name: 'AZURE_SUBSCRIPTION_ID', description: 'Subscription ID in Azure')
+    string(name: 'RESOURCE_GROUP_NAME', description: 'RG Name in Azure')
+    string(name: 'RESOURCE_GROUP_LOC', description: 'RG Location in Azure')
+    booleanParam(name: 'KEEP_RG', defaultValue: true, description: 'Not to check this if RG can be deleted')
     choice(name: 'ENVIRONMENT', choices: ['production', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
     choice(name: 'NETWORK_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the network in NF.')
     string(name: 'NETWORK_NAME', defaultValue: 'DEMONET', description: 'Name to be used to create a network with')
+    choice(name: 'GATEWAY_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the gateway in NF Network.')
+    string(name: 'LOCATION', defaultValue: 'westus', description: 'Azure Cloud DC Location where to deploy GW')
+    string(name: 'SUBNET_PREFIX', defaultValue: '10.10.20.0/24', description: 'Subnet CIDR in Azure Cloud DC Location where to deploy GW')
   }
   environment {
     // Azure Access Information
     ARM_TENANT_ID = "${params.AZURE_TENANT_ID}"
     ARM_SUBSCRIPTION_ID = "${params.AZURE_SUBSCRIPTION_ID}"
-    // Test Input Variables
+    ARM_GROUP_NAME = "${params.RESOURCE_GROUP_NAME}"
+    ARM_GROUP_LOC = "${params.RESOURCE_GROUP_LOC}"
+    // NF Network Variables
     ENVIRONMENT = "${params.ENVIRONMENT}"
     NETWORK_ACTION = "${params.NETWORK_ACTION}"
     NETWORK_NAME = "${params.NETWORK_NAME}"
@@ -37,7 +45,7 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
           script {
-            // fill the network details to be deployed
+            // the details of network to be deployed
               sh '''
               set -Eeux
               echo "environment: ${ENVIRONMENT}" >|  nf_resources.yaml
@@ -64,24 +72,97 @@ pipeline {
         }
       }
     }
-    stage('Delete Network'){
-      when { expression { params.NETWORK_ACTION == "delete" }}
-      // the destroy step to delete NF Network
+    stage('Create Gateway'){
+      when { expression { params.GATEWAY_ACTION == "create" && params.NETWORK_ACTION == "get"}}
+      // the build steps to create NF Gateway
       steps {
-        withCredentials([usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
+        withCredentials([usernamePassword(credentialsId: 'azure-user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
+                         usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
           script {
-            // fill the network details to be deployed
+            // the details of gateway to be deployed
               sh '''
               set -Eeux
-              echo "environment: ${ENVIRONMENT}" >|  nf_resources.yaml
-              echo "network_action: ${NETWORK_ACTION}" >>  nf_resources.yaml
-              echo "network_name: ${NETWORK_NAME}" >>  nf_resources.yaml
+              echo "gateway_list:" >>  nf_resources.yaml
+              echo "- cloud: azure" >>  nf_resources.yaml
+              echo "  count: 1" >>  nf_resources.yaml
+              echo "  names: []" >>  nf_resources.yaml
+              echo "  region: ${LOCATION}" >>  nf_resources.yaml
+              echo "  regionalCidr: [${SUBNET_PREFIX}]" >>  nf_resources.yaml
+              echo "  regkeys: []" >>  nf_resources.yaml
+              echo "  resourceGroup:" >>  nf_resources.yaml
+              echo "    name: ${ARM_GROUP_NAME}" >>  nf_resources.yaml
+              echo "    region: ${ARM_GROUP_LOC}" >>  nf_resources.yaml
+              echo "  tag: Azure-Server-Gateway" >>  nf_resources.yaml
+              echo "  action:" >>  nf_resources.yaml
+              echo "terraform:" >>  nf_resources.yaml
+              echo "  bin: terraform" >>  nf_resources.yaml
+              echo "  output: no" >>  nf_resources.yaml
+              echo "  source: ./quickstarts/docs/terraform" >>  nf_resources.yaml
+              echo "  work_dir: ." >>  nf_resources.yaml
               cat nf_resources.yaml
               '''
           }
           script {
             try {
-              // Delete network based on the details filled in nf_resources.yaml
+              // Create Gateway based on the details filled in nf_resources.yaml
+              sh '''
+              set -Eeux
+              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
+              cat logoutput.txt
+              '''
+            } catch(e) {
+              sh '''
+              cat logoutput.txt
+              exit 1
+              '''
+            }
+          }
+        }
+      }
+    }
+    stage('Save Resource Group'){
+      when { expression { params.KEEP_RG }}
+      // if true the RG resource in terraform state file will be deleted
+      sh '''
+      set -Eeux
+      eval terraform state list
+      removeRg=`eval terraform state list | xargs -L 1  | grep ${ARM_GROUP_LOC}_rg.`
+      eval terraform state rm $removeRg
+      eval terraform state list
+      '''
+    }
+    stage('Delete Gateway'){
+      when { expression { params.GATEWAY_ACTION == "delete" && params.NETWORK_ACTION == "get"}}
+      // the destroy step to delete NF Gateway
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'azure-user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
+                         usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
+          script {
+            try {
+              // Delete gateway based on the details filled in nf_resources.yaml
+              sh '''
+              set -Eeux
+              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
+              cat logoutput.txt
+              '''
+            } catch(e) {
+              sh '''
+              cat logoutput.txt
+              exit 1
+              '''
+            }
+          }
+        }
+      }
+    }
+    stage('Delete Network'){
+      when { expression { params.NETWORK_ACTION == "delete"}}
+      // the destroy step to delete NF Network
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
+          script {
+            try {
+              // Delete gateway based on the details filled in nf_resources.yaml
               sh '''
               set -Eeux
               eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml

@@ -16,5 +16,7 @@
         1. Repository Url: https://github.com/netfoundry/mop.git
         1. Script Path: pipeline/netfoundrydeploy2cloud.jenkinsfile
     ![Image](../images/jenkins-pipeline-option.png)
-    1. Set up users for Azure API and NF MOP API access
+    1. Set up users for Azure API and NF MOP API access --
+    [More on Credentials setup](https://jenkins.io/doc/book/using/using-credentials/)
     ![Image](../images/jenkins-creds.png)
+    1. Run Jenkinsjob

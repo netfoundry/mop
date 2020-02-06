@@ -5,12 +5,99 @@ pipeline {
       alwaysPull true
     }
   }
+  parameters {
+    string(name: 'AZURE_TENANT_ID', description: 'Tenant ID in Azure')
+    string(name: 'AZURE_SUBSCRIPTION_ID', description: 'Subscription ID in Azure')
+    choice(name: 'ENVIRONMENT', choices: ['production', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
+    choice(name: 'NETWORK_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the network in NF.')
+    string(name: 'NETWORK_NAME', defaultValue: 'DEMONET', description: 'Name to be used to create a network with')
+  }
+  environment {
+    // Azure Access Information
+    ARM_TENANT_ID = "${params.AZURE_TENANT_ID}"
+    ARM_SUBSCRIPTION_ID = "${params.AZURE_SUBSCRIPTION_ID}"
+    // Test Input Variables
+    ENVIRONMENT = "${params.ENVIRONMENT}"
+    NETWORK_ACTION = "${params.NETWORK_ACTION}"
+    NETWORK_NAME = "${params.NETWORK_NAME}"
+  }
   stages {
     stage('Set up WORKSPACE'){
       steps {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         // check out the mop git repo where python3 scripts are housed
         checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124E"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
+        withCredentials([usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
+          // fill in MOP API Creds
+          sh '''
+          echo "[${ENVIRONMENT}]" >| ~/.env
+          echo "clientId = ${CLIENT_ID}" >> ~/.env
+          echo clientSecret = ${CLIENT_SECRET}" >> ~/.env"
+          touch logoutput.txt
+          '''
+        }
+      }
+    }
+    stage('Create Network'){
+      when { expression { params.NETWORK_ACTION == "create" }}
+      // the build steps to create NF Network
+      steps {
+        script {
+          // fill the network details to be deployed
+            sh '''
+            set -Eeuxo pipefail
+            echo "environment: ${ENVIRONMENT}" >|  nf_resources.yaml
+            echo "network_action: ${NETWORK_ACTION}" >>  nf_resources.yaml
+            echo "network_name: ${NETWORK_NAME}" >>  nf_resources.yaml
+            cat nf_resources.yaml
+            '''
+        }
+        script {
+          try {
+            // Create network based on the details filled in nf_resources.yaml
+            sh '''
+            set -Eeuxo pipefail
+            eval python3 quickstarts/docs/python/nf_resources.py
+            cat logoutput.txt
+            '''
+          } catch(e) {
+            sh '''
+            cat logoutput.txt
+            exit 1
+            '''
+          }
+        }
+      }
+    }
+    stage('Create Network'){
+      when { expression { params.NETWORK_ACTION == "delete" }}
+      // the destroy step to delete NF Network
+      steps {
+        script {
+          // fill the network details to be deployed
+            sh '''
+            set -Eeuxo pipefail
+            echo "environment: ${ENVIRONMENT}" >|  nf_resources.yaml
+            echo "network_action: ${NETWORK_ACTION}" >>  nf_resources.yaml
+            echo "network_name: ${NETWORK_NAME}" >>  nf_resources.yaml
+            cat nf_resources.yaml
+            '''
+        }
+        script {
+          try {
+            // Delete network based on the details filled in nf_resources.yaml
+            sh '''
+            set -Eeuxo pipefail
+            eval python3 quickstarts/docs/python/nf_resources.py
+            cat logoutput.txt
+            '''
+          } catch(e) {
+            sh '''
+            cat logoutput.txt
+            exit 1
+            '''
+          }
+        }
       }
     }
   }

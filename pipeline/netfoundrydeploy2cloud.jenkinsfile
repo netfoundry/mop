@@ -51,8 +51,6 @@ pipeline {
               // Create network based on the details filled in nf_resources.yaml
               sh '''
               set -Eeux
-              echo $CLIENT_ID
-              echo $CLIENT_SECRET
               eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
               cat logoutput.txt
               '''

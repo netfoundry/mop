@@ -74,12 +74,11 @@ def main(filename):
     # manage network (only one network)
     if netAction == 'get':
         # get a session token from mop environmnet that is used for this
-        if (not os.environ.get('CLIENT_ID')) and \
-           (not os.environ.get('CLIENT_SECRET')):
-            token = nftn.get_token(env)
-        else:
+        if os.environ.get('CLIENT_ID') and os.environ.get('CLIENT_SECRET'):
             token = nftn.get_token(env, os.environ.get('CLIENT_ID'),
                                    os.environ.get('CLIENT_SECRET'))
+        else:
+            token = nftn.get_token(env)
         writelog('Searching for network id')
         netUrl = nfnk.find_network(env, netName, token)
         if netUrl:

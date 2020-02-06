@@ -69,7 +69,7 @@ pipeline {
         }
       }
     }
-    stage('Create Network'){
+    stage('Delete Network'){
       when { expression { params.NETWORK_ACTION == "delete" }}
       // the destroy step to delete NF Network
       steps {

@@ -13,15 +13,15 @@ pipeline {
     string(name: 'RESOURCE_GROUP_LOC', description: 'RG Location in Azure')
     booleanParam(name: 'KEEP_RG', defaultValue: true, description: 'Not to check this if RG can be deleted')
     choice(name: 'ENVIRONMENT', choices: ['production', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
-    choice(name: 'NETWORK_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the network in NF.')
+    choice(name: 'NETWORK_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the network in NF')
     string(name: 'NETWORK_NAME', defaultValue: 'DEMONET', description: 'Name to be used to create a network with')
-    choice(name: 'GATEWAY_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the gateway in NF Network.')
+    choice(name: 'GATEWAY_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the gateway in NF Network')
     string(name: 'GATEWAY_NAME', description: 'Name of NF Gateway generated in NF Console')
     string(name: 'SERVICE_NAME', description: 'Name of NF Service generated in NF Console')
     string(name: 'SERVICE_IP', description: 'IP of NF Service App')
     string(name: 'SERVICE_PORT', description: 'IP of NF Service App')
     string(name: 'APPWAN_NAME', description: 'Name of NF APPWAN to be used in NF Console')
-    text(name: 'configuration', description: 'Multi-line string, where one can enter list of endpoints to be included in AppWan, one per line', )
+    text(name: 'configuration', description: 'Multi-line string, where one can enter list of endpoints to be included in AppWan, one per line')
     string(name: 'LOCATION', defaultValue: 'westus', description: 'Azure Cloud DC Location where to deploy GW')
     string(name: 'SUBNET_PREFIX', defaultValue: '10.20.10.0/24', description: 'Subnet CIDR in Azure Cloud DC Location where to deploy GW')
   }
@@ -112,53 +112,6 @@ pipeline {
               echo "  output: no" >>  nf_resources.yaml
               echo "  source: ./quickstarts/docs/terraform" >>  nf_resources.yaml
               echo "  work_dir: ." >>  nf_resources.yaml
-              cat nf_resources.yaml
-              '''
-          }
-          script {
-          // change network action to get from create
-            sh '''
-            set -Eeux
-            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
-            cat nf_resources.yaml
-            '''
-          }
-          script {
-            try {
-              // Create Gateway based on the details filled in nf_resources.yaml
-              sh '''
-              set -Eeux
-              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
-              cat logoutput.txt
-              '''
-            } catch(e) {
-              sh '''
-              cat logoutput.txt
-              cat nf_resources.yaml
-              exit 1
-              '''
-            }
-          }
-        }
-      }
-    }
-    stage('Create Gateway'){
-      when { expression { params.GATEWAY_ACTION == "create" && params.NETWORK_ACTION == "get"}}
-      // the build steps to create NF Gateway
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'azure_user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
-                         usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
-          script {
-            // the details of service to be configured
-              sh '''
-              set -Eeux
-              echo "services:" >>  nf_resources.yaml
-              echo "- action: create" >>  nf_resources.yaml
-              echo "  gateway: AZCPEGWx0xWESTUS" >>  nf_resources.yaml
-              echo "  ip: 10.20.10.5" >>  nf_resources.yaml
-              echo "  port: 22" >>  nf_resources.yaml
-              echo "  name:" >>  nf_resources.yaml
-              echo "  type: host" >>  nf_resources.yaml
               cat nf_resources.yaml
               '''
           }

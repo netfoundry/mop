@@ -34,7 +34,7 @@ Supply the information needed
 * **Network name / Subnet name**: The network you would like to place your appliance in.
 * **Firewall**: (OPTIONAL) If you would like to allow ssh access to your instance, please check the box & fill out the restricted source ip/networks. **We do not recommend leaving this open to 0.0.0.0/0** if you choose this option.
 * **IP forwarding**: Must be set to on, if you would like to reach applications within your networks.
-* **GatewayRegistrationKey**: (OPTIONAL) This field allows you provide the gateway registration key that will passed into the launching image. Automating the registration portion of the setup.  You can access the gateway via ssh & register after this deployment is complete.
+* **GatewayRegistrationKey**: (OPTIONAL) This field allows you provide the gateway registration key that will passed into the launching image. Automating the registration portion of the setup.  You can access the gateway via ssh & register after this deployment is complete. Learn how to get a registration key [here](https://support.netfoundry.io/hc/en-us/articles/360017558212-Introduction-to-Gateway-Endpoints).
 
 Once the fields have been supplied, Click on "Deploy"
 ![Image](../images/GCPLaunched.png)

@@ -57,3 +57,7 @@ markdown_extensions:
       base_path: docs
 extra_css:
   - 'extra.css'
+plugins:
+  - search
+  - pdf-export:
+      enabled_if_env: ENABLE_PDF_EXPORT      

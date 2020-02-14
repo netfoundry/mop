@@ -13,6 +13,10 @@ nav:
     - GCP:
       - Overview: gcp/intro.md
       - Getting Started Guide: gcp/getting-started.md
+    - AliCloud:
+      - Overview: alicloud/intro.md
+      - Getting Started Guide: alicloud/getting-started.md
+      - User Guide: alicloud/user-guild.md
     - NetFoundry:
       - Overview: netfoundry/intro.md
       - NF Fabric: netfoundry/fabric.md

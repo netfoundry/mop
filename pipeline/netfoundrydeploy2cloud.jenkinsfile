@@ -12,16 +12,16 @@ pipeline {
     string(name: 'RESOURCE_GROUP_NAME', description: 'RG Name in Azure')
     string(name: 'RESOURCE_GROUP_LOC', description: 'RG Location in Azure')
     booleanParam(name: 'KEEP_RG', defaultValue: true, description: 'Not to check this if RG can be deleted')
-    choice(name: 'ENVIRONMENT', choices: ['production', 'sandbox'], description: 'Select NF Console Environment to spin the network and gateways in')
-    choice(name: 'NETWORK_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the network in NF')
+    choice(name: 'ENVIRONMENT', choices: ['sandbox', 'production' ], description: 'Select NF Console Environment to spin the network and gateways in')
+    choice(name: 'NETWORK_ACTION', choices: ['get', 'create', 'delete'], description: 'Selection an action to perform on the network in NF')
     string(name: 'NETWORK_NAME', defaultValue: 'DEMONET', description: 'Name to be used to create a network with')
-    choice(name: 'GATEWAY_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the gateway in NF Network')
+    choice(name: 'GATEWAY_ACTION', choices: ['get', 'create', 'delete'], description: 'Selection an action to perform on the gateway in NF Network')
     string(name: 'GATEWAY_NAME', description: 'Name of NF Gateway generated in NF Console')
-    choice(name: 'SERVICE_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the service in NF Network')
+    choice(name: 'SERVICE_ACTION', choices: ['get', 'create', 'delete', 'get'], description: 'Selection an action to perform on the service in NF Network')
     string(name: 'SERVICE_NAME', description: 'Name of NF Service generated in NF Console')
     string(name: 'SERVICE_IP', description: 'IP of NF Service App')
     string(name: 'SERVICE_PORT', description: 'IP of NF Service App')
-    choice(name: 'APPWAN_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the appwan in NF Network')
+    choice(name: 'APPWAN_ACTION', choices: ['get', 'create', 'delete'], description: 'Selection an action to perform on the appwan in NF Network')
     string(name: 'APPWAN_NAME', description: 'Name of NF APPWAN to be used in NF Console')
     string(name: 'APPWAN_AZURE_ENDPOINT', description: 'Endpoint Name in Azure to be included in AppWan')
     string(name: 'APPWAN_PRIVATE_ENDPOINT', description: 'Endpoint Name (private GW or Client) to be included in AppWan')
@@ -60,7 +60,7 @@ pipeline {
           // start a new logoutput.txt file
             sh '''
             set -Eeux
-            touch logoutput.txt
+            echo " " >| logoutput.txt
             '''
         }
         script {

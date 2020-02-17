@@ -281,7 +281,7 @@ pipeline {
               sh '''
               set -Eeux
               eval terraform init
-              eval terraform select ${ENVIRONMENT}
+              eval terraform workspace select ${ENVIRONMENT}
               '''
             } catch(e) {
               sh '''

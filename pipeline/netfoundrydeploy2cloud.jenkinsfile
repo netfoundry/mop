@@ -17,11 +17,15 @@ pipeline {
     string(name: 'NETWORK_NAME', defaultValue: 'DEMONET', description: 'Name to be used to create a network with')
     choice(name: 'GATEWAY_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the gateway in NF Network')
     string(name: 'GATEWAY_NAME', description: 'Name of NF Gateway generated in NF Console')
+    choice(name: 'SERVICE_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the service in NF Network')
     string(name: 'SERVICE_NAME', description: 'Name of NF Service generated in NF Console')
     string(name: 'SERVICE_IP', description: 'IP of NF Service App')
     string(name: 'SERVICE_PORT', description: 'IP of NF Service App')
+    choice(name: 'APPWAN_ACTION', choices: ['create', 'delete', 'get'], description: 'Selection an action to perform on the appwan in NF Network')
     string(name: 'APPWAN_NAME', description: 'Name of NF APPWAN to be used in NF Console')
-    text(name: 'configuration', description: 'Multi-line string, where one can enter list of endpoints to be included in AppWan, one per line')
+    string(name: 'APPWAN_AZURE_ENDPOINT', description: 'Endpoint Name in Azure to be included in AppWan')
+    string(name: 'APPWAN_PRIVATE_ENDPOINT', description: 'Endpoint Name (private GW or Client) to be included in AppWan')
+    string(name: 'APPWAN_SERVICE', description: 'Service Name to be included in AppWan')
     string(name: 'LOCATION', defaultValue: 'westus', description: 'Azure Cloud DC Location where to deploy GW')
     string(name: 'SUBNET_PREFIX', defaultValue: '10.20.10.0/24', description: 'Subnet CIDR in Azure Cloud DC Location where to deploy GW')
   }
@@ -35,6 +39,16 @@ pipeline {
     ENVIRONMENT = "${params.ENVIRONMENT}"
     NETWORK_ACTION = "${params.NETWORK_ACTION}"
     NETWORK_NAME = "${params.NETWORK_NAME}"
+    GATEWAY_NAME = "${params.GATEWAY_NAME}"
+    LOCATION = "${params.LOCATION}"
+    SUBNET_PREFIX = "${params.SUBNET_PREFIX}"
+    SERVICE_NAME = "${params.NETWORK_NAME}"
+    SERVICE_IP = "${params.SERVICE_IP}"
+    SERVICE_PORT = "${params.SERVICE_PORT}"
+    APPWAN_NAME = "${params.APPWAN_NAME}"
+    APPWAN_AZURE_ENDPOINT = "${params.APPWAN_AZURE_ENDPOINT}"
+    APPWAN_PRIVATE_ENDPOINT = "${params.APPWAN_PRIVATE_ENDPOINT}"
+    APPWAN_SERVICE = "${params.APPWAN_SERVICE}"
   }
   stages {
     stage('Set up WORKSPACE'){
@@ -78,7 +92,7 @@ pipeline {
       }
     }
     stage('Create Gateway'){
-      when { expression { params.GATEWAY_ACTION == "create" && params.NETWORK_ACTION == "get"}}
+      when { expression { params.GATEWAY_ACTION == "create" && params.NETWORK_ACTION == "get" }}
       // the build steps to create NF Gateway
       steps {
         withCredentials([usernamePassword(credentialsId: 'azure_user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
@@ -153,6 +167,99 @@ pipeline {
         eval terraform state rm $removeRg
         eval terraform state list
         '''
+      }
+    }
+    stage('Create Service'){
+      when { expression { params.SERVICE_ACTION == "create" && params.GATEWAY_ACTION == "get" }}
+      // the build steps to create NF Gateway
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
+          script {
+            // the details of service to be provisioned
+              sh '''
+              set -Eeux
+              echo "services:" >>  nf_resources.yaml
+              echo "- gateway: ${GATEWAY_NAME}" >>  nf_resources.yaml
+              echo "  ip: ${SERVICE_IP}" >>  nf_resources.yaml
+              echo "  port: ${SERVICE_PORT}" >>  nf_resources.yaml
+              echo "  name: ${SERVICE_NAME}" >>  nf_resources.yaml
+              echo "  type: host" >>  nf_resources.yaml
+              echo "  action: create" >>  nf_resources.yaml
+              cat nf_resources.yaml
+              '''
+          }
+          script {
+          // change gateway action to get from create
+            sh '''
+            set -Eeux
+            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key gateway_list
+            cat nf_resources.yaml
+            '''
+          }
+          script {
+            try {
+              // Create Service based on the details filled in nf_resources.yaml
+              sh '''
+              set -Eeux
+              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
+              cat logoutput.txt
+              '''
+            } catch(e) {
+              sh '''
+              cat logoutput.txt
+              cat nf_resources.yaml
+              exit 1
+              '''
+            }
+          }
+        }
+      }
+    }
+    stage('Create Appwan'){
+      when { expression { params.APPWAN_ACTION == "create" && params.SERVICE_ACTION == "get" && params.GATEWAY_ACTION == "get" }}
+      // the build steps to create NF Gateway
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
+          script {
+            // the details of service to be provisioned
+              sh '''
+              set -Eeux
+              echo "appwans:" >>  nf_resources.yaml
+              echo "- action: create" >>  nf_resources.yaml
+              echo "  name: ${APPWAN_NAME}" >>  nf_resources.yaml
+              echo "  endpoints:" >>  nf_resources.yaml
+              echo "  - ${APPWAN_AZURE_ENDPOINT}" >>  nf_resources.yaml
+              echo "  - ${APPWAN_PRIVATE_ENDPOINT}" >>  nf_resources.yaml
+              echo "  services:" >>  nf_resources.yaml
+              echo "  - ${APPWAN_SERVICE}" >>  nf_resources.yaml
+              cat nf_resources.yaml
+              '''
+          }
+          script {
+          // change service action to get from create
+            sh '''
+            set -Eeux
+            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key services
+            cat nf_resources.yaml
+            '''
+          }
+          script {
+            try {
+              // Create Service based on the details filled in nf_resources.yaml
+              sh '''
+              set -Eeux
+              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
+              cat logoutput.txt
+              '''
+            } catch(e) {
+              sh '''
+              cat logoutput.txt
+              cat nf_resources.yaml
+              exit 1
+              '''
+            }
+          }
+        }
       }
     }
     stage('Delete Gateway'){

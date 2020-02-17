@@ -23,8 +23,8 @@ pipeline {
     string(name: 'SERVICE_PORT', description: 'IP of NF Service App')
     choice(name: 'APPWAN_ACTION', choices: ['get', 'create', 'delete'], description: 'Selection an action to perform on the appwan in NF Network')
     string(name: 'APPWAN_NAME', description: 'Name of NF APPWAN to be used in NF Console')
-    string(name: 'APPWAN_AZURE_ENDPOINT', description: 'Endpoint Name in Azure to be included in AppWan')
-    string(name: 'APPWAN_PRIVATE_ENDPOINT', description: 'Endpoint Name (private GW or Client) to be included in AppWan')
+    string(name: 'APPWAN_PRIVATE_GATEWAY', description: 'Endpoint Name in Private Datacenter Gateway to be included in AppWan')
+    string(name: 'APPWAN_PRIVATE_CLIENT', description: 'Endpoint Name for Client to be included in AppWan')
     string(name: 'APPWAN_SERVICE', description: 'Service Name to be included in AppWan')
     string(name: 'LOCATION', defaultValue: 'westus', description: 'Azure Cloud DC Location where to deploy GW')
     string(name: 'SUBNET_PREFIX', defaultValue: '10.20.10.0/24', description: 'Subnet CIDR in Azure Cloud DC Location where to deploy GW')
@@ -46,8 +46,8 @@ pipeline {
     SERVICE_IP = "${params.SERVICE_IP}"
     SERVICE_PORT = "${params.SERVICE_PORT}"
     APPWAN_NAME = "${params.APPWAN_NAME}"
-    APPWAN_AZURE_ENDPOINT = "${params.APPWAN_AZURE_ENDPOINT}"
-    APPWAN_PRIVATE_ENDPOINT = "${params.APPWAN_PRIVATE_ENDPOINT}"
+    APPWAN_PRIVATE_GATEWAY = "${params.APPWAN_PRIVATE_GATEWAY}"
+    APPWAN_PRIVATE_CLIENT = "${params.APPWAN_PRIVATE_CLIENT}"
     APPWAN_SERVICE = "${params.APPWAN_SERVICE}"
   }
   stages {

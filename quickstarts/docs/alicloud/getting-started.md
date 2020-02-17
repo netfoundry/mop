@@ -15,52 +15,50 @@ The following screen will appear.
 
 ![Image](../images/AliLaunch1.png)
 
-Fill in the information needed.<br> 
-Find the Marketplace Image for **NetFoundry Application Gateway**<br>
+<ul>
+<li>Choose the Billing Method fit your need </li>
+<li>Choose the region and zone you want your VM to deploy in </li>
+<li>Choose the instance type. We recomment at least 2 vCPUs + 4GiB Memory </li>
+<li>Choose number of Instances you want </li>
+<li>Find the Marketplace Image for <strong>NetFoundry Application Gateway</strong></li>
+<li>Choose the size of Disk. The default size is okay.</li>
+</ul>
 click on **Next: Networking** to open the next screen
 
 ![Image](../images/AliLaunch2.png)
 
-Make the selection then continue to next page.
+Make your required selection then proceed to the next page (System Configurations).
 
 ![Image](../images/AliLaunch3.png)
 
-----
+<ul>
+<li>Select your key pair. <strong>You must use key pair to login</strong></li>
+<li>Change the Instance Name to your desired name</li>
+<li>Optionally enter a host name</li>
+</ul>
 
-visit the GCP Marketplace site by clicking [here](https://console.cloud.google.com/marketplace/details/netfoundry/netfoundry-cloud-gateway). 
-If the marketplace doesn't come up, you can go to the search bar that appears, enter NetFoundry Application Gateway and click the resulting solution that appears.
-
-To launch the instance **Click on "Launch On Compute Engine"**
-![Image](../images/GCPLaunch.png)
-
-Supply the information needed
-![Image](../images/GCPLaunchOptions.png)
-
-
-#### Launch Options
-
-* **Deployment name**: Specify the name of the instance you would like to use.
-* **Zone**: Specify the region you would like to launch your appliance.
-* **Machine type**: The instance type and size for your appliance. For optimal performance, it is recommended that small (2 vCPU/8 GB RAM) is chosen, or better.
-* **Boot disk type**: SSD Persistent Disk is appropriate for the appliance since there is minimal disk I/O for the instance.
-* **Boot disk size in GB**: The instance by default comes with a 10 GB boot disk. 
-* **SSH instance level key**: (OPTIONAL)If you would like to apply an instance level ssh key.
-* **Block project wide ssh keys**: (OPTIONAL) If you would like to prevent the project keys from being applied to this instance.
-* **Network name / Subnet name**: The network you would like to place your appliance in.
-* **Firewall**: (OPTIONAL) If you would like to allow ssh access to your instance, please check the box & fill out the restricted source ip/networks. **We do not recommend leaving this open to 0.0.0.0/0** if you choose this option.
-* **IP forwarding**: Must be set to on, if you would like to reach applications within your networks.
-* **GatewayRegistrationKey**: (OPTIONAL) This field allows you provide the gateway registration key that will passed into the launching image. Automating the registration portion of the setup.  You can access the gateway via ssh & register after this deployment is complete. Learn how to get a registration key [here](https://support.netfoundry.io/hc/en-us/articles/360017558212-Introduction-to-Gateway-Endpoints).
-
-Once the fields have been supplied, Click on "Deploy"
-![Image](../images/GCPLaunched.png)
-
+Continue to the next page to make more optional changes or hit "Preview" to the final page before creating the VM.
 
 ### Post Deployment
 
-If you did not supply the **GatewayRegistrationKey** field during the deployment, you can access the machine via ssh by Clicking on the "SSH" button.  OR You can optionally access this from other ssh point if you enabled the firewall rules to do so.
-![Image](../images/GCPSSH.png)
-Use the following command to register the gateway with your network:
->sudo nfnreg {registration key}
+Go to the virtual machine you created, and locate the public IP address of the virtual machine.
+
+Using an SSH client, log in to the machine using its public IP address as the user "nfadmin", using the SSH key or password specified earlier.
+
+    > ssh -i [path/to/private/key] nfadmin@[public_ip_address]
+
+Once you are logged in to the gateway, run these commands to register it to your NetFoundry Network. Look for errors in the registration process output, or "Success" if registration completes successfully. **\[registration key\]** is the key you captured earlier.
+
+    > sudo nfnreg [registration key]
+    > sudo systemctl status dvn.service
+
+![image](../images/AzureStack06.png)
+
+The output should report **ACTIVE**.
+
+It may take up to 5 minutes to register and come online. Once the Gateway Instance has started up, switch back to the NetFoundry Console and locate the Gateway Endpoint.
+
+Confirm that the status indicator is green, which means that it has successfully registered and is online. If the status indicator remains grey, then the gateway has failed to register. If it is red, the gateway has registered, but is offline.
 
 Setup is complete.
 

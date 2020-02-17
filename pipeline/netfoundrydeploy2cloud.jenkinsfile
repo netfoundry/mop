@@ -60,7 +60,7 @@ pipeline {
           // start a new logoutput.txt file
             sh '''
             set -Eeux
-            touch nf_resources.yaml
+            touch logoutput.txt
             '''
         }
       }
@@ -270,31 +270,36 @@ pipeline {
       }
     }
     stage('Delete Gateway'){
-      when { expression { params.GATEWAY_ACTION == "delete" && params.NETWORK_ACTION == "get"}}
+      when { expression { params.GATEWAY_ACTION == "delete" }}
       // the destroy step to delete NF Gateway
       steps {
         withCredentials([usernamePassword(credentialsId: 'azure_user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
                          usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
           script {
-          // change gateway action to delete from create
-           sh '''
-           set -Eeux
-           eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value delete --top_level_key gateway_list
-           eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
-           cat nf_resources.yaml
-           '''
-          }
-          script {
             try {
-              // Delete gateway based on the details filled in nf_resources.yaml
+              // Run terraform init ans select the workspace for the environment
               sh '''
               set -Eeux
-              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
-              cat logoutput.txt
+              eval terraform init
+              eval terraform select ${ENVIRONMENT}
               '''
             } catch(e) {
               sh '''
-              cat logoutput.txt
+              eval terraform state list
+              '''
+            }
+          }
+          script {
+            try {
+              // Delete gateway resource in Azure
+              sh '''
+              set -Eeux
+              eval terraform destroy --auto-approve
+              eval terraform state list
+              '''
+            } catch(e) {
+              sh '''
+              eval terraform state list
               exit 1
               '''
             }

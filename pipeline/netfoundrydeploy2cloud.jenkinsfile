@@ -237,8 +237,8 @@ pipeline {
               echo "- action: create" >>  nf_resources.yaml
               echo "  name: ${APPWAN_NAME}" >>  nf_resources.yaml
               echo "  endpoints:" >>  nf_resources.yaml
-              echo "  - ${APPWAN_AZURE_ENDPOINT}" >>  nf_resources.yaml
-              echo "  - ${APPWAN_PRIVATE_ENDPOINT}" >>  nf_resources.yaml
+              echo "  - ${APPWAN_PRIVATE_GATEWAY}" >>  nf_resources.yaml
+              echo "  - ${APPWAN_PRIVATE_CLIENT}" >>  nf_resources.yaml
               echo "  services:" >>  nf_resources.yaml
               echo "  - ${APPWAN_SERVICE}" >>  nf_resources.yaml
               cat nf_resources.yaml

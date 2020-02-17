@@ -107,7 +107,7 @@ pipeline {
       }
     }
     stage('Create Gateway'){
-      when { expression { params.GATEWAY_ACTION == "create" && params.NETWORK_ACTION == "get" }}
+      when { expression { params.GATEWAY_ACTION == "create" }}
       // the build steps to create NF Gateway
       steps {
         withCredentials([usernamePassword(credentialsId: 'azure_user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
@@ -177,7 +177,7 @@ pipeline {
       }
     }
     stage('Create Service'){
-      when { expression { params.SERVICE_ACTION == "create" && params.GATEWAY_ACTION == "get" }}
+      when { expression { params.SERVICE_ACTION == "create" }}
       // the build steps to create NF Gateway
       steps {
         withCredentials([usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
@@ -196,10 +196,12 @@ pipeline {
               '''
           }
           script {
-          // change gateway action to get from create
+          // change resource action if needed to get from create that is not being created in this stage
             sh '''
             set -Eeux
+            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
             eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key gateway_list
+            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key appwans
             cat nf_resources.yaml
             '''
           }
@@ -223,7 +225,7 @@ pipeline {
       }
     }
     stage('Create Appwan'){
-      when { expression { params.APPWAN_ACTION == "create" && params.SERVICE_ACTION == "get" && params.GATEWAY_ACTION == "get" }}
+      when { expression { params.APPWAN_ACTION == "create" }}
       // the build steps to create NF Gateway
       steps {
         withCredentials([usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
@@ -243,9 +245,11 @@ pipeline {
               '''
           }
           script {
-          // change service action to get from create
+          // change resource action if needed to get from create that is not being created in this stage
             sh '''
             set -Eeux
+            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
+            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key gateway_list
             eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key services
             cat nf_resources.yaml
             '''

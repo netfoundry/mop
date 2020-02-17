@@ -56,6 +56,13 @@ pipeline {
         // all stages use the same container and WORKSPACE in that running container, and so only one checkout is necessary
         // check out the mop git repo where python3 scripts are housed
         checkout([$class: 'GitSCM', branches: [[name: "feature/NE-124E"]], userRemoteConfigs: [[url: 'https://github.com/netfoundry/mop.git']]])
+        script {
+          // start a new logoutput.txt file
+            sh '''
+            set -Eeux
+            touch nf_resources.yaml
+            '''
+        }
       }
     }
     stage('Create Network'){
@@ -272,7 +279,7 @@ pipeline {
           // change gateway action to delete from create
            sh '''
            set -Eeux
-           eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key gateway_action --item_value delete
+           eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value delete --top_level_key gateway_list
            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
            cat nf_resources.yaml
            '''

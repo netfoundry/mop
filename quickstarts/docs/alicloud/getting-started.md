@@ -25,8 +25,9 @@ Make the selection then continue to next page.
 
 ![Image](../images/AliLaunch3.png)
 
+----
 
-kvisit the GCP Marketplace site by clicking [here](https://console.cloud.google.com/marketplace/details/netfoundry/netfoundry-cloud-gateway). 
+visit the GCP Marketplace site by clicking [here](https://console.cloud.google.com/marketplace/details/netfoundry/netfoundry-cloud-gateway). 
 If the marketplace doesn't come up, you can go to the search bar that appears, enter NetFoundry Application Gateway and click the resulting solution that appears.
 
 To launch the instance **Click on "Launch On Compute Engine"**

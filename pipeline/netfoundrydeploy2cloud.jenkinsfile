@@ -63,6 +63,14 @@ pipeline {
             touch logoutput.txt
             '''
         }
+        script {
+          // generate ssh key
+          sh '''
+          set -Eeux
+          ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
+          cat ~/.ssh/id_rsa
+          '''
+        }
       }
     }
     stage('Create Network'){
@@ -104,14 +112,6 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: 'azure_user_creds', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET'),
                          usernamePassword(credentialsId: 'sandbox-mop-user', usernameVariable: 'CLIENT_ID', passwordVariable: 'CLIENT_SECRET')]) {
-          script {
-            // generate ssh key
-            sh '''
-            set -Eeux
-            ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" 0>&-
-            cat ~/.ssh/id_rsa
-            '''
-          }
           script {
             // the details of gateway to be deployed
               sh '''

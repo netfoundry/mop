@@ -30,7 +30,7 @@
     ![Image](../images/jenkins-pipeline-build-with-parameters.png)
 
 !!! example "To create the resources"
-    1. Fill in the Azure Details and select the following:
+    1. Fill in the Azure Details (e.g. RG, Tenant Id, etc) and select the following:
         1. NF Environment, e.g. production
         1. NETWORK_ACTION - create
         1. NETWORK_NAME, e.g. DEMONET
@@ -58,7 +58,7 @@
 
 !!! example "To delete the resources"
     1. Run Jenkins job again by selecting on the pipeline created in the previous step. Click on "Build with Parameters"
-    1. Fill in the Azure Details and select the following:
+    1. Fill in the Azure Details (e.g. RG, Tenant Id, etc) and select the following:
         1. NF Environment, e.g. production
         1. NETWORK_ACTION - delete
         1. NETWORK_NAME, e.g. DEMONET

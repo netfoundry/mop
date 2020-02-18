@@ -36,6 +36,8 @@
         1. NETWORK_NAME, e.g. DEMONET
         1. GATEWAY_ACTION - create
         1. If Azure RG needs to be preserved, then KEEP_RG option must be left checked.
+        1. LOCATION, e.g. westus - location where the Azure GW will be deployed in
+        1. SUBNET_PREFIX, e.g. 10.20.10.0/24 - the subnet used for the vNet in the location of the Azure GW deployment.
     ![Image](../images/jenkins-pipeline-create-network-gateway.png)
 
     1. Run Jenkins job again by selecting on the pipeline created in the previous step. Click on "Build with Parameters"

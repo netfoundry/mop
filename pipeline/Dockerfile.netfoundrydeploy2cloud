@@ -1,0 +1,35 @@
+FROM python:latest
+RUN pip install requests
+RUN pip install argparse
+RUN pip install configparser
+RUN pip install PyYAML==5.1.2
+ARG TERRAFORM_VERSION=0.12.7
+RUN curl -fsSl \
+      https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+      -o /opt/terraform.zip \
+    && unzip /opt/terraform.zip -d /usr/local/bin && rm /opt/terraform.zip
+
+ARG VERSION=3.33
+ARG user=jenkins
+ARG group=jenkins
+ARG uid=1000
+ARG gid=1000
+ARG AGENT_WORKDIR=/home/${user}/agent
+
+ENV HOME /home/${user}
+RUN groupadd -g ${gid} ${group}
+RUN useradd -c "Jenkins user" -d $HOME -u ${uid} -g ${gid} -m ${user}
+
+USER ${user}
+ENV AGENT_WORKDIR=${AGENT_WORKDIR}
+RUN mkdir -p /home/${user}/.ssh
+RUN mkdir -p /home/${user}/.jenkins
+RUN mkdir -p ${AGENT_WORKDIR}
+RUN chmod 0700 /home/${user}/.ssh
+
+VOLUME /home/${user}/.jenkins
+VOLUME ${AGENT_WORKDIR}
+WORKDIR /home/${user}
+
+USER ${user}
+ENV USER ${user}

@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 
 import os
-import sys
 import time
 import datetime
-import logging
 import argparse
 import yaml
 import nf_requests as nfreq
@@ -13,6 +11,7 @@ import nf_network as nfnk
 import nf_token as nftn
 from azure.mgmt.network import NetworkManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
+
 
 def clear_log():
     logfile = open('logoutput.txt', 'w')

@@ -7,3 +7,4 @@ logoutput.txt
 terraform.tfstate.d
 main.tf.json
 **/modules
+.spyproject

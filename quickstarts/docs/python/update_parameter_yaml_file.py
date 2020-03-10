@@ -1,12 +1,10 @@
 #!/usr/bin/python3
-
 """
 The module opens a yaml file and updates the value of a passed key.
 
 Updates all instances of the passed key found within the entire file or within a specific top
 level key
 """
-
 import yaml
 import argparse
 

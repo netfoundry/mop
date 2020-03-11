@@ -149,7 +149,7 @@ def ziti():
     try:
         payload = "{\"name\":\"iperf3\",\"roleAttributes\": [\"test\"],\
                     \"egressRouter\":\"%s\",\"endpointAddress\":\"tcp://%s:%s\",\
-                     \"configs\":[\"tunnel-client-01\"]}" % (args.gateway_name,
+                     \"configs\":[\"tunnel-client-01\"]}" % (args.gateway_id,
                                                              args.service_dns,
                                                              args.service_port)
         response_data = restful(create_url(args.controller_ip, "services"),

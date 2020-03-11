@@ -5,7 +5,7 @@ import json
 import traceback
 import argparse
 import logging
-from requests import post, get, patch
+from requests import get, post
 from sys import exit
 
 
@@ -84,122 +84,81 @@ def ziti():
     session_token = ziti_authenticate(args.controller_ip, args.username, args.password)
     if not session_token:
         exit(1)
-    # find edge router and add role attribute
+    # print edge routers
     try:
         response_data = restful(create_url(args.controller_ip, "gateways"),
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         gateways = response_data[0]
-        for gateway in gateways:
-            if gateway['name'] == args.gateway_name:
-                gateway_id = gateway['id']
-                payload = "{\"name\":\"%s\",\"roleAttributes\": [\"%s\"]}" \
-                    % (args.gateway_name, "test")
-                response_data = restful(create_url(args.controller_ip,
-                                                   "gateways/"+gateway_id),
-                                        patch, create_headers(session_token),
-                                        payload)
-                logging.info(response_data[1])
+        print(gateways)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
 
-    # find an identity to be assigned to service/edge router with role #test
+    # print identities
     try:
         response_data = restful(create_url(args.controller_ip, "identities"),
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         identities = response_data[0]
-        for identity in identities:
-            if identity['name'] == args.identity_name:
-                if not identity['enrollment']:
-                    identity_id = identity['id']
-                    payload = "{\"name\": \"%s\", \"roleAttributes\": [\"%s\"],\
-                        \"isAdmin\": false, \"type\": \"Device\"}" \
-                        % (args.identity_name, "test")
-                    response_data = restful(create_url(args.controller_ip,
-                                                       "identities/"+identity_id),
-                                            patch, create_headers(session_token),
-                                            payload)
-                    logging.info(response_data[1])
-                    print(response_data[0])
-                else:
-                    print("Identity %s has not been enrolled yet" % identity['name'])
-        if not identity_id:
-            logging.info("Identity %s '[not]' found" % args.identity_name)
+        print(identities)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
 
-    # create config template
+    # print config templates
     try:
-        payload = "{\"name\":\"tunnel-client-01\",\"type\": \"ziti-tunneler-client.v1\",\
-                    \"data\":{\"hostname\":\"%s\",\"port\": %s}}" % (args.service_dns,
-                                                                     args.service_port)
         response_data = restful(create_url(args.controller_ip, "configs"),
-                                post, create_headers(session_token), payload)
-        config_id = response_data[0]['id']
-        print(config_id)
+                                get, create_headers(session_token))
         logging.info(response_data[1])
+        configs = response_data[0]
+        print(configs)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
 
-    # create service
+    # print services
     try:
-        payload = "{\"name\":\"iperf3\",\"roleAttributes\": [\"test\"],\
-                    \"egressRouter\":\"%s\",\"endpointAddress\":\"tcp://%s:%s\",\
-                     \"configs\":[\"tunnel-client-01\"]}" % (args.gateway_name,
-                                                             args.service_dns,
-                                                             args.service_port)
         response_data = restful(create_url(args.controller_ip, "services"),
-                                post, create_headers(session_token), payload)
-        service_id = response_data[0]['id']
+                                get, create_headers(session_token))
+
         logging.info(response_data[1])
-        print(service_id)
+        services = response_data[0]
+        print(services)
     except Exception as excpt:
         print(str(excpt))
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
 
-    # create edge router policy
+    # print edge router policies
     try:
-        payload = "{\"name\":\"router-policy01\",\"edgeRouterRoles\":[\"#%s\"],\
-                    \"identityRoles\":[\"#%s\"],\"semantic\": \"AllOf\"}" \
-                        % ("test", "test")
         response_data = restful(create_url(args.controller_ip, "edge-router-policies"),
-                                post, create_headers(session_token), payload)
-        edge_router_policy_id = response_data[0]['id']
+                                get, create_headers(session_token))
         logging.info(response_data[1])
-        print(edge_router_policy_id)
+        edge_router_policies = response_data[0]
+        print(edge_router_policies)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
 
-    # create service policy
+    # print service policies
     try:
-        payload = "{\"name\":\"service-policy01\",\"serviceRoles\":[\"#%s\"],\
-                    \"identityRoles\":[\"#%s\"],\"type\":\"Dial\",\"semantic\": \"AllOf\"}"\
-                        % ("test", "test")
         response_data = restful(create_url(args.controller_ip, "service-policies"),
-                                post, create_headers(session_token), payload)
-        service_policy_id = response_data[0]['id']
+                                get, create_headers(session_token))
         logging.info(response_data[1])
-        print(service_policy_id)
+        service_policies = response_data[0]
+        print(service_policies)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
 
-    # create service edge router policy
+    # print service edge router policies
     try:
-        payload = "{\"name\":\"service-router-policy01\",\"edgeRouterRoles\":[\"#%s\"],\
-                    \"serviceRoles\":[\"#%s\"],\"semantic\": \"AllOf\"}"\
-                        % ("test", "test")
         response_data = restful(create_url(args.controller_ip, "service-edge-router-policies"),
-                                post, create_headers(session_token), payload)
-        service_edge_router_policy_id = response_data[0]['id']
+                                get, create_headers(session_token))
         logging.info(response_data[1])
-        print(service_edge_router_policy_id)
+        service_edge_router_policies = response_data[0]
+        print(service_edge_router_policies)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
@@ -223,10 +182,6 @@ if __name__ == '__main__':
                         help='controller password')
     parser.add_argument('-cip', '--controller_ip',
                         required='yes', help='controller ip')
-    parser.add_argument('--gateway_name', help='edge gateway name')
-    parser.add_argument('--identity_name', help='identity name')
-    parser.add_argument('--service_dns', help='service ip or dns')
-    parser.add_argument('--service_port', help='service port')
     # get arguments
     args = parser.parse_args()
     if args.debug:

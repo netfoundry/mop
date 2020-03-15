@@ -69,7 +69,6 @@ pipeline {
         checkout scm
         // fill the gateways details to be deployed
         sh '''
-        eval cat logoutput.txt
         set -Eeuxo pipefail
         echo "gateway_list:" >|  nf_resources.yaml
         echo "- cloud: azure" >>  nf_resources.yaml

@@ -1,28 +1,31 @@
 #!/usr/bin/python3
-
-import os
-import logging
-import configparser
+"""Get session token to gain access to MOP environment."""
+from os import path
+from configparser import ConfigParser
 import argparse
 import datetime
 import nf_requests as nfreq
 
+
 def clear_log():
+    """Clear logs."""
     logfile = open('logoutput.txt', 'w')
     logfile.close()
 
 
 def writelog(message):
+    """Write a log."""
     logfile = open('logoutput.txt', 'a+')
     logfile.write(str(datetime.datetime.now()) + ' ' + str(message) + '\n')
     logfile.close()
 
 
 def get_token(env, client_id=None, client_secret=None):
+    """Get the session token."""
     if (not client_id) and (not client_secret):
-        config = configparser.ConfigParser()
+        config = ConfigParser()
         config.sections()
-        config.read(os.path.expanduser('~/.env'))
+        config.read(path.expanduser('~/.env'))
         client_id = config[env]['clientId']
         client_secret = config[env]['clientSecret']
     data = {"client_id": client_id,

@@ -1,29 +1,40 @@
 site_name: QuickStart Guides
 nav:
     - Home: index.md
-    - AWS:
-      - aws/intro.md
-      - Bastion Replacement Removal: aws/aws-bastion.md
-    - Azure:
-      - Use Cases Overview: azure/intro.md
-      - Mobile User To Cloud Application Connectivity: azure/connectUser2App.md
-      - Branch Application To Cloud Application Connectivity: azure/connectApp2App.md
-      - Bastion Replacement Removal: azure/azure-bastion.md
-      - Accessing Azure Stack: azure/accessing-azure-stack.md
-    - GCP:
-      - Overview: gcp/intro.md
-      - Getting Started Guide: gcp/getting-started.md
-    - AliCloud:
-      - Overview: alicloud/intro.md
-      - Getting Started Guide: alicloud/getting-started.md
-      - User Guide: alicloud/user-guild.md
-    - NetFoundry:
+    - NetFoundry Basics:
       - Overview: netfoundry/intro.md
       - NF Fabric: netfoundry/fabric.md
       - NF Clients: netfoundry/client.md
       - NF Gateways: netfoundry/gateway.md
-    - VCPE:
-      - Overview: vcpe/intro.md
+    - Cloud Providers:  
+      - AWS:
+        - aws/intro.md
+        - Bastion Replacement Removal: aws/aws-bastion.md
+      - Azure:
+        - Use Cases Overview: azure/intro.md
+        - Mobile User To Cloud Application Connectivity: azure/connectUser2App.md
+        - Branch Application To Cloud Application Connectivity: azure/connectApp2App.md
+        - Bastion Replacement Removal: azure/azure-bastion.md
+        - Accessing Azure Stack: azure/accessing-azure-stack.md
+      - GCP:
+        - Overview: gcp/intro.md
+        - Getting Started Guide: gcp/getting-started.md
+      - AliCloud:
+        - Overview: alicloud/intro.md
+        - Getting Started Guide: alicloud/getting-started.md
+        - User Guide: alicloud/user-guild.md
+      - VCPE:
+        - Overview: vcpe/intro.md
+    - API:
+      - Powershell:
+         - Overview: api/powershell/overview.md
+         - Getting Started: api/powershell/getting-started.md
+      - Python:
+         - Overview: api/python/overview.md
+      - Bash:
+         - Overview: api/bash/overview.md
+
+
 
 # Theme Configuration
 theme:

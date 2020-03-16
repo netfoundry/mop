@@ -38,6 +38,7 @@ theme:
     favicon: images/fav.png
     feature:
       tabs: true
+    custom_dir: docs/custom_theme/  
 # Site Customization
 extra:
   social:
@@ -64,4 +65,4 @@ extra_css:
 plugins:
   - search
   - pdf-export:
-      enabled_if_env: ENABLE_PDF_EXPORT      
+      enabled_if_env: ENABLE_PDF_EXPORT

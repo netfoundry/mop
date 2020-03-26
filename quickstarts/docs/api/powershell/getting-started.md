@@ -13,4 +13,5 @@ Clientid and Secret needs to be fetched from the NFconsole
 #Set Endpoint name to second half of computer name:
 $endpoint_name = $ENV:COMPUTERNAME.Split("-")[-1]
 ```
+
 Here is [PS script](file:///C:\Users\Sathish\Desktop\NF-pwrshell)

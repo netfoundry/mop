@@ -14,4 +14,4 @@ Clientid and Secret needs to be fetched from the NFconsole
 $endpoint_name = $ENV:COMPUTERNAME.Split("-")[-1]
 ```
 
-Here is [PS script](file:///C:\Users\Sathish\Desktop\NF-pwrshell)
+Here is [PS script](../source-code/NF-pwrshell.ps1)

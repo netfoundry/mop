@@ -1,22 +1,21 @@
 # Global Parameters
 
-#auth paramters
-$environment = "sandbox"
+#auth parameters
+$environment = "production"
 $client_id = "*********"
 $client_secret = "*******************"
 $audience = "https://gateway." + $environment + ".netfoundry.io/"
 $api_endpoint = "https://gateway." + $environment + ".netfoundry.io/rest/v1"
 
 #network parameters
-$network_name = "EDWARD-PS"
+$network_name = "Demonet01"
 
-#datacenter paramters
+#datacenter parameters
 $region_name = "us-east-1"
 $provider = "AWS"
 
 #Set Endpoint name to second half of computer name:
 $endpoint_name = $ENV:COMPUTERNAME.Split("-")[-1]
-
 
 
 # Get a auth token from Auth0
@@ -42,24 +41,20 @@ $headers.add("Authorization", ("Bearer " + $token))
 
 # Get a dataCenter ID:
 
-
 $datacenter_uri = $api_endpoint + "/dataCenters"
 
 $dataCenter_response = Invoke-RestMethod -Method Get -Uri $datacenter_uri -ContentType 'application/json' -Headers $headers
-
 
 $dataCenter = $dataCenter_response._embedded.dataCenters | where { $_.locationCode -like $region_name -and $_.provider -like $provider }  | select _links
 
 $dataCenterId = ($dataCenter._links.self.href).Split("/")[-1]
 
 
-# Get a Netowrk ID:
-
+# Get a Network ID:
 
 $network_uri = $api_endpoint + "/networks"
 
 $network_response = Invoke-RestMethod -Method Get -Uri $network_uri -ContentType 'application/json' -Headers $headers
-
 
 $network = $network_response._embedded.networks | where { $_.name -like $network_name }  | select _links
 

@@ -12,20 +12,6 @@ region_name: The region_name is the reference region or location where client wi
             (reference closest AWS location) e.g.us-east-1
 provider: AWS 
 ```
-Here is how to get clientId and secret from NFconsole. 
-
-login to nfconsole ->organization->Manage API account-> click '+' sign to create one.
-
-![Image](./Image1.jpg)
-
-provide the required details and click on generate token.
-
-![Image](./Image2.jpg)
-
-Copy the clientID and secret and save it securely.
-
-![Image](./Image3.jpg).
-
 
 2.To create a unique client we can use second half of computer name below powershell cmdlet will fetch the same.
 

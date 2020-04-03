@@ -26,6 +26,7 @@ nav:
       - VCPE:
         - Overview: vcpe/intro.md
     - API:
+      - Overview: api/overview.md
       - Powershell:
          - Overview: api/powershell/overview.md
          - Getting Started: api/powershell/getting-started.md

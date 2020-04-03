@@ -1,39 +1,45 @@
 #!/usr/bin/python3
-
+"""Construct the headers and make request to NF API Server for the requested REST method."""
 import requests
-import json
-import os
-import logging
 import time
-import datetime
+from datetime import datetime
+from json import dumps
 
 
 def clear_log():
+    """Clear logs."""
     logfile = open('logoutput.txt', 'w')
     logfile.close()
 
 
 def writelog(message):
+    """Write a log."""
     logfile = open('logoutput.txt', 'a+')
-    logfile.write(str(datetime.datetime.now()) + ' ' + str(message) + '\n')
+    logfile.write(str(datetime.now()) + ' ' + str(message) + '\n')
     logfile.close()
 
-# Function to construct the headers and then make reuqest to NF API Server for the requested REST method.
+
 def nf_req(req, method, token=None):
+    """Construct the headers and make request to NF API Server for the requested REST method."""
     verify = True
     timeout = 15
     count = 0
     handle = -1
+    if req[1] and token is None:
+        payload = req[1]
+    else:
+        payload = dumps(req[1], separators=(',', ':'))
     if token is None:
         headers = {'content-type': 'application/json'}
     elif method == 'get':
-        headers = {'Authorization': 'Bearer ' + token, 'content-type': 'application/json', 'Cache-Control': 'no-cache'}
+        headers = {'Authorization': 'Bearer ' + token, 'content-type': 'application/json',
+                   'Cache-Control': 'no-cache'}
     else:
         headers = {'Authorization': 'Bearer ' + token, 'content-type': 'application/json'}
     if (method == 'post') and (token is None):
         while count < 3:
             try:
-                handle = requests.post(req[0], data=req[1], timeout=timeout, verify=verify)
+                handle = requests.post(req[0], data=payload, timeout=timeout, verify=verify)
                 writelog(str(handle.status_code))
                 writelog(handle.headers)
                 return handle.json()
@@ -45,7 +51,8 @@ def nf_req(req, method, token=None):
     elif method == 'post':
         while count < 3:
             try:
-                handle = requests.post(req[0], data=req[1], timeout=timeout, headers=headers, verify=verify)
+                handle = requests.post(req[0], data=payload, timeout=timeout, headers=headers,
+                                       verify=verify)
                 writelog(str(handle.status_code))
                 writelog(handle.headers)
                 return handle.json()
@@ -82,7 +89,8 @@ def nf_req(req, method, token=None):
     elif method == 'put':
         while count < 3:
             try:
-                handle = requests.put(req[0], data=req[1], timeout=timeout, headers=headers, verify=verify)
+                handle = requests.put(req[0], data=payload, timeout=timeout, headers=headers,
+                                      verify=verify)
                 writelog(str(handle.status_code))
                 writelog(handle.headers)
                 return handle.json()
@@ -92,39 +100,6 @@ def nf_req(req, method, token=None):
                 count += 1
                 continue
     return handle
-
-
-# Get NetFoundry API operation
-def get_data(url, token):
-    req = url
-    data = nf_req(req, 'get', token)
-    return data
-
-
-# Delete NetFoundry API operation
-def delete_nf(url, token):
-    req = url
-    data = nf_req(req, 'delete', token)
-    return data
-
-
-# Update NetFoundry API operation
-def put_data(url, values, token):
-    data = json.dumps(values)
-    # print data
-    req = (url, data)
-    # sys.exit(0)
-    put_return = nf_req(req, 'put', token)
-    return put_return
-
-
-# Create NetFoundry API operation
-def post_data(url, values, token):
-    data = json.dumps(values)
-    # print data
-    req = (url, data)
-    post_return = nf_req(req, 'post', token)
-    return post_return
 
 
 if __name__ == '__main__':

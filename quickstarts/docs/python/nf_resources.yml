@@ -1,3 +1,25 @@
-environment:
-network_action:
-network_name:
+environment: sandbox
+gateway_list:
+- action: get
+  cloud: azure
+  count: 2
+  names:
+  - AZCPEGWx0xWESTUS2
+  - AZCPEGWx1xWESTUS2
+  region: westus2
+  regionalCidr:
+  - 10.20.10.0/24
+  regkeys:
+  - 785467B6764DEF4F01483095BEB4BB5C5E339526
+  - 578AFBBCE5A3DF5F764156F7ACEDE9683283EAAD
+  resourceGroup:
+    name: demoPythonTerraform01
+    region: centralus
+  tag: TerraformDemo
+network_action: get
+network_name: dariuszZiti01
+terraform:
+  bin: terraform
+  output: 'yes'
+  source: /home/dsliwinski/Edge/mop/quickstarts/docs/terraform
+  work_dir: .

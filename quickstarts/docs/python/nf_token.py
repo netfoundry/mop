@@ -3,8 +3,8 @@
 from os import path
 from configparser import ConfigParser
 import argparse
-import datetime
-import nf_requests as nfreq
+from datetime import datetime
+from nf_requests import nf_req as nfreq
 
 
 def clear_log():
@@ -16,7 +16,7 @@ def clear_log():
 def writelog(message):
     """Write a log."""
     logfile = open('logoutput.txt', 'a+')
-    logfile.write(str(datetime.datetime.now()) + ' ' + str(message) + '\n')
+    logfile.write(str(datetime.now()) + ' ' + str(message) + '\n')
     logfile.close()
 
 
@@ -33,8 +33,7 @@ def get_token(env, client_id=None, client_secret=None):
             "audience": "https://gateway." + env + ".netfoundry.io/",
             "grant_type": "client_credentials"}
     url = 'https://netfoundry-' + env + '.auth0.com/oauth/token'
-    req = (url, data)
-    token = nfreq.nf_req(req, 'post')
+    token = nfreq((url, data), 'post')
     return token['access_token']
 
 

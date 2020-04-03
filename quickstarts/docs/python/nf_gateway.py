@@ -1,30 +1,33 @@
 #!/usr/bin/python3
-
+"""Manage NF Gateway in MOP Environment."""
 import sys
 import time
-import datetime
+from datetime import datetime
 import logging
 import traceback
 import argparse
-import nf_requests as nfreq
+from nf_requests import nf_req as nfreq
 
 
 def clear_log():
+    """Clear logs."""
     logfile = open('logoutput.txt', 'w')
     logfile.close()
 
 
 def writelog(message):
+    """Write a log."""
     logfile = open('logoutput.txt', 'a+')
-    logfile.write(str(datetime.datetime.now()) + ' gateway-log ' + str(message) + '\n')
+    logfile.write(str(datetime.now()) + ' ' + str(message) + '\n')
     logfile.close()
 
 
 def create_gateway(env, netUrl, loc, type, index, token, **kargs):
+    """Create NF Gateway in MOP Environment."""
     # Create AWS GW(s)
     url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/dataCenters'
     # find dc id based on location code
-    datacenters = nfreq.get_data(url, token)['_embedded']['dataCenters']
+    datacenters = nfreq(url, "get", token)['_embedded']['dataCenters']
     dcId = None
     for dc in datacenters:
         if dc['locationCode'] == loc:
@@ -41,11 +44,12 @@ def create_gateway(env, netUrl, loc, type, index, token, **kargs):
         gwName = kargs['gwName']
     except KeyError:
         gwName = gwType + 'x' + str(index) + 'x' + loc.upper()
-    new_gw = nfreq.post_data(gwUrl, {"name": gwName,
-                                     "endpointType": gwType,
-                                     "geoRegionId": None,
-                                     "dataCenterId": dcId,
-                                     "o365BreakoutNextHopIp": None}, token)
+    new_gw = nfreq((gwUrl, {"name": gwName,
+                            "endpointType": gwType,
+                            "geoRegionId": None,
+                            "dataCenterId": dcId,
+                            "o365BreakoutNextHopIp": None}),
+                   "post", token)
     try:
         gwName = new_gw['name']
     except TypeError as terr:
@@ -58,7 +62,7 @@ def create_gateway(env, netUrl, loc, type, index, token, **kargs):
     writelog('\nWaiting for GW to be ready for service assignment!\n')
     while not gwstatus:
         try:
-            result = nfreq.get_data(gwUrl, token)
+            result = nfreq(gwUrl, "get", token)
             if result['status'] == 300:
                 writelog('\ngw is ready to assign service!\n')
                 gwstatus = True
@@ -70,9 +74,10 @@ def create_gateway(env, netUrl, loc, type, index, token, **kargs):
 
 
 def find_gateway(netUrl, name, token):
+    """Find NF Gateway in MOP Environment."""
     gwsUrl = netUrl + '/endpoints'
     try:
-        gateways = nfreq.get_data(gwsUrl, token)['_embedded']['endpoints']
+        gateways = nfreq(gwsUrl, "get", token)['_embedded']['endpoints']
         gwUrl = ''
         for gateway in gateways:
             if gateway['name'] == name:
@@ -84,7 +89,8 @@ def find_gateway(netUrl, name, token):
 
 
 def delete_gateway(gwUrl, token):
-    data = nfreq.delete_nf(gwUrl, token)
+    """Delete NF Gateway in MOP Environment."""
+    data = nfreq(gwUrl, "delete", token)
     writelog(data)
 
 

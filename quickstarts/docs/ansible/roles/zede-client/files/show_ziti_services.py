@@ -56,7 +56,7 @@ def ziti_authenticate(controller_ip, username, password):
     """Authenticate to Ziti Controller and get a session token."""
     # login to controller to gain a session token
     try:
-        url = 'https://%s:1280/authenticate?method=password' % controller_ip
+        url = 'https://%s:1080/authenticate?method=password' % controller_ip
         payload = "{\n  \"username\": \"%s\",\n  \"password\": \"%s\"\n}" \
             % (username, password)
         headers = {"content-type": "application/json"}
@@ -71,7 +71,7 @@ def ziti_authenticate(controller_ip, username, password):
 
 def create_url(controller_ip, endpoint):
     """Create endpoint url to POST/PUT/GET/DELTE against."""
-    return 'https://%s:1280/%s' % (controller_ip, endpoint)
+    return 'https://%s:1080/%s' % (controller_ip, endpoint)
 
 
 def create_headers(session_token):

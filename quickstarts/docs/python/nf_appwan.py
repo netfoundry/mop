@@ -1,26 +1,27 @@
 #!/usr/bin/python3
-
-import os
-import sys
+"""Manage NFN Appwan in MOP Environment."""
 import time
-import datetime
-import logging
-import nf_requests as nfreq
+from datetime import datetime
+from nf_requests import nf_req as nfreq
 
 
 def clear_log():
+    """Clear logs."""
     logfile = open('logoutput.txt', 'w')
     logfile.close()
 
 
 def writelog(message):
+    """Write a log."""
     logfile = open('logoutput.txt', 'a+')
-    logfile.write(str(datetime.datetime.now()) + ' ' + str(message) + '\n')
+    logfile.write(str(datetime.now()) + ' ' + str(message) + '\n')
     logfile.close()
 
 
 def check_for_status(urlRestEndpoint, token):
     """
+    Check if NFN Resource status in MOP Environment.
+
     Check for status on the resource creation
     :param urlRestEndpoint: REST Url endpoint for resource
     :param token:  session token for NF Console
@@ -31,9 +32,10 @@ def check_for_status(urlRestEndpoint, token):
         count = 0
         while not itemStatus:
             if count > 6:
-                writelog('Timed out waiting for a status change ' + urlRestEndpoint.split('/')[8] +'!')
+                writelog('Timed out waiting for a status change '
+                         + urlRestEndpoint.split('/')[8] + '!')
                 break
-            returnData = nfreq.get_data(urlRestEndpoint, token)
+            returnData = nfreq(urlRestEndpoint, "get", token)
             if returnData['status'] == 300:
                 writelog('item ' + urlRestEndpoint.split('/')[8] + ' is ready!')
                 break
@@ -47,6 +49,8 @@ def check_for_status(urlRestEndpoint, token):
 
 def add_item2appwan(appwanUrl, itemUrl, token):
     """
+    Add items to NFN Appwan in MOP Environment.
+
     Add items to existing appwan if not create one
     :param env: enviroment, e.g. production, sandbox
     :param appwanUrl: REST Url endpoint for the appwan under build
@@ -58,8 +62,8 @@ def add_item2appwan(appwanUrl, itemUrl, token):
     # add item to appwan, e.g. gateway, client or service
     try:
         if checkStatus == 300:
-            returnData = nfreq.post_data(appwanUrl+'/'+itemUrl.split('/')[7],
-                         {'ids': [itemUrl.split('/')[8]]}, token)
+            returnData = nfreq((appwanUrl+'/'+itemUrl.split('/')[7],
+                                {'ids': [itemUrl.split('/')[8]]}), "post", token)
             writelog(returnData)
     except Exception as e:
         writelog(e)
@@ -67,7 +71,8 @@ def add_item2appwan(appwanUrl, itemUrl, token):
 
 def create_appwan(netUrl, appwanName, token):
     """
-    Create AppWan
+    Create NFN Appwan in MOP Environment.
+
     :param netUrl: REST Url endpoint for network
     :param appwanName: appwan name
     :param token:  seesion token for NF Console
@@ -75,7 +80,7 @@ def create_appwan(netUrl, appwanName, token):
     """
     url = netUrl + '/appWans'
     try:
-        returnData = nfreq.post_data(url, {"name": appwanName}, token)
+        returnData = nfreq((url, {"name": appwanName}), "post", token)
         appwanUrl = returnData['_links']['self']['href']
         time.sleep(1)
     except Exception as e:
@@ -87,14 +92,15 @@ def create_appwan(netUrl, appwanName, token):
 
 def find_appwan(netUrl, appwanName, token):
     """
-    Find url of an exiting appwan
+    Find NFN Appwan in MOP Environment.
+
     :param netUrl: REST Url endpoint for network
     :param appwanName: appwan name
     :param token:  seesion token for NF Console
     :return appwanUrl: url of the found appwan
     """
     appwansUrl = netUrl + '/appWans'
-    appwans = nfreq.get_data(appwansUrl, token)
+    appwans = nfreq(appwansUrl, "get", token)
     if appwans.get('_embedded'):
         for appwan in appwans['_embedded']['appWans']:
             if appwan['name'] == appwanName:
@@ -106,7 +112,8 @@ def find_appwan(netUrl, appwanName, token):
 
 def delete_appwan(appwanUrl, token):
     """
-    Delete an exiting appwan
+    Delete NFN Appwan in MOP Environment.
+
     :param appwanUrl: REST endpoint for the appwan marked for deletion
     :param token:  seesion token for NF Console
     :return none:
@@ -115,7 +122,7 @@ def delete_appwan(appwanUrl, token):
         # Check if item is ready
         checkStatus = check_for_status(appwanUrl, token)
         if checkStatus == 300:
-            data = nfreq.delete_nf(appwanUrl, token)
+            data = nfreq(appwanUrl, "delete", token)
             writelog(data)
     except Exception as e:
         writelog(e)

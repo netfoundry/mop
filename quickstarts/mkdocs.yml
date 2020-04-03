@@ -25,6 +25,16 @@ nav:
         - User Guide: alicloud/user-guild.md
       - VCPE:
         - Overview: vcpe/intro.md
+    - HyperVisors:
+      - Overview: hypervisor/overview.md
+      - Hyper-V: 
+         - Getting Started: hypervisor/hyper-v/getting-started.md
+      - KVM:
+         - Getting Started: hypervisor/kvm/getting-started.md   
+      - VMware:
+         - Getting Started: hypervisor/vmware/getting-started.md
+      - VirtualBox:
+         - Getting Started: hypervisor/virtualbox/getting-started.md
     - API:
       - Overview: api/overview.md
       - Powershell:

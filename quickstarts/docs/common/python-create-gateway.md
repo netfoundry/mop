@@ -1,10 +1,10 @@
     Clone this repo (git clone https://github.com/netfoundry/mop.git)
-    1. Update [Resource yaml](../python/nf_resources.yml) file with the desired options to feed into the wrapper script as described
+    1. Update [Resource yaml](../api/python/etc/nf_resources.yml) file with the desired options to feed into the wrapper script as described
     in the following code snippet.
     [All Resource.yml Options](README.md)
     1. Run this from the root folder to create GW in NF Console UI and Azure.
     ``` python
-    python3 quickstarts/docs/python/nf_resources.py --file quickstarts/docs/python/nf_resources.yml
+    python3 quickstarts/docs/api/python/source/netfoundry/nf_resources.py --file quickstarts/docs/api/python/etc/nf_resources.yml
     ```
     Required Configuration Parameters for Gateway Creation
     ``` yaml

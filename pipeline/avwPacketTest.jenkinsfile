@@ -138,7 +138,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
           // the build steps require for Azure
           sh '''set +x; set -e -u -o pipefail
-          eval python3 quickstarts/docs/python/azure/azure_vwan_create.py
+          eval python3 quickstarts/docs/api/python/source/azure/azure_vwan_create.py
           '''
         }
       }
@@ -151,7 +151,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
               // the build steps require for Azure
               sh '''set +x; set -e -u -o pipefail
-              eval python3 quickstarts/docs/python/azure/azure_vpng_create.py
+              eval python3 quickstarts/docs/api/python/source/azure/azure_vpng_create.py
               '''
             }
           }
@@ -167,7 +167,7 @@ pipeline {
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                       sh '''
                       set -Eeuxo pipefail
-                      eval python3 quickstarts/docs/python/nfnk_create.py
+                      eval python3 quickstarts/docs/api/python/source/netfoundry/nfnk_create.py
                       '''
                     }
                   } catch(e) {
@@ -189,7 +189,7 @@ pipeline {
                       sh '''
                       set -Eeuxo pipefail
                       cat nf_resources.yaml
-                      eval python3 quickstarts/docs/python/nfgw_manage.py --action create --file nf_resources.yaml
+                      eval python3 quickstarts/docs/api/python/source/netfoundry/nfgw_manage.py --action create --file nf_resources.yaml
                       cat nf_resources.yaml
                       '''
                     }
@@ -213,7 +213,7 @@ pipeline {
                       set -Eeuxo pipefail
                       cat nf_resources.yaml
                       rm -Rf terraform.tfstate.d
-                      eval python3 quickstarts/docs/python/nfgw_manage.py --action create-terraform --file nf_resources.yaml
+                      eval python3 quickstarts/docs/api/python/source/netfoundry/nfgw_manage.py --action create-terraform --file nf_resources.yaml
                       jq . main.tf.json
                       eval terraform init
                       eval terraform apply --auto-approve
@@ -248,16 +248,16 @@ pipeline {
           sh '''
           set -Eeuxo pipefail
           export DISK_LOC=centralus
-          python3 quickstarts/docs/python/azure/azure_manage_disk_operations.py --action create
+          python3 quickstarts/docs/api/python/source/azure/azure_manage_disk_operations.py --action create
           '''
           // Trying to create NF vpn site gateway and deploy it to Azure
           sh '''
           set -Eeuxo pipefail
           cat nf_avw_vpn_site.yaml
-          eval python3 quickstarts/docs/python/nfgw_manage.py --action add --file nf_avw_vpn_site.yaml
+          eval python3 quickstarts/docs/api/python/source/netfoundry/nfgw_manage.py --action add --file nf_avw_vpn_site.yaml
           cat logoutput.txt
           cat nf_avw_vpn_site.yaml
-          eval python3 quickstarts/docs/python/nfgw_manage.py --action add-terraform --file nf_avw_vpn_site.yaml
+          eval python3 quickstarts/docs/api/python/source/netfoundry/nfgw_manage.py --action add-terraform --file nf_avw_vpn_site.yaml
           cat logoutput.txt
           jq . main.tf.json
           eval terraform refresh
@@ -280,7 +280,7 @@ pipeline {
           export AVW_SITE_PUBLIC_IP=`terraform output -json | jq -j .${AVW_SITE_NAME}_public_ips.value[][]`
           export AVW_SITE_PEER_PRIVATE_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_private_ips.value[][]`
           export AVW_SITE_PEER_PUBLIC_IP=`terraform output -json | jq -j .AZCPEGWx0xCENTRALUS_public_ips.value[][]`
-          eval python3 quickstarts/docs/python/nf_avwsite.py --action create --file nf_avw_vpn_site.yaml
+          eval python3 quickstarts/docs/api/python/source/netfoundry/nf_avwsite.py --action create --file nf_avw_vpn_site.yaml
           eval cat logoutput.txt
           '''
           // Attaching Server vNet to vHub in Azure and creating a route to server
@@ -360,7 +360,7 @@ pipeline {
                         usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           sh '''
           set -Eeuxo pipefail
-          python3 quickstarts/docs/python/nf_avwsite.py --action delete
+          python3 quickstarts/docs/api/python/source/netfoundry/nf_avwsite.py --action delete
           eval cat logoutput.txt
           '''
           sh '''
@@ -375,7 +375,7 @@ pipeline {
           sh '''
           set -Eeuxo pipefail
           cat nf_avw_vpn_site.yaml
-          eval python3 quickstarts/docs/python/nfgw_manage.py --action delete --file nf_avw_vpn_site.yaml
+          eval python3 quickstarts/docs/api/python/source/netfoundry/nfgw_manage.py --action delete --file nf_avw_vpn_site.yaml
           cat logoutput.txt
           cat nf_avw_vpn_site.yaml
           '''
@@ -390,7 +390,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
               // the build steps require for Azure
               sh '''set +x; set -e -u -o pipefail
-              eval python3 quickstarts/docs/python/azure/azure_vpng_delete.py
+              eval python3 quickstarts/docs/api/python/source/azure/azure_vpng_delete.py
               '''
             }
           }
@@ -426,7 +426,7 @@ pipeline {
                   sh '''
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
-                  python3 quickstarts/docs/python/nfgw_manage.py --action delete --file nf_resources.yaml
+                  python3 quickstarts/docs/api/python/source/nfgw_manage.py --action delete --file nf_resources.yaml
                   cat logoutput.txt
                   cat nf_resources.yaml
                   '''
@@ -440,7 +440,7 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "auth0_jenkinsorg_${params.ENVIRONMENT}", usernameVariable: 'SMOKE_TEST_USER', passwordVariable: 'SMOKE_TEST_PASS']]) {
                   sh '''
                   set -Eeuxo pipefail
-                  eval python3 quickstarts/docs/python/nfnk_delete.py
+                  eval python3 quickstarts/docs/api/python/source/netfoundry/nfnk_delete.py
                   eval cat logoutput.txt
                   '''
                 }
@@ -456,7 +456,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
           // the build steps require for Azure
           sh '''set +x; set -e -u -o pipefail
-          eval python3 quickstarts/docs/python/azure/azure_vwan_delete.py
+          eval python3 quickstarts/docs/api/python/source/azure/azure_vwan_delete.py
           '''
         }
       }
@@ -467,10 +467,10 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]){
           // the build steps require for Azure
           sh '''set +x; set -e -u -o pipefail
-          eval python3 quickstarts/docs/python/azure/azure_cleanup.py
+          eval python3 quickstarts/docs/api/python/source/azure/azure_cleanup.py
           '''
           sh '''set +x; set -e -u -o pipefail
-          python3 quickstarts/docs/python/azure/azure_manage_disk_operations.py --action delete
+          python3 quickstarts/docs/api/python/source/azure/azure_manage_disk_operations.py --action delete
           '''
         }
       }

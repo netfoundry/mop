@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Manage NFN Service in MOP Environment."""
 import time
-import datetime
+from datetime import datetime
 from nf_requests import nf_req as nfreq
 
 

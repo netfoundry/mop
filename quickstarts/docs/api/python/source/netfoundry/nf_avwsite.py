@@ -123,7 +123,7 @@ def create_avw_site(filename):
     # url for NF Datacenters details
     url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/dataCenters'
     # find dc id based on location code
-    datacenters = nfreq.get_data(url, token)['_embedded']['dataCenters']
+    datacenters = nfreq.nf_req(url, "get", token)['_embedded']['dataCenters']
     dcId = None
     for dc in datacenters:
         if dc['locationCode'] == loc:
@@ -135,21 +135,21 @@ def create_avw_site(filename):
     # build Azure Subscriptions Url for a given NF Enviroment API
     azureSubscriptionsURL = 'https://gateway.' + env + '.netfoundry.io/rest/v1/azureSubscriptions'
     # get Azure Subscriptions url of the first one, the assumption is that there is only one.
-    print(nfreq.get_data(azureSubscriptionsURL, token))
+    print(nfreq.nf_req(azureSubscriptionsURL, "get", token))
     print('--------------------------------------------')
     try:
-        avwSiteUrl = nfreq.get_data(azureSubscriptionsURL,
-                                    token)['_embedded']['azureSubscriptions'][0]['_links']['self']['href']+'/virtualWanSites'
+        avwSiteUrl = nfreq.nf_req(azureSubscriptionsURL, "get",
+                                  token)['_embedded']['azureSubscriptions'][0]['_links']['self']['href']+'/virtualWanSites'
     except KeyError as kerr:
         print(kerr.args)
         if kerr.args[0] == '_embedded':
-            data = nfreq.post_data(azureSubscriptionsURL, {
+            data = nfreq.nf_req((azureSubscriptionsURL, {
                                     "name": "AVW Packet Test",
                                     "subscriptionId": os.environ.get('ARM_SUBSCRIPTION_ID'),
                                     "tenantId": os.environ.get('ARM_TENANT_ID'),
                                     "applicationId": os.environ.get('ARM_CLIENT_ID'),
                                     "applicationKey": os.environ.get('ARM_CLIENT_SECRET')
-                                  }, token)
+                                  }), "post", token)
 
             avwSiteUrl = data['_links']['self']['href']+'/virtualWanSites'
     except TypeError as terr:
@@ -160,7 +160,7 @@ def create_avw_site(filename):
     azureVirtualWanId = "/subscriptions/"+os.environ.get('ARM_SUBSCRIPTION_ID')+"/resourceGroups/"\
         + os.environ.get('GROUP_NAME')+"/providers/Microsoft.Network/virtualWans/"\
         + os.environ.get('VWAN_NAME')
-    createData = nfreq.post_data(avwSiteUrl, {
+    createData = nfreq.nf_req((avwSiteUrl, {
                                         "name": gwName,
                                         "endpointId": gwId,
                                         "azureResourceGroupName": os.environ.get('GROUP_NAME'),
@@ -184,8 +184,8 @@ def create_avw_site(filename):
                                             "advertiseLocal": True,
                                             "advertisedPrefixes": []
                                         }
-                                       }, token)
-    deployData = nfreq.put_data(createData['_links']['self']['href']+"/deploy", {}, token)
+                                       }), "post", token)
+    deployData = nfreq.nf_req((createData['_links']['self']['href']+"/deploy", {}), "put", token)
     # Connect th enewly created site to the Azure VPN Gateway
     vpn_site_connection_creation(gwName)
     return createData, deployData
@@ -199,12 +199,12 @@ def delete_avw_site():
     # get network url
     nfn_url = nfnk.find_network(os.environ.get('ENVIRONMENT'), os.environ.get('NFN_NAME'), token)
     # get AVW Site url of the first one, the assumption is that there is only one.
-    avwSite = nfreq.get_data(nfn_url
-                             + '/virtualWanSites', token)['_embedded']['azureVirtualWanSites'][0]
+    avwSite = nfreq.nf_req(nfn_url
+                           + '/virtualWanSites', "get", token)['_embedded']['azureVirtualWanSites'][0]
     # Disconnect the VPN site under test from the Azure VPN Gateway
     vpn_site_connection_deletion(avwSite['name'])
     # Delete the site from the NF Network
-    data = nfreq.delete_nf(avwSite['_links']['self']['href'], token)
+    data = nfreq.nf_req(avwSite['_links']['self']['href'], "delete", token)
     return data
 
 

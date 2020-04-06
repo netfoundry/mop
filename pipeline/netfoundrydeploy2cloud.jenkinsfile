@@ -93,7 +93,7 @@ pipeline {
               // Create network based on the details filled in nf_resources.yaml
               sh '''
               set -Eeux
-              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
+              eval python3 quickstarts/docs/api/python/source/netfoundry/nf_resources.py --file nf_resources.yaml
               cat logoutput.txt
               '''
             } catch(e) {
@@ -140,7 +140,7 @@ pipeline {
           // change network action to "get" from "create"
             sh '''
             set -Eeux
-            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
+            eval python3 quickstarts/docs/api/python/source/utility/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
             cat nf_resources.yaml
             '''
           }
@@ -149,7 +149,7 @@ pipeline {
               // Create Gateway based on the details filled in nf_resources.yaml
               sh '''
               set -Eeux
-              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
+              eval python3 quickstarts/docs/api/python/source/netfoundry/nf_resources.py --file nf_resources.yaml
               cat logoutput.txt
               '''
             } catch(e) {
@@ -199,9 +199,9 @@ pipeline {
           // change resource action if needed to "get" from "create" that is not being created in this stage
             sh '''
             set -Eeux
-            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
-            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key gateway_list
-            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key appwans
+            eval python3 quickstarts/docs/api/python/source/utility/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
+            eval python3 quickstarts/docs/api/python/source/utility/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key gateway_list
+            eval python3 quickstarts/docs/api/python/source/utility/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key appwans
             cat nf_resources.yaml
             '''
           }
@@ -210,7 +210,7 @@ pipeline {
               // Create Service based on the details filled in nf_resources.yaml
               sh '''
               set -Eeux
-              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
+              eval python3 quickstarts/docs/api/python/source/netfoundry/nf_resources.py --file nf_resources.yaml
               cat logoutput.txt
               '''
             } catch(e) {
@@ -248,9 +248,9 @@ pipeline {
           // change resource action if needed to "get" from "create" that is not being created in this stage
             sh '''
             set -Eeux
-            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
-            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key gateway_list
-            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key services
+            eval python3 quickstarts/docs/api/python/source/utility/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value get
+            eval python3 quickstarts/docs/api/python/source/utility/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key gateway_list
+            eval python3 quickstarts/docs/api/python/source/utility/update_parameter_yaml_file.py --file nf_resources.yaml --item_key action --item_value get --top_level_key services
             cat nf_resources.yaml
             '''
           }
@@ -259,7 +259,7 @@ pipeline {
               // Create Service based on the details filled in nf_resources.yaml
               sh '''
               set -Eeux
-              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
+              eval python3 quickstarts/docs/api/python/source/netfoundry/nf_resources.py --file nf_resources.yaml
               cat logoutput.txt
               '''
             } catch(e) {
@@ -320,7 +320,7 @@ pipeline {
           // change network action to "delete" from "create/get"
             sh '''
             set -Eeux
-            eval python3 quickstarts/docs/python/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value delete
+            eval python3 quickstarts/docs/api/python/source/utility/update_parameter_yaml_file.py --file nf_resources.yaml --item_key network_action --item_value delete
             cat nf_resources.yaml
             '''
           }
@@ -329,7 +329,7 @@ pipeline {
               // Delete gateway based on the details filled in nf_resources.yaml
               sh '''
               set -Eeux
-              eval python3 quickstarts/docs/python/nf_resources.py --file nf_resources.yaml
+              eval python3 quickstarts/docs/api/python/source/netfoundry/nf_resources.py --file nf_resources.yaml
               cat logoutput.txt
               '''
             } catch(e) {

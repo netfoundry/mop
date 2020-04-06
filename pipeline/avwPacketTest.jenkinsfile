@@ -426,7 +426,7 @@ pipeline {
                   sh '''
                   set -Eeuxo pipefail
                   cat nf_resources.yaml
-                  python3 quickstarts/docs/api/python/source/nfgw_manage.py --action delete --file nf_resources.yaml
+                  python3 quickstarts/docs/api/python/source/netfoundry/nfgw_manage.py --action delete --file nf_resources.yaml
                   cat logoutput.txt
                   cat nf_resources.yaml
                   '''

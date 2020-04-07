@@ -48,8 +48,8 @@ def vpn_site_connection_creation(siteName):
     # Connect to Azure APIs and get session details
     network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
 
-    # Delay for 300 seconds before creating resources
-    time.sleep(300)
+    # Delay for 120 seconds before creating resources
+    time.sleep(120)
 
     # Create VPN Site Connection to VPNG
     async_vpn_site_connection_creation = network_client.vpn_connections.create_or_update(
@@ -134,24 +134,31 @@ def create_avw_site(filename):
     gwId = nfgw.find_gateway(nfn_url, gwName, token).split('/')[8]
     # build Azure Subscriptions Url for a given NF Enviroment API
     azureSubscriptionsURL = 'https://gateway.' + env + '.netfoundry.io/rest/v1/azureSubscriptions'
-    # get Azure Subscriptions url of the first one, the assumption is that there is only one.
-    print(nfreq.nf_req(azureSubscriptionsURL, "get", token))
+    azureSubscriptions = nfreq.nf_req(azureSubscriptionsURL, "get", token)
+    print(azureSubscriptions)
     print('--------------------------------------------')
+    # delete Azure Subscription if configured.
+    if azureSubscriptions:
+        url = azureSubscriptions['_embedded']['azureSubscriptions'][0]['_links']['self']['href']
+        try:
+            nfreq.nf_req(url, "delete", token)
+        except KeyError as kerr:
+            print(kerr.args)
+        except TypeError as terr:
+            print(terr.args)
+            sys.exit(1)
+    # Configure a new Azure Subscription
     try:
-        avwSiteUrl = nfreq.nf_req(azureSubscriptionsURL, "get",
-                                  token)['_embedded']['azureSubscriptions'][0]['_links']['self']['href']+'/virtualWanSites'
+        data = nfreq.nf_req((azureSubscriptionsURL, {
+                                "name": "AVW Packet Test",
+                                "subscriptionId": os.environ.get('ARM_SUBSCRIPTION_ID'),
+                                "tenantId": os.environ.get('ARM_TENANT_ID'),
+                                "applicationId": os.environ.get('ARM_CLIENT_ID'),
+                                "applicationKey": os.environ.get('ARM_CLIENT_SECRET')
+                              }), "post", token)
+        avwSiteUrl = data['_links']['self']['href']+'/virtualWanSites'
     except KeyError as kerr:
         print(kerr.args)
-        if kerr.args[0] == '_embedded':
-            data = nfreq.nf_req((azureSubscriptionsURL, {
-                                    "name": "AVW Packet Test",
-                                    "subscriptionId": os.environ.get('ARM_SUBSCRIPTION_ID'),
-                                    "tenantId": os.environ.get('ARM_TENANT_ID'),
-                                    "applicationId": os.environ.get('ARM_CLIENT_ID'),
-                                    "applicationKey": os.environ.get('ARM_CLIENT_SECRET')
-                                  }), "post", token)
-
-            avwSiteUrl = data['_links']['self']['href']+'/virtualWanSites'
     except TypeError as terr:
         print(terr.args)
         sys.exit(1)

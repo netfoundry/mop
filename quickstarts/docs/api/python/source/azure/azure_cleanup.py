@@ -34,12 +34,3 @@ for item in storage_client.storage_accounts.list_by_resource_group(os.environ.ge
         )
         print(async_storage_deletion)
         print('VWAN Storage Account %s Deleted' % storageAccountName)
-
-# looking for a disk by gw type AZCPEGW or AVWGW
-# for item in compute_client.disks.list_by_resource_group(os.environ.get('GROUP_NAME')):
-#    if re.search('AZCPEGW', item.name) or re.search('AVWGW', item.name):
-#        # delete disk
-#        async_disk_deletion = compute_client.disks.delete(os.environ.get('GROUP_NAME'), item.name)
-#        print(async_disk_deletion.wait())
-#        print(async_disk_deletion.result())
-#        print('OS Disk %s Deleted' % item.name)

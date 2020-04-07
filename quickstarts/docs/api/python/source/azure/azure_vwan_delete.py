@@ -1,15 +1,14 @@
 #!/usr/bin/python3
-
+"""Delete VWAN."""
 import os
-import time
 from azure.mgmt.network import NetworkManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
 
 # setup Azure Login Credentials from Environmental Variables
 credentials = ServicePrincipalCredentials(
-    client_id = os.environ.get('ARM_CLIENT_ID'),
-    secret = os.environ.get('ARM_CLIENT_SECRET'),
-    tenant = os.environ.get('ARM_TENANT_ID')
+    client_id=os.environ.get('ARM_CLIENT_ID'),
+    secret=os.environ.get('ARM_CLIENT_SECRET'),
+    tenant=os.environ.get('ARM_TENANT_ID')
 )
 
 # Connect to Azure APIs and get session details
@@ -38,22 +37,3 @@ async_vwan_deletion = network_client.virtual_wans.delete(
 async_vwan_deletion.wait()
 print(async_vwan_deletion.result())
 print('VWAN Deleted')
-
-# Delete Subnet
-#async_subnet_deletion = network_client.subnets.delete(
-#    os.environ.get('GROUP_NAME'),
-#    os.environ.get('VNET_NAME'),
-#    os.environ.get('SUBNET_NAME')
-#)
-#async_subnet_deletion.wait()
-#print(async_subnet_deletion.result())
-#print('Subnet Deleted')
-
-# Delete Virtual Network
-#async_vnet_deletion = network_client.virtual_networks.delete(
-#    os.environ.get('GROUP_NAME'),
-#    os.environ.get('VNET_NAME')
-#)
-#async_vnet_deletion.wait()
-#print(async_subnet_deletion.result())
-#print('VNET Deleted')

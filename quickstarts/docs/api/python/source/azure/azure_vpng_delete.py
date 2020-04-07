@@ -1,15 +1,14 @@
 #!/usr/bin/python3
-
+"""Delete VPN Gateway froo AVW."""
 import os
-import time
 from azure.mgmt.network import NetworkManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
 
 # setup Azure Login Credentials from Environmental Variables
 credentials = ServicePrincipalCredentials(
-    client_id = os.environ.get('ARM_CLIENT_ID'),
-    secret = os.environ.get('ARM_CLIENT_SECRET'),
-    tenant = os.environ.get('ARM_TENANT_ID')
+    client_id=os.environ.get('ARM_CLIENT_ID'),
+    secret=os.environ.get('ARM_CLIENT_SECRET'),
+    tenant=os.environ.get('ARM_TENANT_ID')
 )
 
 # Connect to Azure APIs and get session details

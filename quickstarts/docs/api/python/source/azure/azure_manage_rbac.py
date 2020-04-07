@@ -1,28 +1,29 @@
 #!/usr/bin/python3
-
+"""Manage roles for vms created."""
 import os
 import sys
 import argparse
-from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.authorization import AuthorizationManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
 
+
 def connect():
-    # setup Azure Login Credentials from Environmental Variables
+    """Set up Azure Login Credentials from Environmental Variables."""
     credentials = ServicePrincipalCredentials(
-        client_id = os.environ.get('ARM_CLIENT_ID'),
-        secret = os.environ.get('ARM_CLIENT_SECRET'),
-        tenant = os.environ.get('ARM_TENANT_ID')
+        client_id=os.environ.get('ARM_CLIENT_ID'),
+        secret=os.environ.get('ARM_CLIENT_SECRET'),
+        tenant=os.environ.get('ARM_TENANT_ID')
     )
 
-    #network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
+    # network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
     auth_management_client = AuthorizationManagementClient(credentials,
-                                          os.environ.get('ARM_SUBSCRIPTION_ID'),
-                                          api_version=None, base_url=None)
+                                                           os.environ.get('ARM_SUBSCRIPTION_ID'),
+                                                           api_version=None, base_url=None)
     return auth_management_client
 
 
 def create(roleName, principalId):
+    """Create a role name for a VM under test."""
     scope = '/subscriptions/%s/resourceGroups/%s' % (
                                 os.environ.get("ARM_SUBSCRIPTION_ID"),
                                 os.environ.get("GROUP_NAME"))
@@ -32,7 +33,7 @@ def create(roleName, principalId):
     async_rbac_create = auth_management_client.role_assignments.create(
         scope,
         roleGUID,
-        parameters = {
+        parameters={
             'role_definition_id': roleDefinitionId,
             'principal_id': principalId
         }
@@ -41,6 +42,7 @@ def create(roleName, principalId):
 
 
 def delete(roleName):
+    """Delete a role name."""
     scope = '/subscriptions/%s/resourceGroups/%s' % (
                                 os.environ.get("ARM_SUBSCRIPTION_ID"),
                                 os.environ.get("GROUP_NAME"))
@@ -56,6 +58,7 @@ def delete(roleName):
 
 
 def list_role_definitions(roleName):
+    """List of role definition."""
     roleName = roleName.replace("_"," ")
     scope = '/subscriptions/%s/resourceGroups/%s' % (
                                           os.environ.get("ARM_SUBSCRIPTION_ID"),
@@ -74,7 +77,8 @@ def list_role_definitions(roleName):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='RBAC Operations')
-    parser.add_argument("--action", choices=['create', 'delete', 'list_role_definitions'], help="Action to perform for RBAC", required=True)
+    parser.add_argument("--action", choices=['create', 'delete', 'list_role_definitions'],
+                        help="Action to perform for RBAC", required=True)
     parser.add_argument("--role_name", help="Name of the role that need to be \
                         applied, if two words, join them with _, e.g. \
                         Network Contributor = Network_Contributor")

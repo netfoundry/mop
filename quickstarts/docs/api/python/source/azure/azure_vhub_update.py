@@ -1,7 +1,6 @@
 #!/usr/bin/python3
-
+"""Update VPN HUB."""
 import os
-import time
 from azure.mgmt.network import NetworkManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
 import logging
@@ -10,9 +9,9 @@ logging.getLogger('msrest').setLevel(logging.DEBUG)
 
 # setup Azure Login Credentials from Environmental Variables
 credentials = ServicePrincipalCredentials(
-    client_id = os.environ.get('ARM_CLIENT_ID'),
-    secret = os.environ.get('ARM_CLIENT_SECRET'),
-    tenant = os.environ.get('ARM_TENANT_ID')
+    client_id=os.environ.get('ARM_CLIENT_ID'),
+    secret=os.environ.get('ARM_CLIENT_SECRET'),
+    tenant=os.environ.get('ARM_TENANT_ID')
 )
 
 # Connect to Azure APIs and get session details
@@ -34,20 +33,20 @@ for item in async_vnet_list:
             "id": "/subscriptions/8699c8dd-f425-46fa-85ef-cefe299aeb4f/resourceGroups/clouddev-smoke/providers/Microsoft.Network/virtualHubs/AVW-PT-VHUB",
             "location": "westus2",
             'virtual_network_connections': [{
-                #"name": item.name,
+                # "name": item.name,
                 'id': "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Network/virtualHubs/%s/hubVirtualNetworkConnections/%s" % (os.environ.get('ARM_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'), os.environ.get('VHUB_NAME'), item.name)
-                #"etag": "W/\"2b3110c5-4aea-4612-813a-81babecef5fb\"",
-                #"properties": {
-                  #"provisioningState": "Succeeded",
-                  #"resourceGuid": "8b463835-ef3c-4f14-a172-1d73623e2424",
+                # "etag": "W/\"2b3110c5-4aea-4612-813a-81babecef5fb\"",
+                # "properties": {
+                  # "provisioningState": "Succeeded",
+                  # "resourceGuid": "8b463835-ef3c-4f14-a172-1d73623e2424",
                 #  "remoteVirtualNetwork": {
                 #    "id": "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Network/virtualNetworks/%s" % (os.environ.get('ARM_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'), item.name)
                 #  },
                 #  "allowHubToRemoteVnetTransit": True,
                 #  "allowRemoteVnetToUseHubVnetGateways": True,
                 #  "enableInternetSecurity": True
-                #}
-                #"type": "Microsoft.Network/virtualHubs/hubVirtualNetworkConnections"
+                # }
+                # "type": "Microsoft.Network/virtualHubs/hubVirtualNetworkConnections"
             }]
         }
         # Adding Server vNet to the vHub

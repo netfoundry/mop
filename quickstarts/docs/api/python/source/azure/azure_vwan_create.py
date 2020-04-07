@@ -1,15 +1,14 @@
 #!/usr/bin/python3
-
+"""Create VWAN."""
 import os
-import time
 from azure.mgmt.network import NetworkManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
 
 # setup Azure Login Credentials from Environmental Variables
 credentials = ServicePrincipalCredentials(
-    client_id = os.environ.get('ARM_CLIENT_ID'),
-    secret = os.environ.get('ARM_CLIENT_SECRET'),
-    tenant = os.environ.get('ARM_TENANT_ID')
+    client_id=os.environ.get('ARM_CLIENT_ID'),
+    secret=os.environ.get('ARM_CLIENT_SECRET'),
+    tenant=os.environ.get('ARM_TENANT_ID')
 )
 
 # declaire Test Input Variables
@@ -56,30 +55,6 @@ VPNG_PARAMS = {
 
 # Connect to Azure APIs and get session details
 network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
-
-# Create Virtual Network
-#async_vnet_creation = network_client.virtual_networks.create_or_update(
-#    os.environ.get('GROUP_NAME'),
-#    os.environ.get('VNET_NAME'),
-#    {
-#        'location': os.environ.get('LOCATION'),
-#        'address_space': {
-#            'address_prefixes': [os.environ.get('VNET_PREFIX')]
-#        }
-#    }
-#)
-#async_vnet_creation.wait()
-#print(async_vnet_creation.result())
-
-# Create Subnet
-#async_subnet_creation = network_client.subnets.create_or_update(
-#    os.environ.get('GROUP_NAME'),
-#    os.environ.get('VNET_NAME'),
-#    os.environ.get('SUBNET_NAME'),
-#    {'address_prefix': os.environ.get('SUBNET_PREFIX')}
-#)
-#async_subnet_creation.wait()
-#print(async_subnet_creation.result())
 
 # Create VWAN
 async_vwan_creation = network_client.virtual_wans.create_or_update(

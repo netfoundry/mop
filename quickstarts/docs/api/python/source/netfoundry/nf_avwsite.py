@@ -48,8 +48,8 @@ def vpn_site_connection_creation(siteName):
     # Connect to Azure APIs and get session details
     network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
 
-    # Delay for 30 seconds before deleting resources
-    time.sleep(60)
+    # Delay for 300 seconds before creating resources
+    time.sleep(300)
 
     # Create VPN Site Connection to VPNG
     async_vpn_site_connection_creation = network_client.vpn_connections.create_or_update(

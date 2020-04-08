@@ -158,8 +158,8 @@ def create_avw_site(filename):
         sys.exit(1)
     print(avwSiteUrl)
     # create avw vpn site
-    azureVirtualWanId = "/subscriptions/"+os.environ.get('ARM_SUBSCRIPTION_ID')+"/resourceGroups/"\
-        + os.environ.get('GROUP_NAME')+"/providers/Microsoft.Network/virtualWans/"\
+    azureVirtualWanId = "/subscriptions/" + os.environ.get('ARM_SUBSCRIPTION_ID') + "/resourceGroups/"\
+        + os.environ.get('GROUP_NAME') + "/providers/Microsoft.Network/virtualWans/"\
         + os.environ.get('VWAN_NAME')
     createData = nfreq.nf_req((avwSiteUrl, {
                                         "name": gwName,
@@ -186,8 +186,10 @@ def create_avw_site(filename):
                                             "advertisedPrefixes": []
                                         }
                                        }), "post", token)
-    deployData = nfreq.nf_req((createData['_links']['self']['href']+"/deploy", {}), "put", token)
-    # Connect th enewly created site to the Azure VPN Gateway
+    print(createData)
+    url = createData['_links']['self']['href'] + "/deploy"
+    deployData = nfreq.nf_req((url, {}), "put", token)
+    # Connect the newly created site to the Azure VPN Gateway
     vpn_site_connection_creation(gwName)
     return createData, deployData
 

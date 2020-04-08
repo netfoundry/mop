@@ -134,31 +134,25 @@ def create_avw_site(filename):
     gwId = nfgw.find_gateway(nfn_url, gwName, token).split('/')[8]
     # build Azure Subscriptions Url for a given NF Enviroment API
     azureSubscriptionsURL = 'https://gateway.' + env + '.netfoundry.io/rest/v1/azureSubscriptions'
-    azureSubscriptions = nfreq.nf_req(azureSubscriptionsURL, "get", token)
-    print(azureSubscriptions)
+    # get Azure Subscriptions url of the first one, the assumption is that there is only one.
+    print(nfreq.nf_req(azureSubscriptionsURL, "get", token))
     print('--------------------------------------------')
-    # delete Azure Subscription if configured.
-    if azureSubscriptions:
-        url = azureSubscriptions['_embedded']['azureSubscriptions'][0]['_links']['self']['href']
-        try:
-            nfreq.nf_req(url, "delete", token)
-        except KeyError as kerr:
-            print(kerr.args)
-        except TypeError as terr:
-            print(terr.args)
-            sys.exit(1)
-    # Configure a new Azure Subscription
     try:
-        data = nfreq.nf_req((azureSubscriptionsURL, {
-                                "name": "AVW Packet Test",
-                                "subscriptionId": os.environ.get('ARM_SUBSCRIPTION_ID'),
-                                "tenantId": os.environ.get('ARM_TENANT_ID'),
-                                "applicationId": os.environ.get('ARM_CLIENT_ID'),
-                                "applicationKey": os.environ.get('ARM_CLIENT_SECRET')
-                              }), "post", token)
-        avwSiteUrl = data['_links']['self']['href']+'/virtualWanSites'
+        avwSiteUrl = nfreq.nf_req(azureSubscriptionsURL,
+                                  "get",
+                                  token)['_embedded']['azureSubscriptions'][0]['_links']['self']['href']+'/virtualWanSites'
     except KeyError as kerr:
         print(kerr.args)
+        if kerr.args[0] == '_embedded':
+            data = nfreq.nf_req((azureSubscriptionsURL, {
+                "name": "AVW Packet Test",
+                "subscriptionId": os.environ.get('ARM_SUBSCRIPTION_ID'),
+                "tenantId": os.environ.get('ARM_TENANT_ID'),
+                "applicationId": os.environ.get('ARM_CLIENT_ID'),
+                "applicationKey": os.environ.get('ARM_CLIENT_SECRET')
+                }), "post", token)
+
+            avwSiteUrl = data['_links']['self']['href']+'/virtualWanSites'
     except TypeError as terr:
         print(terr.args)
         sys.exit(1)
@@ -206,8 +200,8 @@ def delete_avw_site():
     # get network url
     nfn_url = nfnk.find_network(os.environ.get('ENVIRONMENT'), os.environ.get('NFN_NAME'), token)
     # get AVW Site url of the first one, the assumption is that there is only one.
-    avwSite = nfreq.nf_req(nfn_url
-                           + '/virtualWanSites', "get", token)['_embedded']['azureVirtualWanSites'][0]
+    avwSite = nfreq.nf_req(nfn_url + '/virtualWanSites',
+                           "get", token)['_embedded']['azureVirtualWanSites'][0]
     # Disconnect the VPN site under test from the Azure VPN Gateway
     vpn_site_connection_deletion(avwSite['name'])
     # Delete the site from the NF Network

@@ -1,34 +1,35 @@
 #!/usr/bin/python3
-
-import os
+"""Manage NF Network in MOP Environment."""
 import sys
 import time
-import datetime
-import logging
+from datetime import datetime
 import argparse
-import nf_requests as nfreq
+from nf_requests import nf_req as nfreq
 
 
 def clear_log():
+    """Clear logs."""
     logfile = open('logoutput.txt', 'w')
     logfile.close()
 
 
 def writelog(message):
+    """Write a log."""
     logfile = open('logoutput.txt', 'a+')
-    logfile.write(str(datetime.datetime.now()) + ' network-log ' + str(message) + '\n')
+    logfile.write(str(datetime.now()) + ' ' + str(message) + '\n')
     logfile.close()
 
 
 def create_network(env, name, token):
+    """Create NF Resources in MOP Environment."""
     # Create new Network specified by --name commandline argument
     net_name = name
     writelog('\nCreating new Network! \n')
     url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/networks'
-    start = datetime.datetime.now()
-    network_id = nfreq.post_data(url, {"name": net_name, "productFamily": "DVN"}, token)
-    #, "productVersion" : "4.19.0-57168534"
-    end = datetime.datetime.now()
+    start = datetime.now()
+    network_id = nfreq((url, {"name": net_name}), "post", token)
+    #  "productFamily": "Ziti_Enabled", "productVersion" : "4.19.0-57168534"
+    end = datetime.now()
     diff = end - start
     create_time = diff.seconds + diff.microseconds / (1000 * 1000.0)
     writelog("response_time = " + str(create_time))
@@ -38,25 +39,28 @@ def create_network(env, name, token):
         writelog(e)
         writelog('\nnetwork not created!\n' + str(network_id))
         sys.exit(0)
-    start = datetime.datetime.now()
+    start = datetime.now()
     try:
         net_status = False
-        writelog('\nWaiting for network \"' + network_id['name'] + '\" to be ready @ 10 to 20 minutes! \n')
+        writelog('\nWaiting for network \"' + network_id['name']
+                 + '\" to be ready @ 10 to 20 minutes! \n')
         while not net_status:
-            now = datetime.datetime.now()
+            now = datetime.now()
             delta = now - start
             minutes = delta.seconds / 60.0
-            result = nfreq.get_data(netUrl, token)
+            result = nfreq(netUrl, "get", token)
             if result['status'] == 200:
                 status = 'NOT READY'
-                writelog('\nnetwork build status = ' + status + ' time waiting = ' + str(minutes) + ' Minutes')
+                writelog('\nnetwork build status = ' + status +
+                         ' time waiting = ' + str(minutes) + ' Minutes')
             if result['status'] == 300:
-                writelog('\nnetwork build status = FINISHED, time waited = ' + str(minutes) + 'Minutes')
+                writelog('\nnetwork build status = FINISHED, time waited = '
+                         + str(minutes) + 'Minutes')
                 net_status = True
             if minutes > 30:
                 writelog('\nExcesive time waitng for Network to transition!\n')
                 writelog('deleting network: ' + url)
-                nfreq.delete_nf(url, token)
+                nfreq(url, "delete", token)
                 sys.exit(0)
             time.sleep(20)
     except Exception as e:
@@ -67,8 +71,9 @@ def create_network(env, name, token):
 
 
 def find_network(env, name, token):
+    """Find NF Network in MOP Environment."""
     url = 'https://gateway.' + env + '.netfoundry.io/rest/v1/networks'
-    networks = nfreq.get_data(url, token)['_embedded']['networks']
+    networks = nfreq(url, "get", token)['_embedded']['networks']
     writelog('\nNetworks found are\n')
     writelog(networks)
     for network in networks:
@@ -80,8 +85,10 @@ def find_network(env, name, token):
     writelog('network not found!')
     return None
 
+
 def delete_network(netUrl, token):
-    data = nfreq.delete_nf(netUrl, token)
+    """Delete NF Network in MOP Environment."""
+    data = nfreq(netUrl, "delete", token)
     writelog(data)
 
 

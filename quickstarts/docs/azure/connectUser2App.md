@@ -40,6 +40,6 @@ This quickstart guide will provide all the steps to create a secure service betw
 
 ### via Jenkins
 
-In this section, we will use [Resource yaml](../python/nf_resources.yml) along with Jenkinsfile to show how to automate the steps further by creating the Jenkins Job
+In this section, we will use [Resource yaml](../api/python/etc/nf_resources.yml) along with Jenkinsfile to show how to automate the steps further by creating the Jenkins Job
 
 {!common/install-jenkins.md!}

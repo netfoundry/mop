@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 """
-Requirement for this script to work is to have the following variables exported as Environment Variables:
+The script will manage a vm.
+
+Requirement for this script to work is to have the following variables:
+
+exported as Environment Variables:
 ARM_CLIENT_ID
 ARM_CLIENT_SECRET
 ARM_TENANT_ID
@@ -17,11 +21,11 @@ from azure.common.credentials import ServicePrincipalCredentials
 
 
 def connect():
-    # setup Azure Login Credentials from Environmental Variables
+    """Import Azure Login Credentials from Environmental Variables."""
     credentials = ServicePrincipalCredentials(
-        client_id = os.environ.get('ARM_CLIENT_ID'),
-        secret = os.environ.get('ARM_CLIENT_SECRET'),
-        tenant = os.environ.get('ARM_TENANT_ID')
+        client_id=os.environ.get('ARM_CLIENT_ID'),
+        secret=os.environ.get('ARM_CLIENT_SECRET'),
+        tenant=os.environ.get('ARM_TENANT_ID')
     )
     # Connect to Azure APIs and return session details
     return ComputeManagementClient(credentials,
@@ -29,18 +33,18 @@ def connect():
 
 
 def start_vm():
-    # Start the VM
-   compute_client = connect()
-   async_vm_start = compute_client.virtual_machines.start(
+    """Start the VM."""
+    compute_client = connect()
+    async_vm_start = compute_client.virtual_machines.start(
        os.environ.get('GROUP_NAME'),
        os.environ.get('ZEDE_NAME')
-   )
-   async_vm_start.wait()
-   print(async_vm_start.result())
+    )
+    async_vm_start.wait()
+    print(async_vm_start.result())
 
 
 def restart_vm():
-    # Restart the VM
+    """Restart the VM."""
     compute_client = connect()
     async_vm_restart = compute_client.virtual_machines.restart(
         os.environ.get('GROUP_NAME'),
@@ -51,7 +55,7 @@ def restart_vm():
 
 
 def stop_vm():
-    # Stop the VM
+    """Stop the VM."""
     compute_client = connect()
     async_vm_stop = compute_client.virtual_machines.power_off(
         os.environ.get('GROUP_NAME'),
@@ -62,7 +66,7 @@ def stop_vm():
 
 
 def get_vm():
-    # Show VM Details
+    """Show VM Details."""
     compute_client = connect()
     async_vm_get = compute_client.virtual_machines.get(
         os.environ.get('GROUP_NAME'),
@@ -72,21 +76,21 @@ def get_vm():
 
 
 def list_vms_by_subscription():
-    # List VMs in subscription
+    """List VMs in subscription."""
     compute_client = connect()
     for vm in compute_client.virtual_machines.list_all():
         print("\tVM: {}".format(vm.name))
 
 
 def list_vms_by_resource_group():
-    # List VM in resource group
+    """List VM in resource group."""
     compute_client = connect()
     for vm in compute_client.virtual_machines.list(os.environ.get('GROUP_NAME')):
         print("\tVM: {}".format(vm.name))
 
 
 def delete_vm():
-    # Delete VM
+    """Delete VM."""
     compute_client = connect()
     async_vm_delete = compute_client.virtual_machines.delete(
         os.environ.get('GROUP_NAME'),
@@ -98,7 +102,12 @@ def delete_vm():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Virtual Machine Operations')
-    parser.add_argument("--action", choices=['start', 'restart', 'stop', 'get', 'list_by_subscription', 'list_by_resource_group', 'delete'], help="Action one wants to perform on a virtual machine", required=True)
+    parser.add_argument("--action", choices=['start', 'restart', 'stop', 'get',
+                                             'list_by_subscription',
+                                             'list_by_resource_group',
+                                             'delete'],
+                        help="Action one wants to perform on a virtual machine",
+                        required=True)
     args = parser.parse_args()
     if args.action == 'start':
         start_vm()

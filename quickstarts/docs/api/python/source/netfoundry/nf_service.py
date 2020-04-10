@@ -1,27 +1,27 @@
 #!/usr/bin/python3
-
-import os
-import sys
+"""Manage NFN Service in MOP Environment."""
 import time
-import datetime
-import logging
-import nf_requests as nfreq
+from datetime import datetime
+from nf_requests import nf_req as nfreq
 
 
 def clear_log():
+    """Clear logs."""
     logfile = open('logoutput.txt', 'w')
     logfile.close()
 
 
 def writelog(message):
+    """Write a log."""
     logfile = open('logoutput.txt', 'a+')
-    logfile.write(str(datetime.datetime.now()) + ' ' + str(message) + '\n')
+    logfile.write(str(datetime.now()) + ' ' + str(message) + '\n')
     logfile.close()
 
 
 def create_service(netUrl, gwUrl, attributes, token):
     """
-    Create Service on Gateway
+    Create NFN Service in MOP Environment.
+
     :param netUrl: REST Url endpoint for network
     :param gwUrl: REST Url endpoint for gateway
     :param serviceAttributes: service paramaters, e.g. service type or name, etc
@@ -33,23 +33,23 @@ def create_service(netUrl, gwUrl, attributes, token):
     serviceName = attributes['gateway']+'--'+str(attributes['ip'])+'--'+str(attributes['port'])
     if attributes['type'] == 'host':
         data = {
-                  "serviceClass" : "CS",
-                  "name" : serviceName,
-                  "serviceInterceptType" : "IP",
-                  "serviceType" : "ALL",
-                  "endpointId" : gwId,
-                  "pbrType" : "WAN",
+                  "serviceClass": "CS",
+                  "name": serviceName,
+                  "serviceInterceptType": "IP",
+                  "serviceType": "ALL",
+                  "endpointId": gwId,
+                  "pbrType": "WAN",
                   "dataInterleaving": "NO",
                   "transparency": "NO",
-                  "networkIp" : attributes['ip'],
-                  "networkFirstPort" : attributes['port'],
-                  "networkLastPort" : attributes['port'],
-                  "interceptIp" : attributes['ip'],
-                  "interceptFirstPort" : attributes['port'],
-                  "interceptLastPort" : attributes['port']
+                  "networkIp": attributes['ip'],
+                  "networkFirstPort": attributes['port'],
+                  "networkLastPort": attributes['port'],
+                  "interceptIp": attributes['ip'],
+                  "interceptFirstPort": attributes['port'],
+                  "interceptLastPort": attributes['port']
                 }
     if attributes['type'] == 'network':
-        data =  {
+        data = {
                   "serviceClass": "GW",
                   "name": attributes['netIp']+'-'+attributes['netCidr'],
                   "serviceInterceptType": "IP",
@@ -72,23 +72,23 @@ def create_service(netUrl, gwUrl, attributes, token):
                   "gatewayCidrBlock": attributes['netCidr'],
                   "localNetworkGateway": "YES"
                 }
-    returnData = nfreq.post_data(url, data, token)
+    returnData = nfreq((url, data), "post", token)
     serviceUrl = returnData['_links']['self']['href']
     time.sleep(1)
-
     return serviceUrl, serviceName
 
 
 def find_service(netUrl, serviceName, token):
     """
-    Find url of an exiting service
+    Find NFN Service in MOP Environment.
+
     :param netUrl: REST Url endpoint for network
     :param serviceName: service name
     :param token:  seesion token for NF Console
     :return serviceUrl: url of the found service
     """
     servicesUrl = netUrl + '/services'
-    services = nfreq.get_data(servicesUrl, token)['_embedded']['services']
+    services = nfreq(servicesUrl, "get", token)['_embedded']['services']
     for service in services:
         if service['name'] == serviceName:
             serviceUrl = service['_links']['self']['href']
@@ -98,13 +98,14 @@ def find_service(netUrl, serviceName, token):
 
 def delete_service(serviceUrl, token):
     """
-    Delete an exiting service
+    Delete NFN Service in MOP Environment.
+
     :param serviceUrl: REST endpoint for the service marked for deletion
     :param token:  seesion token for NF Console
     :return none:
     """
     try:
-        data = nfreq.delete_nf(serviceUrl, token)
+        data = nfreq(serviceUrl, "delete", token)
         writelog(data)
     except Exception as e:
         writelog(e)

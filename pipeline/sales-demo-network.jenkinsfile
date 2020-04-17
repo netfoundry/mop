@@ -1,0 +1,274 @@
+authUrl = "https://netfoundry-staging.auth0.com/oauth/token"
+networksUrl = "https://gateway.staging.netfoundry.io/rest/v1/networks"
+
+def access_token
+def network_name
+def organization_name = "SALESDEMO"
+def localNetworkUrl, localOrganizationUrl, localnetworkControllers, localendpoints, localendpointGroups, localservice, localappwans, localgatewayclusters
+def ingressGWUrl, localGatewayUrl, servicesGwUrl, endpointID, serviceID
+def egressGWUrl, testServiceUrl, appWanServiceUrl
+def serviceFinal, gatewayFinal
+
+pipeline {
+  agent any
+  environment {
+      SMOKE_TEST_CREDS = credentials('smoketest_creds')
+  }
+  stages {
+    stage('User Input') {
+      input {
+        message "Enter name of network"
+        parameters {
+             string(name:'network', defaultValue: '', description: 'Choose Network Name')
+             }
+          }
+      steps {
+        script {
+          network_name = network
+        }
+      }
+      }
+    stage('Login - Get BearerToken'){
+      steps {
+        script {
+          access_token = getBearerToken()
+        }
+      }
+    }
+
+    stage('Create Network') {
+      steps {
+        script {
+          def data = [
+          "name": network_name,
+          "organizationId": "d06730a6-cf36-4eb5-a029-d073ca904d3d",
+          "locationCode": "ca-central-1a"
+          ]
+
+          def createResult = httpEndpoint(networksUrl, data, access_token, "POST")
+          print createResult
+          print "Links"
+          print createResult["_links"]["self"]["href"]
+          localNetworkUrl = createResult["_links"]["self"]["href"]
+          localOrganizationUrl = createResult["_links"]["organization"]["href"]
+          localnetworkControllers = createResult["_links"]["networkControllers"]["href"]
+          localendpoints  = createResult["_links"]["endpoints"]["href"]
+          localendpointGroups = createResult["_links"]["endpointGroups"]["href"]
+          localservice = createResult["_links"]["services"]["href"]
+          localappwans  = createResult["_links"]["appWans"]["href"]
+          localgatewayclusters = createResult["_links"]["gatewayClusters"]["href"]
+          // println createResult
+        }
+        }
+      }
+
+    stage('Wait For Network Creation') {
+      steps {
+        script {
+          waitForNetworkCreation(localNetworkUrl, access_token, 300 )
+        }
+      }
+    }
+
+    stage('Create Egress Gateway') {
+      steps {
+        script {
+          def data = [
+          "name" : "Serving Gateway",
+          "endpointType" : "GW",
+          "dataCenterId": "c3b7c38b-6bc5-921e-0111-c3a7c2acc29d"
+          ]
+          def createResult = httpEndpoint(localendpoints, data, access_token, "POST")
+          print createResult
+          print "Links"
+          ingressGWUrl = createResult["_links"]["self"]["href"]
+          endpointID = ingressGWUrl.split("/")[8]
+          servicesGwUrl = createResult["_links"]["services"]["href"]
+        }
+      }
+    }
+
+    stage('Wait For Serving Gateway Creation') {
+      steps {
+        script {
+          waitForNetworkCreation(ingressGWUrl, access_token, 400 )
+        }
+      }
+    }
+
+    stage('Create Service') {
+      steps {
+        script {
+          data = [
+          "name": "Test Service",
+          "serviceClass": "CS",
+          "serviceInterceptType": "IP",
+          "endpointId": endpointID,
+          "serviceType": "TCP",
+          "interceptFirstPort": "80",
+          "interceptIp": "10.1.1.1",
+          "networkIp": "10.19.102.183",
+          "networkFirstPort": "80",
+          "networkLastPort": "80",
+          "interceptLastPort": "80"
+          ]
+          def createResult = httpEndpoint(localservice, data, access_token, "POST")
+          print createResult
+          print "Links"
+          testServiceUrl = createResult["_links"]["self"]["href"]
+          serviceID = testServiceUrl.split("/")[8]
+          // servicesGwUrl = createResult["_links"]["services"]["href"]
+        }
+      }
+    }
+
+    stage('Wait For Service Creation') {
+      steps {
+        script {
+          waitForNetworkCreation(testServiceUrl, access_token, 300 )
+        }
+      }
+    }
+
+    stage('Create AppWan') {
+      steps {
+        script {
+          data = [
+          "name": "Devops AppWan"
+          ]
+          def createResult = httpEndpoint(localappwans, data, access_token, "POST")
+          print createResult
+          print "Links"
+          appWanServiceUrl  = createResult["_links"]["self"]["href"]
+          gatewayFinal = createResult["_links"]["endpoints"]["href"]
+          servicesFinal = createResult["_links"]["services"]["href"]
+          // servicesGwUrl = createResult["_links"]["services"]["href"]
+        }
+      }
+    }
+
+    stage('Wait For AppWan Creation') {
+      steps {
+        script {
+          waitForNetworkCreation(appWanServiceUrl, access_token, 300 )
+        }
+      }
+    }
+
+    stage('Attach Service to AppWan') {
+      steps {
+        script {
+          data = [
+          "ids": [serviceID]
+          ]
+          def createResult = httpEndpoint(servicesFinal, data, access_token, "POST")
+          print createResult
+          print "Links"
+          appWanServiceUrl = createResult["_links"]["self"]["href"]
+
+          // servicesGwUrl = createResult["_links"]["services"]["href"]
+        }
+      }
+    }
+
+    stage('Wait For AppWan Update{Service]') {
+      steps {
+        script {
+          waitForNetworkCreation(appWanServiceUrl, access_token, 300 )
+        }
+      }
+    }
+
+    stage('Create Client'){
+      steps {
+        script {
+          def data = [
+            "name" : "Test Client",
+            "endpointType" : "CL",
+            "dataCenterId": "c3b7c38b-6bc5-921e-0111-c3a7c2acc29d"
+          ]
+          createResult = httpEndpoint(localendpoints, data, access_token, "POST")
+          clientUrl = createResult["_links"]["self"]["href"]
+          clientID = clientUrl.split("/")[8]
+          echo "Client ID is ${clientID}"
+          registrationKey = createResult["registrationKey"]
+          echo "Registration Key is ${registrationKey}"
+          createResult = ""
+        }
+      }
+    }
+
+}
+}
+
+def waitForNetworkCreation(localNetworkUrl, access_token, res_status ) {
+  status = 0
+  print localNetworkUrl
+  def result = [:]
+  def data = [:]
+  while ( status != res_status) {
+    print "Beginning"
+    result = httpEndpoint(localNetworkUrl, data, access_token, "GET" )
+    print result
+    status = result["status"]
+    print "Expecting Status: ${res_status}, Current Status: ${status}"
+    result = ""
+    sleep_out()
+  }
+}
+
+def sleep_out() {
+  sleep 5
+}
+
+def getBearerToken() {
+  try {
+    URL url = authUrl.toURL()
+    def message = [
+                      "client_id" : SMOKE_TEST_CREDS_USR ,
+                      "client_secret" : SMOKE_TEST_CREDS_PSW ,
+                      "audience" : "https://gateway.staging.netfoundry.io/" ,
+                      "grant_type" : "client_credentials"
+              ]
+    URLConnection connection = url.openConnection()
+    connection.setDoOutput(true)
+    connection.setRequestMethod("POST")
+    connection.setRequestProperty("Content-Type", "application/json")
+    connection.getOutputStream().write(groovy.json.JsonOutput.toJson(message).getBytes("UTF-8"));
+    InputStream inputStream = connection.getInputStream()
+    // print inputStream.text
+    def resultJSON = new groovy.json.JsonSlurper().parseText(inputStream.text)
+    inputStream.close()
+    return resultJSON['access_token']
+  } catch ( err ) {
+    try {
+      print inputStream.text
+    } catch (err1) {}
+    println "Error is "+err
+  }
+}
+
+def httpEndpoint(baseUrl, data, access_token, method) {
+  // def resultJSON = [:]
+  try {
+    print "Token is "+access_token
+    URL url = baseUrl.toURL()
+    URLConnection connection = url.openConnection()
+    connection.setDoOutput(true)
+    connection.setRequestMethod(method)
+    connection.setRequestProperty("Content-Type", "application/json")
+    connection.setRequestProperty ("Authorization", "Bearer ${access_token}")
+    if( method == "POST") {
+      connection.getOutputStream().write(groovy.json.JsonOutput.toJson(data).getBytes("UTF-8"));
+    }
+    InputStream inputStream = connection.getInputStream()
+    def inputVar = inputStream.text
+    def resultJSON = new groovy.json.JsonSlurper().parseText(inputVar)
+    print "JSON"
+    inputStream.close()
+    return resultJSON
+  } catch ( err ) {
+    println "HTTP Post Error is: "+err+" for URL: "+baseUrl
+  }
+
+}

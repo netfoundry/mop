@@ -6,16 +6,17 @@ nav:
       - NF Fabric: netfoundry/fabric.md
       - NF Clients: netfoundry/client.md
       - NF Gateways: netfoundry/gateway.md
-    - Cloud Providers:  
+    - Cloud Providers:
       - AWS:
         - aws/intro.md
         - Bastion Replacement Removal: aws/aws-bastion.md
       - Azure:
         - Use Cases Overview: azure/intro.md
-        - Mobile User To Cloud Application Connectivity: azure/connectUser2App.md
-        - Branch Application To Cloud Application Connectivity: azure/connectApp2App.md
-        - Bastion Replacement Removal: azure/azure-bastion.md
         - Accessing Azure Stack: azure/accessing-azure-stack.md
+        - Bastion Replacement Removal: azure/azure-bastion.md
+        - Branch Application To Cloud Application Connectivity: azure/connectApp2App.md
+        - Mobile User To Cloud Application Connectivity: azure/connectUser2App.md
+        - MS Office 365 Optimize: azure/o365-optimization.md
       - GCP:
         - Overview: gcp/intro.md
         - Getting Started Guide: gcp/getting-started.md
@@ -27,10 +28,10 @@ nav:
         - Overview: vcpe/intro.md
     - HyperVisors:
       - Overview: hypervisor/overview.md
-      - Hyper-V: 
+      - Hyper-V:
          - Getting Started: hypervisor/hyper-v/getting-started.md
       - KVM:
-         - Getting Started: hypervisor/kvm/getting-started.md   
+         - Getting Started: hypervisor/kvm/getting-started.md
       - VMware:
          - Getting Started: hypervisor/vmware/getting-started.md
       - VirtualBox:
@@ -60,7 +61,7 @@ theme:
     favicon: images/fav.png
     feature:
       tabs: true
-    custom_dir: docs/custom_theme/  
+    custom_dir: docs/custom_theme/
 # Site Customization
 extra:
   social:

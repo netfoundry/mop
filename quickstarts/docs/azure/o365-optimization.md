@@ -50,6 +50,9 @@ AppWan successfully configured would look like this.
 ![Image](../images/CreateAppWanO365SharePointOneDrive.png)
 
 {!common/install-nf-client.md!}
+    1. Add this Endpoint to the AppWan
+    1. Once endpoint is added to the AppWan, here is what the services tab should look like.
+    ![Image](../images/EndpointServiceView-O365.png)
 
 ## Programmatically
 
@@ -142,29 +145,45 @@ AppWan successfully configured would look like this.
     !!! note
         If something went wrong, please check logoutput.txt file generated in the root directory for details on any errors that may have occurred during the deployment.
 
-## Performance Testing
-
-!!! example "Install and register client"
-
+### Create Windows Client via Powershell
+{!api/powershell/getting-started.md!}
+    1. Once you download the PS script onto your laptop, run the following in the directory containing the script:
+    ```
+    .\NF-powershell.ps1
+    ```
+    1. Update the following section of the resources.yaml file referenced at the beginning of the last section.
+    ``` yaml
+    appwans:
+    - action: create
+      endpoints:
+      - "your endpoint name"
+    ```
+    1. Run resources.py script to add the newly created endpoint to the same AppWan.
+    ``` python
+    python3 quickstarts/docs/api/python/source/netfoundry/nf_resources.py --file quickstarts/docs/api/python/etc/nf_resources.yml
+    ```
+    1. Once endpoint is added to the AppWan, here is what the services tab should look like.
+    ![Image](../images/EndpointServiceView-O365.png)
 
 ## Performance Testing
 
 !!! example "Verifying the performance through testing"
-    1. Login to Jenkins
-    1. Click on " New Item"
-    ![Image](../images/jenkins-new-item.png)
-    1. Name you Project, select pipeline option and click "Ok"
-    ![Image](../images/jenkins-pipeline-name.png)
-    1. In the pipeline details, fill in the scm details as seen in the image below and click "Save".
-    Everything default apart from:
+    !!! Note
+        Recommended way of accessing Ondrive is through the Windows App with File Explorer. If access to OneDrive is required using a browser than Firefox is recommended by NetFoundry to get best performance.
 
+    1. Map your Business OneDrive to your local file system if not already done so.
+    1. Make sure the NF App is enabled.
+    1. Transfer large files between remote and local drive to test the performance.
+    1. Disable the NF App and repeat the previous step to compare the performance.
+    1. The anaconda-navigator
+    1. The performance should be at least the same if not better.
 
 ## Programmatically
 
 ### Delete via Python and Terraform
 
 !!! example "Steps"
-    1. Update ```quickstarts/docs/api/python/etc/nf_resources.yml``` as so:
+    1. Change all actions to delete in ```quickstarts/docs/api/python/etc/nf_resources.yml``` as so:
     ``` yaml
     environment: production
     network_action: delete

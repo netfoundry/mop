@@ -146,10 +146,10 @@ AppWan successfully configured would look like this.
         If something went wrong, please check logoutput.txt file generated in the root directory for details on any errors that may have occurred during the deployment.
 
 ### Create Windows Client via Powershell
-{!api/powershell/getting-started.md!}
-    1. Once you download the PS script onto your laptop, run the following in the directory containing the script:
+{!common/powershell-create-win-client.md!}
+    1. Once you download [PS script](../api/powershell/source-code/NF-pwrshell.ps1) onto your laptop, run the following in the directory containing the script:
     ```
-    .\NF-powershell.ps1
+    .\NF-pwrshell.ps1
     ```
     1. Update the following section of the resources.yaml file referenced at the beginning of the last section.
     ``` yaml
@@ -175,7 +175,6 @@ AppWan successfully configured would look like this.
     1. Make sure the NF App is enabled.
     1. Transfer large files between remote and local drive to test the performance.
     1. Disable the NF App and repeat the previous step to compare the performance.
-    1. The anaconda-navigator
     1. The performance should be at least the same if not better.
 
 ## Programmatically

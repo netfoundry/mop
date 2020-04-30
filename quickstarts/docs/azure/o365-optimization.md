@@ -147,7 +147,7 @@ AppWan successfully configured would look like this.
 
 ### Create Windows Client via Powershell
 {!common/powershell-create-win-client.md!}
-    1. Once you download [PS script](../api/powershell/source-code/NF-pwrshell.ps1) onto your laptop, run the following in the directory containing the script:
+    1. Once you download [PS script](../api/powershell/source-code/NF-pwrshell.ps1) onto your laptop and update it with your network details, run the following in the directory containing the script:
     ```
     .\NF-pwrshell.ps1
     ```

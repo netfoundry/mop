@@ -256,6 +256,21 @@
       Use Cases Overview
     </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../accessing-azure-stack/" title="Accessing Azure Stack">
+      Accessing Azure Stack
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../azure-bastion/" title="Bastion Replacement Removal">
+      Bastion Replacement Removal
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../connectApp2App/" title="Branch Application To Cloud Application Connectivity">
+      Branch Application To Cloud Application Connectivity
+    </a>
+</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-toggle md-nav__toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
@@ -333,18 +348,8 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../connectApp2App/" title="Branch Application To Cloud Application Connectivity">
-      Branch Application To Cloud Application Connectivity
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../azure-bastion/" title="Bastion Replacement Removal">
-      Bastion Replacement Removal
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../accessing-azure-stack/" title="Accessing Azure Stack">
-      Accessing Azure Stack
+<a class="md-nav__link" href="../o365-optimization/" title="MS Office 365 Optimize">
+      MS Office 365 Optimize
     </a>
 </li>
 </ul>
@@ -790,7 +795,7 @@
 </ol>
 <p>Additional Information:</p>
 <ol>
-<li>The new Resource Group in Azure is created based on then name provided in <a href="../../api/python/etc/nf_resources.yml">Resource yaml</a>, if one does not exists already in the same region (e.g. centralus). The action delete gateway will delete the RG as well even if it was an existing RG. If one does not want to delete the RG, the command <code>terraform state rm "{tf resource name for RG}"</code> needs to be run before running the gateway delete step. This will ensure that the RG is not deleted.</li>
+<li>The new Resource Group in Azure is created based on then name provided in <a href="../../api/python/etc/nf_resources.yml">Resource yml</a>, if one does not exist already in the same region (e.g. centralus). The action delete gateway will delete the RG as well even if it was an existing RG. If one does not want to delete the RG, the command <code>terraform state rm "{tf resource name for RG}"</code> needs to be run before running the gateway delete step. This will ensure that the RG is not deleted.</li>
 <li>A new vNet will be created and NF Gateway will be placed in it.</li>
 <li>Environment means the NF Console Environment used (e.g. production), not Azure.</li>
 </ol>
@@ -1116,7 +1121,7 @@ Everything default apart from:<ol>
 <div class="md-footer-nav">
 <nav class="md-footer-nav__inner md-grid">
 <!-- Link to previous page -->
-<a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../intro/" rel="prev" title="Use Cases Overview">
+<a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../connectApp2App/" rel="prev" title="Branch Application To Cloud Application Connectivity">
 <div class="md-flex__cell md-flex__cell--shrink">
 <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
 </div>
@@ -1125,18 +1130,18 @@ Everything default apart from:<ol>
 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Use Cases Overview
+                Branch Application To Cloud Application Connectivity
               </span>
 </div>
 </a>
 <!-- Link to next page -->
-<a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../connectApp2App/" rel="next" title="Branch Application To Cloud Application Connectivity">
+<a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../o365-optimization/" rel="next" title="MS Office 365 Optimize">
 <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
 <span class="md-flex__ellipsis">
 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Branch Application To Cloud Application Connectivity
+                MS Office 365 Optimize
               </span>
 </div>
 <div class="md-flex__cell md-flex__cell--shrink">

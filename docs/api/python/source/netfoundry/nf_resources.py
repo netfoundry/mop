@@ -56,6 +56,18 @@ def update_config_file(filename, new_config):
         writelog(str(e))
 
 
+def delete_gateways(netUrl, gateway, token):
+    """Delete Gateways from NFN."""
+    for name in gateway['names']:
+        try:
+            gwUrl = nfgw.find_gateway(netUrl, name, token)
+            nfgw.delete_gateway(gwUrl, token)
+        except Exception as e:
+            writelog(str(e))
+    gateway['names'] = []
+    gateway['regkeys'] = []
+
+
 def main(filename):
     """Create NFN Resources in MOP Environment."""
     # when processing string from POPEN need to strip escape characters
@@ -105,31 +117,32 @@ def main(filename):
             token = nftn.get_token(env)
         netUrl = nfnk.find_network(env, netName, token)
         nfnk.delete_network(netUrl, token)
-
     # manage gateways (list of gateways)
     if config.get('gateway_list'):
         # if gateway options are enabled, the following code will be run
-        if config['gateway_list'] and netAction != 'delete':
-            for gateway in config['gateway_list']:
-                if gateway['action'] == 'create':
-                    index = 0
-                    while index < gateway['count']:
-                        name, regkey = nfgw.create_gateway(env, netUrl,
-                                                           gateway['region'],
-                                                           gateway['cloud'],
-                                                           index, token)
-                        index += 1
-                        gateway['names'] = gateway['names'] + [name]
-                        gateway['regkeys'] = gateway['regkeys'] + [regkey]
-                if gateway['action'] == 'delete' and gateway['names']:
-                    for name in gateway['names']:
-                        try:
-                            gwUrl = nfgw.find_gateway(netUrl, name, token)
-                            nfgw.delete_gateway(gwUrl, token)
-                        except Exception as e:
-                            writelog(str(e))
-                    gateway['names'] = []
-                    gateway['regkeys'] = []
+        if config['gateway_list']:
+            if netAction != 'delete':
+                for gateway in config['gateway_list']:
+                    if gateway['action'] == 'create':
+                        index = 0
+                        while index < gateway['count']:
+                            if gateway['names']:
+                                name = gateway['names'][index]
+                                name, regkey = nfgw.create_gateway(env, netUrl,
+                                                                   gateway['region'],
+                                                                   gateway['cloud'],
+                                                                   index, token,
+                                                                   gwName=name)
+                            else:
+                                name, regkey = nfgw.create_gateway(env, netUrl,
+                                                                   gateway['region'],
+                                                                   gateway['cloud'],
+                                                                   index, token)
+                                gateway['names'] = gateway['names'] + [name]
+                            index += 1
+                            gateway['regkeys'] = gateway['regkeys'] + [regkey]
+                    if gateway['action'] == 'delete' and gateway['names']:
+                        delete_gateways(netUrl, gateway, token)
             if list(filter(lambda gateway: gateway['action'] == 'create' or
                            gateway['action'] == 'create-terraform',
                            config['gateway_list'])):

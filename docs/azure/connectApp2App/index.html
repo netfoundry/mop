@@ -257,8 +257,13 @@
     </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../connectUser2App/" title="Mobile User To Cloud Application Connectivity">
-      Mobile User To Cloud Application Connectivity
+<a class="md-nav__link" href="../accessing-azure-stack/" title="Accessing Azure Stack">
+      Accessing Azure Stack
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../azure-bastion/" title="Bastion Replacement Removal">
+      Bastion Replacement Removal
     </a>
 </li>
 <li class="md-nav__item md-nav__item--active">
@@ -328,6 +333,16 @@
     via Jenkins
   </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_ip_host_service_1">
+    Create IP Host Service
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_appwan_1">
+    Create AppWan
+  </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -338,13 +353,13 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../azure-bastion/" title="Bastion Replacement Removal">
-      Bastion Replacement Removal
+<a class="md-nav__link" href="../connectUser2App/" title="Mobile User To Cloud Application Connectivity">
+      Mobile User To Cloud Application Connectivity
     </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../accessing-azure-stack/" title="Accessing Azure Stack">
-      Accessing Azure Stack
+<a class="md-nav__link" href="../o365-optimization/" title="MS Office 365 Optimize">
+      MS Office 365 Optimize
     </a>
 </li>
 </ul>
@@ -656,6 +671,16 @@
     via Jenkins
   </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_ip_host_service_1">
+    Create IP Host Service
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_appwan_1">
+    Create AppWan
+  </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -805,7 +830,7 @@ Thus, a static route will need to be configured in one of the branch routers. NF
 </ol>
 <p>Additional Information:</p>
 <ol>
-<li>The new Resource Group in Azure is created based on then name provided in <a href="../../api/python/etc/nf_resources.yml">Resource yaml</a>, if one does not exists already in the same region (e.g. centralus). The action delete gateway will delete the RG as well even if it was an existing RG. If one does not want to delete the RG, the command <code>terraform state rm "{tf resource name for RG}"</code> needs to be run before running the gateway delete step. This will ensure that the RG is not deleted.</li>
+<li>The new Resource Group in Azure is created based on then name provided in <a href="../../api/python/etc/nf_resources.yml">Resource yml</a>, if one does not exist already in the same region (e.g. centralus). The action delete gateway will delete the RG as well even if it was an existing RG. If one does not want to delete the RG, the command <code>terraform state rm "{tf resource name for RG}"</code> needs to be run before running the gateway delete step. This will ensure that the RG is not deleted.</li>
 <li>A new vNet will be created and NF Gateway will be placed in it.</li>
 <li>Environment means the NF Console Environment used (e.g. production), not Azure.</li>
 </ol>
@@ -1104,6 +1129,40 @@ Everything default apart from:<ol>
 </li>
 </ol>
 </div>
+<h4 id="create_ip_host_service_1">Create IP Host Service<a class="headerlink" href="#create_ip_host_service_1" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to create a NF Service.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage Services Page under Manage Appwans</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../../images/CreateService01.png"/></li>
+<li>Click on "Create an IP Host Service"
+<img alt="Image" src="../../images/CreateService03.png"/></li>
+<li>Fill in the required information for SSH and click on "Create"
+<img alt="Image" src="../../images/CreateService04.png"/></li>
+<li>If successfully, the service is green.
+<img alt="Image" src="../../images/CreateService05.png"/></li>
+<li>Done</li>
+</ol>
+</div>
+<h4 id="create_appwan_1">Create AppWan<a class="headerlink" href="#create_appwan_1" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to enable service connectivity to users by creating an appwan.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage AppWANS Page under Manage Appwans</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../../images/CreateAppWan01.png"/></li>
+<li>Click on "Component Builder Appwan"
+<img alt="Image" src="../../images/CreateAppWan02.png"/></li>
+<li>Move the desired gateway (e.g. DemoGateway01) from "Available" Gateways to "Selected" Endpoints. Move the desired service (e.g. DemoServiceSsh) from "Available" to "Selected" Services.
+<img alt="Image" src="../../images/BranchGW2AzureGWappWanServiceSsh.png"/></li>
+<li>Click on "Create".
+<img alt="Image" src="../../images/BranchGW2AzureGWappWanServiceSshResult.png"/></li>
+<li>Done</li>
+</ol>
+</div>
 </article>
 </div>
 </div>
@@ -1132,7 +1191,7 @@ Everything default apart from:<ol>
 <div class="md-footer-nav">
 <nav class="md-footer-nav__inner md-grid">
 <!-- Link to previous page -->
-<a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../connectUser2App/" rel="prev" title="Mobile User To Cloud Application Connectivity">
+<a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../azure-bastion/" rel="prev" title="Bastion Replacement Removal">
 <div class="md-flex__cell md-flex__cell--shrink">
 <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
 </div>
@@ -1141,18 +1200,18 @@ Everything default apart from:<ol>
 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Mobile User To Cloud Application Connectivity
+                Bastion Replacement Removal
               </span>
 </div>
 </a>
 <!-- Link to next page -->
-<a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../azure-bastion/" rel="next" title="Bastion Replacement Removal">
+<a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../connectUser2App/" rel="next" title="Mobile User To Cloud Application Connectivity">
 <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
 <span class="md-flex__ellipsis">
 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Bastion Replacement Removal
+                Mobile User To Cloud Application Connectivity
               </span>
 </div>
 <div class="md-flex__cell md-flex__cell--shrink">

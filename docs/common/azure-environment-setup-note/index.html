@@ -254,13 +254,8 @@
     </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../azure/connectUser2App/" title="Mobile User To Cloud Application Connectivity">
-      Mobile User To Cloud Application Connectivity
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../azure/connectApp2App/" title="Branch Application To Cloud Application Connectivity">
-      Branch Application To Cloud Application Connectivity
+<a class="md-nav__link" href="../../azure/accessing-azure-stack/" title="Accessing Azure Stack">
+      Accessing Azure Stack
     </a>
 </li>
 <li class="md-nav__item">
@@ -269,8 +264,18 @@
     </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../azure/accessing-azure-stack/" title="Accessing Azure Stack">
-      Accessing Azure Stack
+<a class="md-nav__link" href="../../azure/connectApp2App/" title="Branch Application To Cloud Application Connectivity">
+      Branch Application To Cloud Application Connectivity
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../azure/connectUser2App/" title="Mobile User To Cloud Application Connectivity">
+      Mobile User To Cloud Application Connectivity
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../azure/o365-optimization/" title="MS Office 365 Optimize">
+      MS Office 365 Optimize
     </a>
 </li>
 </ul>
@@ -536,7 +541,7 @@
 </ol>
 <p>Additional Information:</p>
 <ol>
-<li>The new Resource Group in Azure is created based on then name provided in <a href="../../api/python/etc/nf_resources.yml">Resource yaml</a>, if one does not exists already in the same region (e.g. centralus). The action delete gateway will delete the RG as well even if it was an existing RG. If one does not want to delete the RG, the command <code>terraform state rm "{tf resource name for RG}"</code> needs to be run before running the gateway delete step. This will ensure that the RG is not deleted.</li>
+<li>The new Resource Group in Azure is created based on then name provided in <a href="../../api/python/etc/nf_resources.yml">Resource yml</a>, if one does not exist already in the same region (e.g. centralus). The action delete gateway will delete the RG as well even if it was an existing RG. If one does not want to delete the RG, the command <code>terraform state rm "{tf resource name for RG}"</code> needs to be run before running the gateway delete step. This will ensure that the RG is not deleted.</li>
 <li>A new vNet will be created and NF Gateway will be placed in it.</li>
 <li>Environment means the NF Console Environment used (e.g. production), not Azure.</li>
 </ol>

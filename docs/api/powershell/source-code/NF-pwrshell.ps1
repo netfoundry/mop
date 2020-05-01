@@ -79,4 +79,4 @@ $endpoint_registration_key = $endpoint_response.registrationKey
 
 # Run registration script
 
-Start-Process -FilePath C:\Program Files\DVN\vtc_app\nfnreg $endpoint_registration_key
+Start-Process -FilePath C:\"Program Files"\DVN\vtc_app\nfnreg $endpoint_registration_key

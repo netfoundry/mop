@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Connect VPN SIte to VPN Gateway."""
+"""Connect VPN Site to VPN Gateway."""
 import os
 import time
 from azure.mgmt.network import NetworkManagementClient
@@ -17,7 +17,8 @@ CONNECTION_PARAMS = {
     'enable_bgp': True,
     'remote_vpnsite': {
       'id': "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Network/vpnSites/%s"
-      % (os.environ.get('ARM_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'), siteName)
+      % (os.environ.get('ARM_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'),
+         os.environ.get('VPN_SITE_NAME'))
     }
 }
 
@@ -33,7 +34,7 @@ time.sleep(60)
 async_vpn_site_connection_creation = network_client.vpn_connections.create_or_update(
     os.environ.get('GROUP_NAME'),
     os.environ.get('VPNG_NAME'),
-    'CONNECTION_' + siteName,
+    'CONNECTION_' + os.environ.get('VPN_SITE_NAME'),
     CONNECTION_PARAMS,
     custom_headers=None,
     raw=False,

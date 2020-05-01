@@ -30,8 +30,12 @@ def create_service(netUrl, gwUrl, attributes, token):
     """
     url = netUrl+'/services'
     gwId = gwUrl.split('/')[8]
-    serviceName = attributes['gateway']+'--'+str(attributes['ip'])+'--'+str(attributes['port'])
     if attributes['type'] == 'host':
+        # checking if service name is provided
+        if attributes['name']:
+            serviceName = attributes['name']
+        else:
+            serviceName = attributes['gateway']+'--'+str(attributes['ip'])+'--'+str(attributes['port'])
         data = {
                   "serviceClass": "CS",
                   "name": serviceName,
@@ -49,9 +53,14 @@ def create_service(netUrl, gwUrl, attributes, token):
                   "interceptLastPort": attributes['port']
                 }
     if attributes['type'] == 'network':
+        # checking if service name is provided
+        if attributes['name']:
+            serviceName = attributes['name']
+        else:
+            serviceName = attributes['gateway']+'--'+str(attributes['netIp'])+'--'+str(attributes['netCidr'])
         data = {
                   "serviceClass": "GW",
-                  "name": attributes['netIp']+'-'+attributes['netCidr'],
+                  "name": serviceName,
                   "serviceInterceptType": "IP",
                   "serviceType": "ALL",
                   "endpointId": gwId,

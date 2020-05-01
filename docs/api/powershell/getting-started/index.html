@@ -254,13 +254,8 @@
     </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../azure/connectUser2App/" title="Mobile User To Cloud Application Connectivity">
-      Mobile User To Cloud Application Connectivity
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../../azure/connectApp2App/" title="Branch Application To Cloud Application Connectivity">
-      Branch Application To Cloud Application Connectivity
+<a class="md-nav__link" href="../../../azure/accessing-azure-stack/" title="Accessing Azure Stack">
+      Accessing Azure Stack
     </a>
 </li>
 <li class="md-nav__item">
@@ -269,8 +264,18 @@
     </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../../azure/accessing-azure-stack/" title="Accessing Azure Stack">
-      Accessing Azure Stack
+<a class="md-nav__link" href="../../../azure/connectApp2App/" title="Branch Application To Cloud Application Connectivity">
+      Branch Application To Cloud Application Connectivity
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../azure/connectUser2App/" title="Mobile User To Cloud Application Connectivity">
+      Mobile User To Cloud Application Connectivity
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../azure/o365-optimization/" title="MS Office 365 Optimize">
+      MS Office 365 Optimize
     </a>
 </li>
 </ul>
@@ -525,7 +530,10 @@
 <article class="md-content__inner md-typeset"><a class="md-icon md-content__icon" download href="getting-started.pdf" title="PDF Export"></a>
 <h1>Getting Started</h1>
 <p>This section provides the powershell code to spin up a NF client with the name as computer name fetched by PS script.</p>
-<p>1.Here are the parameters used in the script few needs to be changed to suit your need for eg. network_name and region_ name.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<ol>
+<li>Here are the parameters used in the script few needs to be changed to suit your need for eg. network_name and region_ name.
 <div class="highlight"><pre><span></span><span class="nt">clientId /secret</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">from NF console steps below.</span>
 <span class="nt">environment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Production</span>
 <span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">e.g. DemoNet01</span>
@@ -534,20 +542,19 @@
 <span class="nt">region_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The region_name is the reference region or location where client will be created</span>
             <span class="l l-Scalar l-Scalar-Plain">(reference closest AWS location) e.g.us-east-1</span>
 <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS</span>
-</pre></div>
-<p>2.To create a unique client we can use second half of computer name below powershell cmdlet will fetch the same.</p>
-<p><div class="highlight"><pre><span></span><span class="c">#Set Endpoint name to second half of computer name:</span>
+</pre></div></li>
+<li>To create a unique client we can use second half of computer name below powershell cmdlet will fetch the same.
+<div class="highlight"><pre><span></span><span class="c">#Set Endpoint name to second half of computer name:</span>
 <span class="nv">$endpoint_name</span> <span class="p">=</span> <span class="nv">$ENV:COMPUTERNAME</span><span class="p">.</span><span class="n">Split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)[-</span><span class="n">1</span><span class="p">]</span>
-</pre></div>
-3. This section creates an access token by an api call using parameters defined earlier.</p>
-<p><div class="highlight"><pre><span></span><span class="c"># Get a auth token from Auth0</span>
+</pre></div></li>
+<li>This section creates an access token by an api call using parameters defined earlier.
+<div class="highlight"><pre><span></span><span class="c"># Get a auth token from Auth0</span>
 <span class="nv">$auth_payload</span> <span class="p">=</span> <span class="p">@{</span>
     <span class="n">client_id</span><span class="p">=</span><span class="nv">$client_id</span>
     <span class="n">client_secret</span><span class="p">=</span><span class="nv">$client_secret</span>
     <span class="n">audience</span><span class="p">=</span><span class="nv">$audience</span>
     <span class="n">grant_type</span><span class="p">=</span><span class="s1">'client_credentials'</span>
 <span class="p">}</span>
-
 <span class="nv">$auth_json</span> <span class="p">=</span> <span class="nv">$auth_payload</span> <span class="p">|</span> <span class="nb">ConvertTo-Json</span>
 
 <span class="nv">$post_uri</span> <span class="p">=</span>  <span class="s2">"https://netfoundry-"</span> <span class="p">+</span> <span class="nv">$environment</span> <span class="p">+</span> <span class="s2">".auth0.com/oauth/token"</span>
@@ -559,9 +566,9 @@
 <span class="c">#Inserting auth token to headers for API calls</span>
 <span class="nv">$headers</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="s2">"System.Collections.Generic.Dictionary[[String],[String]]"</span>
 <span class="nv">$headers</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"Authorization"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"Bearer "</span> <span class="p">+</span> <span class="nv">$token</span><span class="p">))</span>
-</pre></div>
-4. This is how to get datacenterId and networkId which basically makes an API call to strips off unwanted information.
-This information will be used to create client later.</p>
+</pre></div></li>
+<li>This is how to get datacenterId and networkId which basically makes an API call to strips off unwanted information.
+This information will be used to create client later.
 <div class="highlight"><pre><span></span><span class="c"># Get a dataCenter ID:</span>
 
 <span class="nv">$datacenter_uri</span> <span class="p">=</span> <span class="nv">$api_endpoint</span> <span class="p">+</span> <span class="s2">"/dataCenters"</span>
@@ -572,7 +579,7 @@ This information will be used to create client later.</p>
 
 <span class="nv">$dataCenterId</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$dataCenter</span><span class="p">.</span><span class="n">_links</span><span class="p">.</span><span class="n">self</span><span class="p">.</span><span class="n">href</span><span class="p">).</span><span class="n">Split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)[-</span><span class="n">1</span><span class="p">]</span>
 </pre></div>
-<p><div class="highlight"><pre><span></span><span class="c"># Get a Network ID:</span>
+<div class="highlight"><pre><span></span><span class="c"># Get a Network ID:</span>
 
 <span class="nv">$network_uri</span> <span class="p">=</span> <span class="nv">$api_endpoint</span> <span class="p">+</span> <span class="s2">"/networks"</span>
 
@@ -581,28 +588,25 @@ This information will be used to create client later.</p>
 <span class="nv">$network</span> <span class="p">=</span> <span class="nv">$network_response</span><span class="p">.</span><span class="n">_embedded</span><span class="p">.</span><span class="n">networks</span> <span class="p">|</span> <span class="nb">where </span><span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">name</span> <span class="o">-like</span> <span class="nv">$network_name</span> <span class="p">}</span> <span class="p">|</span> <span class="nb">select </span><span class="n">_links</span>
 
 <span class="nv">$networkrId</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$network</span><span class="p">.</span><span class="n">_links</span><span class="p">.</span><span class="n">self</span><span class="p">.</span><span class="n">href</span><span class="p">).</span><span class="n">Split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)[-</span><span class="n">1</span><span class="p">]</span>
-</pre></div>
-6. Below section of the script uses computername, networkId and datacenterId from above sections to make API call create a NF client and fetch the regitration key.</p>
-<p><div class="highlight"><pre><span></span><span class="c"># Create an Endpoint &amp; get reg key</span>
-
+</pre></div></li>
+<li>Below section of the script uses computername, networkId and datacenterId from above sections to make API call create a NF client and fetch the regitration key.
+<div class="highlight"><pre><span></span><span class="c"># Create an Endpoint &amp; get reg key</span>
 <span class="nv">$endpoint_uri</span> <span class="p">=</span> <span class="nv">$api_endpoint</span> <span class="p">+</span> <span class="s2">"/networks/"</span> <span class="p">+</span> <span class="nv">$networkrId</span> <span class="p">+</span> <span class="s2">"/endpoints"</span>
-
 <span class="nv">$endpoint_payload</span>  <span class="p">=</span> <span class="p">@{</span>
     <span class="n">name</span> <span class="p">=</span> <span class="nv">$endpoint_name</span>
     <span class="n">endpointType</span> <span class="p">=</span> <span class="s2">"CL"</span>
     <span class="n">dataCenterId</span> <span class="p">=</span> <span class="nv">$dataCenterId</span>
 <span class="p">}</span>
-
 <span class="nv">$endpoint_json</span> <span class="p">=</span> <span class="nv">$endpoint_payload</span> <span class="p">|</span> <span class="nb">ConvertTo-Json</span>
-
 <span class="nv">$endpoint_response</span>  <span class="p">=</span> <span class="nb">Invoke-RestMethod</span> <span class="n">-Method</span> <span class="n">Post</span> <span class="n">-Uri</span> <span class="nv">$endpoint_uri</span> <span class="n">-ContentType</span> <span class="s1">'application/json'</span> <span class="n">-Body</span> <span class="nv">$endpoint_json</span> <span class="n">-Headers</span> <span class="nv">$headers</span>
-
 <span class="nv">$endpoint_registration_key</span> <span class="p">=</span> <span class="nv">$endpoint_response</span><span class="p">.</span><span class="n">registrationKey</span>
-</pre></div>
-7. This section will run a registration script silently to register the NF client.</p>
+</pre></div></li>
+<li>This section will run a registration script silently to register the NF client.
 <div class="highlight"><pre><span></span><span class="c"># Run registration script</span>
-<span class="nb">Start-Process</span> <span class="n">-FilePath</span> <span class="n">C</span><span class="err">:</span><span class="p">\</span><span class="n">Program</span> <span class="n">Files</span><span class="p">\</span><span class="n">DVN</span><span class="p">\</span><span class="n">vtc_app</span><span class="p">\</span><span class="n">nfnreg</span> <span class="nv">$endpoint_registration_key</span>
-</pre></div>
+<span class="nb">Start-Process</span> <span class="n">-FilePath</span> <span class="n">C</span><span class="err">:</span><span class="p">\</span><span class="s2">"Program Files"</span><span class="p">\</span><span class="n">DVN</span><span class="p">\</span><span class="n">vtc_app</span><span class="p">\</span><span class="n">nfnreg</span> <span class="nv">$endpoint_registration_key</span>
+</pre></div></li>
+</ol>
+</div>
 <p>Here is full script <a href="../source-code/NF-pwrshell.ps1">PS script</a></p>
 </article>
 </div>

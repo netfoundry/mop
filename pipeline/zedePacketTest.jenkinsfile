@@ -37,7 +37,7 @@ pipeline {
     ENVIRONMENT='sandbox'
     // Azure Credentials
     ARM_TENANT_ID = "25445e86-2ae6-4434-b116-25c66c27168d"
-    ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
+    ARM_SUBSCRIPTION_ID = "dc02b178-1aa8-4fdf-b4f1-d54e4b7e7ac6"
     // AWS Credentials
     AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
     // JFROG credentials

@@ -32,7 +32,7 @@ def image_create():
                'os_disk': {
                   'os_type': 'Linux',
                   'os_state': "Generalized",
-                  'blob_uri': "https://edgeimages.blob.core.windows.net/system/Microsoft.Compute/Images/builds/%s-osDisk.%s.vhd" % (imageName, imageId),
+                  'blob_uri': "https://clouddevimages.blob.core.windows.net/system/Microsoft.Compute/Images/builds/%s-osDisk.%s.vhd" % (imageName, imageId),
                   'caching': "ReadWrite"
                }
             }

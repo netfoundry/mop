@@ -40,7 +40,7 @@ def check_for_status(urlRestEndpoint, token):
                 writelog('item ' + urlRestEndpoint.split('/')[8] + ' is ready!')
                 break
             else:
-                time.sleep(5)
+                time.sleep(10)
             count += 1
     except Exception as e:
         writelog(e)

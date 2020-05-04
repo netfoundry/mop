@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Create ziti services and policies based on pre-configured indetities and edge routers."""
+"""Create ziti edge services and policies based on pre-configured indetities and edge routers."""
 from os.path import expanduser
 import json
 import traceback
@@ -48,7 +48,7 @@ def debug(debug=False):
                             datefmt='%Y-%m-%d-%H:%M:%S',
                             level=log_level)
     except Exception as excpt:
-        print('configure-ziti-services: '+str(excpt))
+        print('configure-ziti-edge-services: '+str(excpt))
     # write separator in log file if debug has been enabled.
     logging.debug("----------------debug-enabled----------------")
 
@@ -81,7 +81,7 @@ def create_headers(session_token):
 
 
 def ziti():
-    """Configure Ziti Services."""
+    """Configure Ziti Edge Services."""
     session_token = ziti_authenticate(args.controller_ip, args.username, args.password)
     if not session_token:
         exit(1)
@@ -171,7 +171,7 @@ def ziti():
                      \"configs\":[\"tunnel-client-01\"]}" % (edge_router_id,
                                                              args.service_dns,
                                                              args.service_port)
-        response_data = restful(create_url(args.controller_ip, "services"),
+        response_data = restful(create_url(args.controller_ip, "edge-services"),
                                 post, create_headers(session_token), payload)
         service_id = response_data[0]['id']
         logging.info(response_data[1])

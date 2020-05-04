@@ -90,7 +90,7 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         edge_routers = response_data[0]
-        print(edge_routers)
+        print("edge-routers: %s" % edge_routers)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
@@ -101,7 +101,7 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         identities = response_data[0]
-        print(identities)
+        print("identities: %s" % identities)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
@@ -112,7 +112,7 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         configs = response_data[0]
-        print(configs)
+        print("configs: %s" % configs)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
@@ -124,7 +124,7 @@ def ziti():
 
         logging.info(response_data[1])
         services = response_data[0]
-        print(services)
+        print("services: %s" % services)
     except Exception as excpt:
         print(str(excpt))
         logging.error(str(excpt))
@@ -136,7 +136,7 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         edge_router_policies = response_data[0]
-        print(edge_router_policies)
+        print("er-policies: %s" % edge_router_policies)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
@@ -147,7 +147,7 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         service_policies = response_data[0]
-        print(service_policies)
+        print("service-policies: %s" % service_policies)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
@@ -158,7 +158,7 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         service_edge_router_policies = response_data[0]
-        print(service_edge_router_policies)
+        print("service-er-policies: %s" % service_edge_router_policies)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())

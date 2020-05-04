@@ -28,6 +28,7 @@ def restful(url, rest_method, headers, payload=None):
         request = rest_method(url=url, data=payload, headers=headers,  verify=False)
     else:
         request = rest_method(url=url, headers=headers,  verify=False)
+    print(request)
     data = json.loads(request.content)['data']
     code = request.status_code
     return data, code

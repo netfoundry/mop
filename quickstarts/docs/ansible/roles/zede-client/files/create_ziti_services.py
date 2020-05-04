@@ -168,9 +168,8 @@ def ziti():
     try:
         payload = "{\"name\":\"iperf3\",\"roleAttributes\": [\"test\"],\
                     \"egressRouter\":\"%s\",\"endpointAddress\":\"tcp://%s:%s\",\
-                     \"configs\":[\"tunnel-client-01\"]}" % (edge_router_id,
-                                                             args.service_dns,
-                                                             args.service_port)
+                     \"configs\":[\"%s\"]}" % (edge_router_id, args.service_dns,
+                                               args.service_port, config_id)
         response_data = restful(create_url(args.controller_ip, "edge-services"),
                                 post, create_headers(session_token), payload)
         service_id = response_data[0]['id']

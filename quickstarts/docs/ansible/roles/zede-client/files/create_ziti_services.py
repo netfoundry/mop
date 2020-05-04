@@ -132,10 +132,28 @@ def ziti():
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
 
+    # find config type id
+    try:
+        response_data = restful(create_url(args.controller_ip, "config-types"),
+                                get, create_headers(session_token))
+        logging.info(response_data[1])
+        config_types = response_data[0]
+        for config_type in config_types:
+            if config_type['name'] == "ziti-tunneler-client.v1":
+                config_type_id = config_type['id']
+                print("config_type_id is %s" % config_type_id)
+        if not config_type_id:
+            print("Could not find id for config-type ziti-tunneler-client.v1" )
+            exit(1)
+    except Exception as excpt:
+        logging.error(str(excpt))
+        logging.debug(traceback.format_exc())
+
     # create config template
     try:
-        payload = "{\"name\":\"tunnel-client-01\",\"type\": \"ziti-tunneler-client.v1\",\
-                    \"data\":{\"hostname\":\"%s\",\"port\": %s}}" % (args.service_dns,
+        payload = "{\"name\":\"tunnel-client-01\",\"type\": \"%s\",\
+                    \"data\":{\"hostname\":\"%s\",\"port\": %s}}" % (config_type_id,
+                                                                     args.service_dns,
                                                                      args.service_port)
         response_data = restful(create_url(args.controller_ip, "configs"),
                                 post, create_headers(session_token), payload)

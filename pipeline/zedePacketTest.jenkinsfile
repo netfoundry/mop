@@ -232,7 +232,7 @@ pipeline {
           serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
           cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
           export ZITI_PASSWORD=`eval jq -j .password ${WORKSPACE}/credentials.json`
-          eval python3 quickstarts/docs/ansible/roles/zede-client/files/create_ziti_services.py -u admin -p $ZITI_PASSWORD -cip $cip --gateway_name ziti-gw01 --identity_name ziti-tunnel --service_dns $serverIp --service_port 5201
+          eval python3 quickstarts/docs/ansible/roles/zede-client/files/create_ziti_services.py -u admin -p $ZITI_PASSWORD -cip $cip --edge_router_name ziti-er01 --identity_name ziti-tunnel --service_dns $serverIp --service_port 5201
           '''
         }
       }

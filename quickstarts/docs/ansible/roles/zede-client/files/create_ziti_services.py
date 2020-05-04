@@ -86,17 +86,17 @@ def ziti():
         exit(1)
     # find edge router and add role attribute
     try:
-        response_data = restful(create_url(args.controller_ip, "gateways"),
+        response_data = restful(create_url(args.controller_ip, "edge-routers"),
                                 get, create_headers(session_token))
         logging.info(response_data[1])
-        gateways = response_data[0]
-        for gateway in gateways:
-            if gateway['name'] == args.gateway_name:
-                gateway_id = gateway['id']
+        edge_routers = response_data[0]
+        for edge_router in edge_routers:
+            if edge_router['name'] == args.edge_router_name:
+                edge_router_id = edge_router['id']
                 payload = "{\"name\":\"%s\",\"roleAttributes\": [\"%s\"]}" \
-                    % (args.gateway_name, "test")
+                    % (args.edge_router_name, "test")
                 response_data = restful(create_url(args.controller_ip,
-                                                   "gateways/"+gateway_id),
+                                                   "edge-routers/"+edge_router_id),
                                         patch, create_headers(session_token),
                                         payload)
                 logging.info(response_data[1])
@@ -149,7 +149,7 @@ def ziti():
     try:
         payload = "{\"name\":\"iperf3\",\"roleAttributes\": [\"test\"],\
                     \"egressRouter\":\"%s\",\"endpointAddress\":\"tcp://%s:%s\",\
-                     \"configs\":[\"tunnel-client-01\"]}" % (gateway_id,
+                     \"configs\":[\"tunnel-client-01\"]}" % (edge_router_id,
                                                              args.service_dns,
                                                              args.service_port)
         response_data = restful(create_url(args.controller_ip, "services"),
@@ -223,7 +223,7 @@ if __name__ == '__main__':
                         help='controller password')
     parser.add_argument('-cip', '--controller_ip',
                         required='yes', help='controller ip')
-    parser.add_argument('--gateway_name', help='edge gateway name')
+    parser.add_argument('--edge_router_name', help='edge edge router name')
     parser.add_argument('--identity_name', help='identity name')
     parser.add_argument('--service_dns', help='service ip or dns')
     parser.add_argument('--service_port', help='service port')

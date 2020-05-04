@@ -86,11 +86,11 @@ def ziti():
         exit(1)
     # print edge routers
     try:
-        response_data = restful(create_url(args.controller_ip, "gateways"),
+        response_data = restful(create_url(args.controller_ip, "edge-routers"),
                                 get, create_headers(session_token))
         logging.info(response_data[1])
-        gateways = response_data[0]
-        print(gateways)
+        edge_routers = response_data[0]
+        print(edge_routers)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())

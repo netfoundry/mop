@@ -133,7 +133,7 @@ pipeline {
       steps {
         // Steps to Deploy NF Gateways VMs in Azure based on Terraform plan
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
-          // Download the NF ZEDE image under test from the edgeimages blob container
+          // Download the NF ZEDE image under test from the clouddevimages blob container
           sh ''' #!/bin/bash
           set -Eeuxo pipefail
           export DISK_LOC=centralus

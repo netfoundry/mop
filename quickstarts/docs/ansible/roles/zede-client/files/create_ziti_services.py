@@ -182,7 +182,7 @@ def ziti():
     # create terminator
     try:
         payload = "{\"service\":\"%s\",\"router\":\"%s\",\
-                    \"endpointAddress\":\"tcp://%s:%s\"}" \
+                    \"address\":\"tcp:%s:%s\"}" \
                     % (service_id, edge_router_id, args.service_dns,
                        args.service_port)
         response_data = restful(create_url(args.controller_ip, "terminators"),

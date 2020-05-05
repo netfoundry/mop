@@ -170,7 +170,7 @@ def ziti():
                     \"egressRouter\":\"%s\",\"endpointAddress\":\"tcp://%s:%s\",\
                      \"configs\":[\"%s\"]}" % (edge_router_id, args.service_dns,
                                                args.service_port, config_id)
-        response_data = restful(create_url(args.controller_ip, "edge-services"),
+        response_data = restful(create_url(args.controller_ip, "services"),
                                 post, create_headers(session_token), payload)
         service_id = response_data[0]['id']
         logging.info(response_data[1])

@@ -167,14 +167,29 @@ def ziti():
     # create service
     try:
         payload = "{\"name\":\"iperf3\",\"roleAttributes\": [\"test\"],\
-                    \"egressRouter\":\"%s\",\"endpointAddress\":\"tcp://%s:%s\",\
-                     \"configs\":[\"%s\"]}" % (edge_router_id, args.service_dns,
-                                               args.service_port, config_id)
+                    \"terminatorStrategy\":\"\",\"configs\":[\"%s\"]}" \
+                    % config_id
         response_data = restful(create_url(args.controller_ip, "services"),
                                 post, create_headers(session_token), payload)
         service_id = response_data[0]['id']
         logging.info(response_data[1])
         print(service_id)
+    except Exception as excpt:
+        print(str(excpt))
+        logging.error(str(excpt))
+        logging.debug(traceback.format_exc())
+
+    # create terminator
+    try:
+        payload = "{\"service\":\"%s\",\"router\":\"%s\",\
+                    \"endpointAddress\":\"tcp://%s:%s\"}" \
+                    % (service_id, edge_router_id, args.service_dns,
+                       args.service_port)
+        response_data = restful(create_url(args.controller_ip, "terminators"),
+                                post, create_headers(session_token), payload)
+        terminator_id = response_data[0]['id']
+        logging.info(response_data[1])
+        print(terminator_id)
     except Exception as excpt:
         print(str(excpt))
         logging.error(str(excpt))

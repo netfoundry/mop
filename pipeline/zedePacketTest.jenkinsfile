@@ -156,10 +156,10 @@ pipeline {
         }
       }
     }
-    stage('Configure ZEDE Gateway') {
+    stage('Configure ZEDE Edge Router') {
       when { expression { params.CREATE_ZEDE }}
       steps {
-        // the build steps to configure ZEDE Gateway
+        // the build steps to configure ZEDE Edge Router
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           // Set up security rules to allow tcp/1280, tcp/3022, tcp/443
           sh ''' #!/bin/bash
@@ -286,7 +286,7 @@ pipeline {
           rm zede_site.yaml
           rm main.tf.json
           '''
-          // Delete Network Network Contributor added in stage "Configure ZEDE Gateway"
+          // Delete Network Network Contributor added in stage "Configure ZEDE Edge Router"
           sh ''' #!/bin/bash
           eval python3 quickstarts/docs/api/python/source/azure/azure_manage_rbac.py --action delete --role_name Network_Contributor
           '''

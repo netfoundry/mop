@@ -26,6 +26,7 @@ nav:
         - User Guide: alicloud/user-guild.md
       - VCPE:
         - Overview: vcpe/intro.md
+        - CPE Automation: vcpe/cpe-automation.md
     - HyperVisors:
       - Overview: hypervisor/overview.md
       - Hyper-V:

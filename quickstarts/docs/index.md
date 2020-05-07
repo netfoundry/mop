@@ -14,6 +14,8 @@ We will provide series of quickstart guides on how to quickly deploy and configu
     1. [Bastion Host](aws/aws-bastion.md)
 1. Google Cloud Connectivity
     1. [Getting Started Guilde](gcp/getting-started.md)
+1. VCPE
+    1. [CPE Automation](vcpe/cpe-automation.md)
 
 
 !!! note

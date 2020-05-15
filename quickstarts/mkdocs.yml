@@ -27,6 +27,7 @@ nav:
       - VCPE:
         - Overview: vcpe/intro.md
         - CPE Automation: vcpe/cpe-automation.md
+        - Partner Program: vcpe/partner-program.md
     - HyperVisors:
       - Overview: hypervisor/overview.md
       - Hyper-V:

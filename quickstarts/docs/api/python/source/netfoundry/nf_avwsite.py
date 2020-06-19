@@ -141,15 +141,6 @@ def create_avw_site(filename):
         avwSiteUrl = nfreq.nf_req(azureSubscriptionsURL,
                                   "get",
                                   token)['_embedded']['azureSubscriptions'][0]['_links']['self']['href']+'/virtualWanSites'
-        print(avwSiteUrl)
-        data = nfreq.nf_req((avwSiteUrl, {
-            "name": "AVW Packet Test",
-            "subscriptionId": os.environ.get('ARM_SUBSCRIPTION_ID'),
-            "tenantId": os.environ.get('ARM_TENANT_ID'),
-            "applicationId": os.environ.get('ARM_CLIENT_ID'),
-            "applicationKey": os.environ.get('ARM_CLIENT_SECRET')
-            }), "put", token)
-        print(data)
     except KeyError as kerr:
         print(kerr.args)
         if kerr.args[0] == '_embedded':
@@ -170,6 +161,7 @@ def create_avw_site(filename):
     azureVirtualWanId = "/subscriptions/" + os.environ.get('ARM_SUBSCRIPTION_ID') + "/resourceGroups/"\
         + os.environ.get('GROUP_NAME') + "/providers/Microsoft.Network/virtualWans/"\
         + os.environ.get('VWAN_NAME')
+    print(azureVirtualWanId)
     createData = nfreq.nf_req((avwSiteUrl, {
                                         "name": gwName,
                                         "endpointId": gwId,

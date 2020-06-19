@@ -55,7 +55,7 @@ pipeline {
     VWAN_NAME = "AVW-PT-VWAN"
     VHUB_NAME = "AVW-PT-VHUB"
     VPNG_NAME = "AVW-PT-VPNG"
-    NFN_NAME = "AVW-PT-NFN"
+    NFN_NAME = "AVW-PT-NFN-1"
     AVW_SITE_NAME = "${params.AVW_SITE_NAME}"
     IMAGE_VERSION = "${params.NF_IMAGE_VERSION}"
     IMAGE_ID = "${params.AZURE_IMAGE_SUFFIX_ID}"

@@ -79,7 +79,7 @@ sudo virsh attach-interface --domain nfgateway --type bridge --source br1 --mode
 ```
 
 ## 1.3 Configure IPs
-You should be able to login to the VM to configto ure the IP on the new interface. Please note, the first additional interface created is “<b>eth1</b>”, and the next one will be “<b>eth2</b>” and so on.
+You should be able to login to the VM to configure the IP on the new interface. Please note, the first additional interface created is “<b>eth1</b>”, and the next one will be “<b>eth2</b>” and so on.
 
 When you login to the VM, the interface should look like this:
 ![image](../images/cpe-automation-a02.png)

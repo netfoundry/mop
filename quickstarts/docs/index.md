@@ -16,6 +16,7 @@ We will provide series of quickstart guides on how to quickly deploy and configu
     1. [Getting Started Guilde](gcp/getting-started.md)
 1. VCPE
     1. [CPE Automation](vcpe/cpe-automation.md)
+    1. [CPE Automation Supplement](vcpe/cpe-automation-supplement.md)
 
 
 !!! note

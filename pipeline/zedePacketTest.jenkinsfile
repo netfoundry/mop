@@ -37,7 +37,7 @@ pipeline {
     ENVIRONMENT='sandbox'
     // Azure Credentials
     ARM_TENANT_ID = "25445e86-2ae6-4434-b116-25c66c27168d"
-    ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
+    ARM_SUBSCRIPTION_ID = "dc02b178-1aa8-4fdf-b4f1-d54e4b7e7ac6"
     // AWS Credentials
     AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
     // JFROG credentials
@@ -133,7 +133,7 @@ pipeline {
       steps {
         // Steps to Deploy NF Gateways VMs in Azure based on Terraform plan
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
-          // Download the NF ZEDE image under test from the edgeimages blob container
+          // Download the NF ZEDE image under test from the clouddevimages blob container
           sh ''' #!/bin/bash
           set -Eeuxo pipefail
           export DISK_LOC=centralus
@@ -156,10 +156,10 @@ pipeline {
         }
       }
     }
-    stage('Configure ZEDE Gateway') {
+    stage('Configure ZEDE Edge Router') {
       when { expression { params.CREATE_ZEDE }}
       steps {
-        // the build steps to configure ZEDE Gateway
+        // the build steps to configure ZEDE Edge Router
         withCredentials([usernamePassword(credentialsId: 'azure-edge-packer-builder', usernameVariable: 'ARM_CLIENT_ID', passwordVariable: 'ARM_CLIENT_SECRET')]) {
           // Set up security rules to allow tcp/1280, tcp/3022, tcp/443
           sh ''' #!/bin/bash
@@ -232,7 +232,7 @@ pipeline {
           serverIp=`eval terraform output -json | jq -j .VM${SERVER_LOCATION}01_private_ips.value[][]`
           cip=`eval terraform output -json | jq -j .${ZEDE_NAME}_public_ips.value[][]`
           export ZITI_PASSWORD=`eval jq -j .password ${WORKSPACE}/credentials.json`
-          eval python3 quickstarts/docs/ansible/roles/zede-client/files/create_ziti_services.py -u admin -p $ZITI_PASSWORD -cip $cip --gateway_name ziti-gw01 --identity_name ziti-tunnel --service_dns $serverIp --service_port 5201
+          eval python3 quickstarts/docs/ansible/roles/zede-client/files/create_ziti_services.py -u admin -p $ZITI_PASSWORD -cip $cip --edge_router_name ziti-er01 --identity_name ziti-tunnel --service_dns $serverIp --service_port 5201
           '''
         }
       }
@@ -286,7 +286,7 @@ pipeline {
           rm zede_site.yaml
           rm main.tf.json
           '''
-          // Delete Network Network Contributor added in stage "Configure ZEDE Gateway"
+          // Delete Network Network Contributor added in stage "Configure ZEDE Edge Router"
           sh ''' #!/bin/bash
           eval python3 quickstarts/docs/api/python/source/azure/azure_manage_rbac.py --action delete --role_name Network_Contributor
           '''

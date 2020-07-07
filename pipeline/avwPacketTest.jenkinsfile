@@ -39,7 +39,7 @@ pipeline {
   environment {
     // Azure Credentials
     ARM_TENANT_ID = "25445e86-2ae6-4434-b116-25c66c27168d"
-    ARM_SUBSCRIPTION_ID = "8699c8dd-f425-46fa-85ef-cefe299aeb4f"
+    ARM_SUBSCRIPTION_ID = "dc02b178-1aa8-4fdf-b4f1-d54e4b7e7ac6"
     AWS_CONFIG_FILE = "${WORKSPACE}/aws/aws-config"
     // Test Input Variables
     ENVIRONMENT = "${params.ENVIRONMENT}"
@@ -55,7 +55,7 @@ pipeline {
     VWAN_NAME = "AVW-PT-VWAN"
     VHUB_NAME = "AVW-PT-VHUB"
     VPNG_NAME = "AVW-PT-VPNG"
-    NFN_NAME = "AVW-PT-NFN"
+    NFN_NAME = "AVW-PT-NFN-1"
     AVW_SITE_NAME = "${params.AVW_SITE_NAME}"
     IMAGE_VERSION = "${params.NF_IMAGE_VERSION}"
     IMAGE_ID = "${params.AZURE_IMAGE_SUFFIX_ID}"
@@ -289,6 +289,7 @@ pipeline {
           export ROUTE_NAME=`eval echo "route_${VNET_PREFIX}" | sed -r "s/\\//_/g"`
           export AVW_SITE_PRIVATE_IP=`terraform output -json | jq -j .${AVW_SITE_NAME}_private_ips.value[][]`
           az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+          az account set --subscription $ARM_SUBSCRIPTION_ID
           az extension add --name virtual-wan
           response=`eval az network route-table route create -g $GROUP_NAME  --route-table-name centralus-routeTable -n $ROUTE_NAME \
               --next-hop-type VirtualAppliance --address-prefix $VNET_PREFIX --next-hop-ip-address $AVW_SITE_PRIVATE_IP`
@@ -368,6 +369,7 @@ pipeline {
           export ROUTE_NAME=`eval echo "route_${VNET_PREFIX}" | sed -r "s/\\//_/g"`
           az extension add --name virtual-wan
           az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+          az account set --subscription $ARM_SUBSCRIPTION_ID
           eval az network vhub connection delete --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet
           eval az network route-table route delete -g $GROUP_NAME --route-table-name centralus-routeTable -n $ROUTE_NAME
           '''

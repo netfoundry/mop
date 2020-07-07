@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Create ziti services and policies based on pre-configured indetities and edge routers."""
+"""Create ziti edge services and policies based on pre-configured indetities and edge routers."""
 from os.path import expanduser
 import json
 import traceback
@@ -47,7 +47,7 @@ def debug(debug=False):
                             datefmt='%Y-%m-%d-%H:%M:%S',
                             level=log_level)
     except Exception as excpt:
-        print('configure-ziti-services: '+str(excpt))
+        print('configure-ziti-edge-services: '+str(excpt))
     # write separator in log file if debug has been enabled.
     logging.debug("----------------debug-enabled----------------")
 
@@ -80,17 +80,17 @@ def create_headers(session_token):
 
 
 def ziti():
-    """Configure Ziti Services."""
+    """Configure Ziti Edge Services."""
     session_token = ziti_authenticate(args.controller_ip, args.username, args.password)
     if not session_token:
         exit(1)
     # print edge routers
     try:
-        response_data = restful(create_url(args.controller_ip, "gateways"),
+        response_data = restful(create_url(args.controller_ip, "edge-routers"),
                                 get, create_headers(session_token))
         logging.info(response_data[1])
-        gateways = response_data[0]
-        print(gateways)
+        edge_routers = response_data[0]
+        print("edge-routers: %s" % edge_routers)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
@@ -101,7 +101,7 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         identities = response_data[0]
-        print(identities)
+        print("identities: %s" % identities)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
@@ -112,19 +112,19 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         configs = response_data[0]
-        print(configs)
+        print("configs: %s" % configs)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
 
-    # print services
+    # print edge services
     try:
-        response_data = restful(create_url(args.controller_ip, "services"),
+        response_data = restful(create_url(args.controller_ip, "edge-services"),
                                 get, create_headers(session_token))
 
         logging.info(response_data[1])
-        services = response_data[0]
-        print(services)
+        edge_services = response_data[0]
+        print("edge services: %s" % edge_services)
     except Exception as excpt:
         print(str(excpt))
         logging.error(str(excpt))
@@ -136,7 +136,7 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         edge_router_policies = response_data[0]
-        print(edge_router_policies)
+        print("er-policies: %s" % edge_router_policies)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
@@ -147,7 +147,7 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         service_policies = response_data[0]
-        print(service_policies)
+        print("service-policies: %s" % service_policies)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
@@ -158,7 +158,7 @@ def ziti():
                                 get, create_headers(session_token))
         logging.info(response_data[1])
         service_edge_router_policies = response_data[0]
-        print(service_edge_router_policies)
+        print("service-er-policies: %s" % service_edge_router_policies)
     except Exception as excpt:
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())

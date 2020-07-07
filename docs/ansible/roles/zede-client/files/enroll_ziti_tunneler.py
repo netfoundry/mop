@@ -89,8 +89,8 @@ def ziti_tunnel():
 
     # create an identity
     try:
-        payload = "{\"name\":\"%s\",\"type\":\"Device\",\"enrollment\":{\"ott\":true}}"\
-            % args.identity_name
+        payload = "{\"name\":\"%s\",\"type\":\"Device\",\"isAdmin\":false,\"roleAttributes\":[],\
+            \"enrollment\":{\"ott\":true}}" % args.identity_name
         response_data = restful(create_url(args.controller_ip, "identities"),
                                 post, create_headers(session_token), payload)
         logging.info(response_data[1])

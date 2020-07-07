@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Create ziti services and policies based on pre-configured indetities and edge routers."""
+"""Create ziti edge services and policies based on pre-configured indetities and edge routers."""
 from os.path import expanduser
 import json
 import traceback
@@ -28,6 +28,7 @@ def restful(url, rest_method, headers, payload=None):
         request = rest_method(url=url, data=payload, headers=headers,  verify=False)
     else:
         request = rest_method(url=url, headers=headers,  verify=False)
+    print(request)
     data = json.loads(request.content)['data']
     code = request.status_code
     return data, code
@@ -47,7 +48,7 @@ def debug(debug=False):
                             datefmt='%Y-%m-%d-%H:%M:%S',
                             level=log_level)
     except Exception as excpt:
-        print('configure-ziti-services: '+str(excpt))
+        print('configure-ziti-edge-services: '+str(excpt))
     # write separator in log file if debug has been enabled.
     logging.debug("----------------debug-enabled----------------")
 
@@ -80,23 +81,23 @@ def create_headers(session_token):
 
 
 def ziti():
-    """Configure Ziti Services."""
+    """Configure Ziti Edge Services."""
     session_token = ziti_authenticate(args.controller_ip, args.username, args.password)
     if not session_token:
         exit(1)
     # find edge router and add role attribute
     try:
-        response_data = restful(create_url(args.controller_ip, "gateways"),
+        response_data = restful(create_url(args.controller_ip, "edge-routers"),
                                 get, create_headers(session_token))
         logging.info(response_data[1])
-        gateways = response_data[0]
-        for gateway in gateways:
-            if gateway['name'] == args.gateway_name:
-                gateway_id = gateway['id']
+        edge_routers = response_data[0]
+        for edge_router in edge_routers:
+            if edge_router['name'] == args.edge_router_name:
+                edge_router_id = edge_router['id']
                 payload = "{\"name\":\"%s\",\"roleAttributes\": [\"%s\"]}" \
-                    % (args.gateway_name, "test")
+                    % (args.edge_router_name, "test")
                 response_data = restful(create_url(args.controller_ip,
-                                                   "gateways/"+gateway_id),
+                                                   "edge-routers/"+edge_router_id),
                                         patch, create_headers(session_token),
                                         payload)
                 logging.info(response_data[1])
@@ -131,10 +132,28 @@ def ziti():
         logging.error(str(excpt))
         logging.debug(traceback.format_exc())
 
+    # find config type id
+    try:
+        response_data = restful(create_url(args.controller_ip, "config-types"),
+                                get, create_headers(session_token))
+        logging.info(response_data[1])
+        config_types = response_data[0]
+        for config_type in config_types:
+            if config_type['name'] == "ziti-tunneler-client.v1":
+                config_type_id = config_type['id']
+                print("config_type_id is %s" % config_type_id)
+        if not config_type_id:
+            print("Could not find id for config-type ziti-tunneler-client.v1" )
+            exit(1)
+    except Exception as excpt:
+        logging.error(str(excpt))
+        logging.debug(traceback.format_exc())
+
     # create config template
     try:
-        payload = "{\"name\":\"tunnel-client-01\",\"type\": \"ziti-tunneler-client.v1\",\
-                    \"data\":{\"hostname\":\"%s\",\"port\": %s}}" % (args.service_dns,
+        payload = "{\"name\":\"tunnel-client-01\",\"type\": \"%s\",\
+                    \"data\":{\"hostname\":\"%s\",\"port\": %s}}" % (config_type_id,
+                                                                     args.service_dns,
                                                                      args.service_port)
         response_data = restful(create_url(args.controller_ip, "configs"),
                                 post, create_headers(session_token), payload)
@@ -148,15 +167,29 @@ def ziti():
     # create service
     try:
         payload = "{\"name\":\"iperf3\",\"roleAttributes\": [\"test\"],\
-                    \"egressRouter\":\"%s\",\"endpointAddress\":\"tcp://%s:%s\",\
-                     \"configs\":[\"tunnel-client-01\"]}" % (gateway_id,
-                                                             args.service_dns,
-                                                             args.service_port)
+                    \"terminatorStrategy\":\"\",\"configs\":[\"%s\"]}" \
+                    % config_id
         response_data = restful(create_url(args.controller_ip, "services"),
                                 post, create_headers(session_token), payload)
         service_id = response_data[0]['id']
         logging.info(response_data[1])
         print(service_id)
+    except Exception as excpt:
+        print(str(excpt))
+        logging.error(str(excpt))
+        logging.debug(traceback.format_exc())
+
+    # create terminator
+    try:
+        payload = "{\"service\":\"%s\",\"router\":\"%s\",\
+                    \"address\":\"tcp:%s:%s\"}" \
+                    % (service_id, edge_router_id, args.service_dns,
+                       args.service_port)
+        response_data = restful(create_url(args.controller_ip, "terminators"),
+                                post, create_headers(session_token), payload)
+        terminator_id = response_data[0]['id']
+        logging.info(response_data[1])
+        print(terminator_id)
     except Exception as excpt:
         print(str(excpt))
         logging.error(str(excpt))
@@ -223,7 +256,7 @@ if __name__ == '__main__':
                         help='controller password')
     parser.add_argument('-cip', '--controller_ip',
                         required='yes', help='controller ip')
-    parser.add_argument('--gateway_name', help='edge gateway name')
+    parser.add_argument('--edge_router_name', help='edge edge router name')
     parser.add_argument('--identity_name', help='identity name')
     parser.add_argument('--service_dns', help='service ip or dns')
     parser.add_argument('--service_port', help='service port')

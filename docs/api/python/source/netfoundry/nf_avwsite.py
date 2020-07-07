@@ -161,6 +161,7 @@ def create_avw_site(filename):
     azureVirtualWanId = "/subscriptions/" + os.environ.get('ARM_SUBSCRIPTION_ID') + "/resourceGroups/"\
         + os.environ.get('GROUP_NAME') + "/providers/Microsoft.Network/virtualWans/"\
         + os.environ.get('VWAN_NAME')
+    print(azureVirtualWanId)
     createData = nfreq.nf_req((avwSiteUrl, {
                                         "name": gwName,
                                         "endpointId": gwId,

@@ -6,7 +6,7 @@
 
 - debug: msg="{{ result_ip_route.stdout_lines }}"
 
-- name:  Test | To show iptables rules fro Ziti Tunneler
+- name:  Test | To show iptables rules for Ziti Tunneler
   shell: /usr/sbin/iptables -t mangle -S
   become: True
   register: result_ip_tables

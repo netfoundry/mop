@@ -44,5 +44,5 @@ You can verify ssh access to the VM by using a ssh enabled terminal:
 
     > ssh opc@[ip_address_of_the_vm]
 
-You can follow the normal process to register this VM to the NetFoundry netowrk.
+Once you are able to login, you can follow the registration process to register this VM to the NetFoundry network.
 

@@ -24,14 +24,7 @@ Using an SSH client, log in to the machine using its public IP address as the us
 
     > ssh -i [path/to/private/key] nfadmin@[public_ip_address]
 
-Once you are logged in to the gateway, run these commands to register it to your NetFoundry Network. Look for errors in the registration process output, or "Success" if registration completes successfully. **\[registration key\]** is the key you captured earlier.
-
-    > sudo nfnreg [registration key]
-    > sudo systemctl status dvn.service
-
-![image](../images/AzureStack06.png)
- 
-The output should report **ACTIVE**.
+Once you are logged in to the gateway, follow the instructions to register it to your NetFoundry Network. Look for errors in the registration process output, or "Success" if registration completes successfully. **\[registration key\]** is the key you captured earlier. [How to Register a NetFoundry Cloud Gateway VW](https://support.netfoundry.io/hc/en-us/articles/360034337892)
 
 It may take up to 5 minutes to register and come online. Once the Gateway Instance has started up, switch back to the NetFoundry Console and locate the Gateway Endpoint.
 

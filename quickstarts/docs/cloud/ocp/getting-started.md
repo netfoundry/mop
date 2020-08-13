@@ -43,28 +43,26 @@ Use the following code:
 V3->V6:
 ```
 #!/bin/bash
-sudo nfnreg {Gateway Registration Key}
+sudo nfnreg {Registration Key}
 ```
 V7:
 ```
 #!/bin/bash
-sudo router-registration {Gateway Registration Key}
+sudo router-registration {Registration Key}
 ```
 
 ### Post Deployment
 
 If you did not supply the **GatewayRegistrationKey** field during the deployment, you can access the machine via ssh, following the launch.  **Please Note** You must enable external IP in order to reach the launched machine remotely. 
 
-Use the following command to register the gateway with your network:
+!!! important
+    The ssh username must be "opc"
 
-V3->V6: 
-```
-sudo nfnreg {registration key}
-```
-V7: 
-```
-sudo router-registration {registration key}
-```
+Using an SSH client, log in to the machine using its public IP address as the user "nfadmin", using the SSH key or password specified earlier.
+
+```ssh -i [path/to/private/key] opc@[public_ip_address]```
+
+Once you are logged in to the gateway, follow the instructions to register it to your NetFoundry Network. Look for errors in the registration process output, or "Success" if registration completes successfully. **\[registration key\]** is the key you captured earlier. [How to Register a NetFoundry Cloud Gateway VW](https://support.netfoundry.io/hc/en-us/articles/360034337892)
 
 Setup is complete.
 

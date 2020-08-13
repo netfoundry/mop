@@ -13,7 +13,7 @@ This getting started guide will explain how to launch a NetFoundry application g
 To get started, go to **Elastic Compute Service**, click on **Create Instance**.
 The following screen will appear.
 
-![Image](../images/AliLaunch1.png)
+![Image](../../images/AliLaunch1.png)
 
 <ul>
 <li>Choose the Billing Method fit your need </li>
@@ -25,11 +25,11 @@ The following screen will appear.
 </ul>
 click on **Next: Networking** to open the next screen
 
-![Image](../images/AliLaunch2.png)
+![Image](../../images/AliLaunch2.png)
 
 Make your required selection then proceed to the next page (System Configurations).
 
-![Image](../images/AliLaunch3.png)
+![Image](../../images/AliLaunch3.png)
 
 <ul>
 <li>Select your key pair. <strong>You must use key pair to login</strong></li>
@@ -52,7 +52,7 @@ Once you are logged in to the gateway, run these commands to register it to your
     > sudo nfnreg [registration key]
     > sudo systemctl status dvn.service
 
-![image](../images/AzureStack06.png)
+![image](../../images/AzureStack06.png)
 
 The output should report **ACTIVE**.
 

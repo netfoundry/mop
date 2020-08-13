@@ -16,10 +16,10 @@ To get started, visit the GCP Marketplace site by clicking [here](https://consol
 If the marketplace doesn't come up, you can go to the search bar that appears, enter NetFoundry Application Gateway and click the resulting solution that appears.
 
 To launch the instance **Click on "Launch On Compute Engine"**
-![Image](../images/GCPLaunch.png)
+![Image](../../images/GCPLaunch.png)
 
 Supply the information needed
-![Image](../images/GCPLaunchOptions.png)
+![Image](../../images/GCPLaunchOptions.png)
 
 
 #### Launch Options
@@ -37,13 +37,13 @@ Supply the information needed
 * **GatewayRegistrationKey**: (OPTIONAL) This field allows you provide the gateway registration key that will passed into the launching image. Automating the registration portion of the setup.  You can access the gateway via ssh & register after this deployment is complete. Learn how to get a registration key [here](https://support.netfoundry.io/hc/en-us/articles/360017558212-Introduction-to-Gateway-Endpoints).
 
 Once the fields have been supplied, Click on "Deploy"
-![Image](../images/GCPLaunched.png)
+![Image](../../images/GCPLaunched.png)
 
 
 ### Post Deployment
 
 If you did not supply the **GatewayRegistrationKey** field during the deployment, you can access the machine via ssh by Clicking on the "SSH" button.  OR You can optionally access this from other ssh point if you enabled the firewall rules to do so.
-![Image](../images/GCPSSH.png)
+![Image](../../images/GCPSSH.png)
 Use the following command to register the gateway with your network:
 >sudo nfnreg {registration key}
 

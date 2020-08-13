@@ -12,7 +12,7 @@ Import Oracle Public Image
 
 From the Oracle Cloud menu, navigate to <b>Compute</b> -> <b>Custom Images</b>
 
-![image](../images/OCP01.png)
+![image](../../images/OCP01.png)
 
 
 Choose <b>Import Image</b>
@@ -26,7 +26,7 @@ Choose <b>Import Image</b>
 
 You should see a screen look like this
 
-![image](../images/OCP02.png)
+![image](../../images/OCP02.png)
 
 Press <b>Import Image</b> to continue.  The import process will take few minutes.
 

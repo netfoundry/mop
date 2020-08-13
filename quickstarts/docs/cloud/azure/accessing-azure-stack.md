@@ -24,7 +24,7 @@ Once the download is complete, the image can now be used by the local user.
 * Sign in to your account on the Azure portal and go to → Resource groups. 
 * Once inside the resource group, Click the "+ Add" button on the toolbar.
 * Search for " Application Connection Gateway (Azure Stack)". Click on the result, the description should be shown.
-![image](../images/AzureStack02.png)
+![image](../../images/AzureStack02.png)
 * Click the "Create" button to launch the wizard.
 * Enter basics information:
 * Enter the Username as "nfadmin". 
@@ -32,11 +32,11 @@ Once the download is complete, the image can now be used by the local user.
 !!! important
     The username must be **nfadmin** to gain access to this gateway; (_the username restriction will be removed soon_)
 
-![image](../images/AzureStack03.png)
+![image](../../images/AzureStack03.png)
 
 * Click OK to continue
 * Next page, on choosing the compute size, it varies depends on your need. We are using a 2 VCPUs and 4 GB RAM for this example.
-![image](../images/AzureStack04.png)
+![image](../../images/AzureStack04.png)
 * Continue to finish setup and let system bring up the VM.
 
 ## 2.3 Register the gateway with your NetFoundry Network
@@ -57,7 +57,7 @@ Using an SSH client, log in to the machine using its public IP address as the us
 
 `Once the fields are populated properly, select "update".`
 
-![image](../images/AzureStack05.png)
+![image](../../images/AzureStack05.png)
 
 ---
 
@@ -66,7 +66,7 @@ Once you are logged in to the gateway, run these commands to register it to your
     > sudo nfnreg [registration key]
     > sudo systemctl status dvn.service
 
-![image](../images/AzureStack06.png)
+![image](../../images/AzureStack06.png)
  
 The output should report **ACTIVE**.
 
@@ -84,7 +84,7 @@ In this example, we are going to assume the client you are using to connect to t
 
 On the NFCONSOLE, choose **MANAGE APPWANS** button.
 
-![image](../images/AzureStack07.png)
+![image](../../images/AzureStack07.png)
 
 On the MANAGE APPWANS screen, hit the **+** button.
 
@@ -95,7 +95,7 @@ Choose **CREATE APPWAN**, a form will display for you to create the AppWAN.
     3 Fill in the Connection information.  This is where you want the traffic to go once it reaches the Azure Stack GW (in our example, we fill in a subnet: 192.168.2.0/24)
     4 Add your client to the APPWAN
 
-![image](../images/AzureStack08.png)
+![image](../../images/AzureStack08.png)
 
 Hit **Create your APPWAN**, and your AppWAN will be created.
 

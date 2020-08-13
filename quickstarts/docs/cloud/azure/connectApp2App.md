@@ -22,7 +22,7 @@ This quickstart guide will provide all the steps to create a secure service betw
 !!! example "Steps"
     1. Log in to a Client App Host in Branch DataCenter
     1. Run ssh username@privateIpOfServerAppHostInAzure
-    ![Image](../images/CreateService06.png)
+    ![Image](../../images/CreateService06.png)
 
 ## Programmatically
 
@@ -35,14 +35,14 @@ This quickstart guide will provide all the steps to create a secure service betw
 !!! example "Steps"
     1. {!common/python-create-gateway.md!}
     1. Create a test server vm on the same vNet if not already present.
-    ![Image](../images/CreateManagedGatewayAzure13.png)
+    ![Image](../../images/CreateManagedGatewayAzure13.png)
     1. {!common/python-create-service.md!}
     1. Create a gateway in the branch as the steps in [the UI section indicated](#create_and_deploy_nf_gateway_in_branch_datacenter).
     We will provide code snippets for private hypervisors deployment through python in later releases (e.g. vSphere)
-    ![Image](../images/GreenStatusBranchGatewayDetails.png)
+    ![Image](../../images/GreenStatusBranchGatewayDetails.png)
     1. {!common/python-create-appwan.md!}
     1. To test connectivity, log in to the Remote Client or Branch App Server and run ssh "username"@"privateIp"
-    ![Image](../images/DemoClientTestSsh01.png)
+    ![Image](../../images/DemoClientTestSsh01.png)
     1. {!common/python-delete-all.md!}
 
 ### via Jenkins

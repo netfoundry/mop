@@ -15,7 +15,7 @@ ip a |grep “state UP”
 ```
 
 You should see output like this:
-![image](../images/cpe-automation-a01.png)
+![image](../../images/cpe-automation-a01.png)
 
 
 Then issue the command on the uCPE:
@@ -82,7 +82,7 @@ sudo virsh attach-interface --domain nfgateway --type bridge --source br1 --mode
 You should be able to login to the VM to configure the IP on the new interface. Please note, the first additional interface created is “<b>eth1</b>”, and the next one will be “<b>eth2</b>” and so on.
 
 When you login to the VM, the interface should look like this:
-![image](../images/cpe-automation-a02.png)
+![image](../../images/cpe-automation-a02.png)
 
 The interface on the VM will default to be DHCP. If you want to setup a static IP, you can use “<b>nmtui</b>” tool or setup a static interface script file.
 

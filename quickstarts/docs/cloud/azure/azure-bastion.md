@@ -15,19 +15,19 @@
 
 ## Standard Bastion Setup
 
-![image](../images/bastion-host.png)
+![image](../../images/bastion-host.png)
 
 
 ## Netfoundry
 
 ### Public
 
-![image](../images/netfoundry-bastion-public.png)
+![image](../../images/netfoundry-bastion-public.png)
 
 
 ### Private
 
-![image](../images/netfoundry-bastion-private.png)
+![image](../../images/netfoundry-bastion-private.png)
 
 
 !!! important

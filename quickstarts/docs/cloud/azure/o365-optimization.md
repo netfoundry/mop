@@ -13,9 +13,9 @@ Microsoft created an online tool to test from user's location, where the best en
 
 As it is stated there, click on the location icon. Once the test is finished, it will show where the closest location is.
 
-![Image](../images/office-connectivity-tool-01.png)
+![Image](../../images/office-connectivity-tool-01.png)
 
-![Image](../images/office-connectivity-tool-02.png)
+![Image](../../images/office-connectivity-tool-02.png)
 
 In our example, the user's closest location is Ashburn, VA (Azure USEAST).
 
@@ -41,18 +41,18 @@ In our example, the user's closest location is Ashburn, VA (Azure USEAST).
 
 All services configured.
 
-![Image](../images/CreateServiceO365SharePointOneDrive.png)
+![Image](../../images/CreateServiceO365SharePointOneDrive.png)
 
 {!common/create-appwan-gateway.md!}
 
 AppWan successfully configured would look like this.
 
-![Image](../images/CreateAppWanO365SharePointOneDrive.png)
+![Image](../../images/CreateAppWanO365SharePointOneDrive.png)
 
 {!common/install-nf-client.md!}
     1. Add this Endpoint to the AppWan
     1. Once endpoint is added to the AppWan, here is what the services tab should look like.
-    ![Image](../images/EndpointServiceView-O365.png)
+    ![Image](../../images/EndpointServiceView-O365.png)
 
 ## Programmatically
 
@@ -163,7 +163,7 @@ AppWan successfully configured would look like this.
     python3 quickstarts/docs/api/python/source/netfoundry/nf_resources.py --file quickstarts/docs/api/python/etc/nf_resources.yml
     ```
     1. Once endpoint is added to the AppWan, here is what the services tab should look like.
-    ![Image](../images/EndpointServiceView-O365.png)
+    ![Image](../../images/EndpointServiceView-O365.png)
 
 ## Performance Testing
 

@@ -6,4 +6,4 @@ Users or Applications can reach applications located in Azure's Private vNets ov
     The tunnels are encrypted and user-app or app-app sessions are hashed across 3 diverse paths by default.
 
 ## Use Case Diagram
-![Image](../images/azureAppConnectivity-Azure-Apps.png)
+![Image](../../images/azureAppConnectivity-Azure-Apps.png)

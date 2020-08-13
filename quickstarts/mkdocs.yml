@@ -7,26 +7,26 @@ nav:
       - NF Clients: netfoundry/client.md
       - NF Gateways: netfoundry/gateway.md
     - Cloud Providers:
-      - AWS:
-        - aws/intro.md
-        - Bastion Replacement Removal: aws/aws-bastion.md
-      - Azure:
-        - Use Cases Overview: azure/intro.md
-        - Accessing Azure Stack: azure/accessing-azure-stack.md
-        - Bastion Replacement Removal: azure/azure-bastion.md
-        - Branch Application To Cloud Application Connectivity: azure/connectApp2App.md
-        - Mobile User To Cloud Application Connectivity: azure/connectUser2App.md
-        - MS Office 365 Optimize: azure/o365-optimization.md
-      - GCP:
-        - Overview: gcp/intro.md
-        - Getting Started Guide: gcp/getting-started.md
+      - Overview: cloud/overview.md
       - AliCloud:
-        - Overview: alicloud/intro.md
-        - Getting Started Guide: alicloud/getting-started.md
-        - User Guide: alicloud/user-guild.md
+        - Getting Started Guide: cloud/alicloud/getting-started.md
+        - User Guide: cloud/alicloud/user-guild.md
+      - AWS:
+        - Bastion Replacement Removal: cloud/aws/aws-bastion.md        
+      - Azure:
+        - Use Cases Overview: cloud/azure/intro.md
+        - Accessing Azure Stack: cloud/azure/accessing-azure-stack.md
+        - Bastion Replacement Removal: cloud/azure/azure-bastion.md
+        - Branch Application To Cloud Application Connectivity: cloud/azure/connectApp2App.md
+        - Mobile User To Cloud Application Connectivity: cloud/azure/connectUser2App.md
+        - MS Office 365 Optimize: cloud/azure/o365-optimization.md        
+      - GCP:
+        - Getting Started Guide: cloud/gcp/getting-started.md
+      - OCP:
+        - Getting Started Guide: cloud/ocp/getting-started.md
+        - Importing an image: cloud/ocp/image-import.md    
       - VCPE:
-        - Overview: vcpe/intro.md
-        - CPE Automation: vcpe/cpe-automation.md
+        - CPE Automation: cloud/vcpe/cpe-automation.md
     - HyperVisors:
       - Overview: hypervisor/overview.md
       - Hyper-V:
@@ -39,13 +39,14 @@ nav:
          - Getting Started: hypervisor/virtualbox/getting-started.md
     - API:
       - Overview: api/overview.md
+      - Bash:
+         - Overview: api/bash/overview.md      
       - Powershell:
          - Overview: api/powershell/overview.md
          - Getting Started: api/powershell/getting-started.md
       - Python:
          - Overview: api/python/overview.md
-      - Bash:
-         - Overview: api/bash/overview.md
+
 
 
 

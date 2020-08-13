@@ -16,7 +16,7 @@ This quickstart guide will provide all the steps to create a secure service betw
 ### Test Connectivity to Application Server
 
 !!! example "To test connectivity, log in to the DemoClinet01 and run ssh username@privateIp"
-    ![Image](../images/CreateService06.png)
+    ![Image](../../images/CreateService06.png)
 
 ## Programmatically
 
@@ -29,13 +29,13 @@ This quickstart guide will provide all the steps to create a secure service betw
 !!! example "Steps"
     1. {!common/python-create-gateway.md!}
     1. Create a test server vm on the same vNet if not already present.
-    ![Image](../images/CreateManagedGatewayAzure13.png)
+    ![Image](../../images/CreateManagedGatewayAzure13.png)
     1. {!common/python-create-service.md!}
     1. Create a client endpoint if not already done so.
-    ![Image](../images/DemoClient01.png)
+    ![Image](../../images/DemoClient01.png)
     1. {!common/python-create-appwan.md!}
     1. To test connectivity, log in to the DemoClinet01 and run ssh "username"@"privateIp"
-    ![Image](../images/DemoClientTestSsh01.png)
+    ![Image](../../images/DemoClientTestSsh01.png)
     1. {!common/python-delete-all.md!}
 
 ### via Jenkins

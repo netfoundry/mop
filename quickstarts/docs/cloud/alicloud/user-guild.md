@@ -14,7 +14,7 @@ Create a VM with the **Netfoundry Application Gateway** offering from the Aliclo
 * Sign in to your NetFoundry organization at (https://nfconsole.io). If you don't have an account yet, you can sign up for free trial.
 * Navigate to the Gateways page and create a new gateway. Give it a name and location, then click the Create button;
 * Take note of the registration key. You will need it to register the gateway later.
-![image](../images/AzureStack01.png)
+![image](../../images/AzureStack01.png)
  
 
 ## 2.2 Register the gateway with your NetFoundry Network
@@ -29,7 +29,7 @@ Once you are logged in to the gateway, run these commands to register it to your
     > sudo nfnreg [registration key]
     > sudo systemctl status dvn.service
 
-![image](../images/AzureStack06.png)
+![image](../../images/AzureStack06.png)
  
 The output should report **ACTIVE**.
 
@@ -45,7 +45,7 @@ In this example, we are going to assume the client you are using to connect to t
 
 On the NFCONSOLE, choose **MANAGE APPWANS** button.
 
-![image](../images/AzureStack07.png)
+![image](../../images/AzureStack07.png)
 
 On the MANAGE APPWANS screen, hit the **+** button.
 
@@ -56,7 +56,7 @@ Choose **SIMPLE CLOUD APPWAN**, a form will display for you to create the AppWAN
     3 Fill in the Connection information.  This is where you want the traffic to go once it reaches your gateway (in our example, we fill in a subnet: 192.168.2.0/24)
     4 Add your client to the APPWAN
 
-![image](../images/UserGuide1.png)
+![image](../../images/UserGuide1.png)
 
 Hit **Create your APPWAN**, and your AppWAN will be created.
 

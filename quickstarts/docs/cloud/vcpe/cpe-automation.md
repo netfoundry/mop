@@ -26,39 +26,39 @@ Use this procedure to create NF Gateway enabled equipment automatically.
 ## Create the VM with the OVA
 
 From your hypervisor, create a VM and use the <b>Deploy from OVA</b> option
-![image](../images/cpe-automation-01.png)
+![image](../../images/cpe-automation-01.png)
 
 Hit "<b>Next</b>", and you can choose your OVA image and give a name to the VM you are creating
-![image](../images/cpe-automation-02.png)
+![image](../../images/cpe-automation-02.png)
 
 Hit "<b>Next</b>", it will ask you which storage (Disk) you want to put your VM.  Choose one that suits you.
-![image](../images/cpe-automation-03.png)
+![image](../../images/cpe-automation-03.png)
 
 Hit "<b>Next</b>“ and choose your Network. (Hint, "VM Network" is your default network, that usually is a good choice). For "Disk provisioning", you can leave it at the default choice of "Thin".
-![image](../images/cpe-automation-04.png)
+![image](../../images/cpe-automation-04.png)
 
 Hit "<b>Next</b>", and you are ready to deploy the OVA. Review the content carefully and hit "<b>Finish</b>" to deploy it.
-![image](../images/cpe-automation-05.png)
+![image](../../images/cpe-automation-05.png)
 
 After you hit "<b>Finish</b>", on the Task window, you should notice the VM been created. Once the it reaches 100%, your VM is created.  And it should automatically start after the deployment is done.
-![image](../images/cpe-automation-06.png)
+![image](../../images/cpe-automation-06.png)
 
 ## Login and Check the automation VM
 
 Once the VM is completely deployed, we need to make sure the VM is setup correctly.<br>
 Go to the main VM window, right click on your VM,<br>
 on the popup menu, choose "<b>Console</b>"->"<b>Open browser console</b>".
-![image](../images/cpe-automation-07.png)
+![image](../../images/cpe-automation-07.png)
 
 You will see a console window pop up like this:
-![image](../images/cpe-automation-08.png)
+![image](../../images/cpe-automation-08.png)
 
 
 Login to the console by using credential <br>
 Username: <b>nfadmin</b><br>
 Password: <b>nfadmin</b><br>
 Check the IP setting by issuing "<b>ip a</b>" command. If you see a valid IP address, then your VM is on a network.
-![image](../images/cpe-automation-09.png)
+![image](../../images/cpe-automation-09.png)
 
 You can verify ssh access to the VM by using a ssh enabled terminal:
 
@@ -75,48 +75,48 @@ You can verify ssh access to the VM by using a ssh enabled terminal:
      
 
 Insert an Ethernet Cable into your CPE and bootup your CPE via the installation media, you will encounter the first screen:
-![image](../images/cpe-automation-10.png)
+![image](../../images/cpe-automation-10.png)
 
 Choose "<b>Install CentOS 7</b>" to continue.<br>
 
 On the next screen, Choose your Language. And hit "<b>Continue</b>"
-![image](../images/cpe-automation-11.png)
+![image](../../images/cpe-automation-11.png)
 
 The "<b>INSTALLATION SUMMARY</b>" screen will appear.<br>
 Check to make sure the step (1) "<b>SOFTWARE SELECTION</b>" is set to "<b>Minimal Install</b>".<br>
 Then Click on step (2) "<b>INSTALLATION DESTINATION</b>" to setup the Disk.
-![image](../images/cpe-automation-12.png)
+![image](../../images/cpe-automation-12.png)
 
 Once in the "<b>INSTALLATION DESTINATION</b>" screen<br>
 Choose your Disk (NOT the USB installation media)<br>
 Click on "<b>Automatically configure partitioning</b>"
 Then hit "<b>Done</b>" at the top left screen to continue.  
-![image](../images/cpe-automation-13.png)
+![image](../../images/cpe-automation-13.png)
 
 Once you are back to the "INSTALLATION SUMMARY" screen<br>
 Choose step (3) "NETWORK & HOST NAME". The following screen should appear.<br>
 Turn on the Ethernet by hitting the button marked (1).<br>
 And then observe the IP Address appears below it (at area Marked (2)). (We will need that IP address when we run the automation).<br>
 Then hit "<b>Done</b>" at the top left screen to continue.
-![image](../images/cpe-automation-14.png)
+![image](../../images/cpe-automation-14.png)
 
 
 You should be back to the "INSTALLATION SUMAMRY" screen again, and you can hit "<b>Begin Installation"</b>" to start the Installation.
 
-![image](../images/cpe-automation-15.png)
+![image](../../images/cpe-automation-15.png)
 
 During the installation, you need to create a user account. For our deployment, you do not need to create root Password. So, press on "<b>USER CREATION</b>" to create an Admin user.
-![image](../images/cpe-automation-16.png)
+![image](../../images/cpe-automation-16.png)
 
 On the "<b>CREATE USER</b>" screen, you need to fill the following:<br>
 Username: <b>nfadmin</b><br>
 click on "<b>Make this user administrator</b>"<br>
 Password: <b>nfadmin</b><br>
 You then need to click "<b>Done</b>" twice to exit this screen.  
-![image](../images/cpe-automation-17.png)
+![image](../../images/cpe-automation-17.png)
 
 You will be sent back to the installation screen, wait for it to complete installation, and the "<b>Reboot</b>" button will appear for you to restart the CPE with the CentOS installed.
-![image](../images/cpe-automation-18.png)
+![image](../../images/cpe-automation-18.png)
 
 !!! Conclusion
     This is the end of installing CentOS 7 on the CPE box.
@@ -140,7 +140,7 @@ Start the automation by issuing the following command:
 The automation will prompt you to enter<br>
 "<b>SSH password</b>" to login to the CPE box (<b>nfadmin</b>)<br>
 "<b>BECOME password</b>" (hit <ENTER\> key)
-![image](../images/cpe-automation-19.png)
+![image](../../images/cpe-automation-19.png)
 
 The automation will take a few minutes to complete. At the end of automation, you will see message like this:
 

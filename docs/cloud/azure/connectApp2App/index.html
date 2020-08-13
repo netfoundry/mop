@@ -1,0 +1,1242 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="ie=edge" http-equiv="x-ua-compatible"/>
+<meta content="Copy to clipboard" name="lang:clipboard.copy"/>
+<meta content="Copied to clipboard" name="lang:clipboard.copied"/>
+<meta content="en" name="lang:search.language"/>
+<meta content="True" name="lang:search.pipeline.stopwords"/>
+<meta content="True" name="lang:search.pipeline.trimmer"/>
+<meta content="No matching documents" name="lang:search.result.none"/>
+<meta content="1 matching document" name="lang:search.result.one"/>
+<meta content="# matching documents" name="lang:search.result.other"/>
+<meta content="[\s\-]+" name="lang:search.tokenizer"/>
+<link href="../../../images/fav.png" rel="shortcut icon"/>
+<meta content="mkdocs-1.1, mkdocs-material-4.6.3" name="generator"/>
+<title>Branch Application To Cloud Application Connectivity - QuickStart Guides</title>
+<link href="../../../assets/stylesheets/application.adb8469c.css" rel="stylesheet"/>
+<script src="../../../assets/javascripts/modernizr.86422ebf.js"></script>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,400i,700%7CUbuntu+Mono&amp;display=fallback" rel="stylesheet"/>
+<style>body,input{font-family:"Ubuntu","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Ubuntu Mono","Courier New",Courier,monospace}</style>
+<link href="../../../assets/fonts/material-icons.css" rel="stylesheet"/>
+<link href="../../../extra.css" rel="stylesheet"/>
+</head>
+<body dir="ltr">
+<svg class="md-svg">
+<defs>
+</defs>
+</svg>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+<a class="md-skip" href="#overview" tabindex="0">
+        Skip to content
+      </a>
+<!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+<!-- Application header -->
+<header class="md-header" data-md-component="header">
+<!-- Top-level navigation -->
+<nav class="md-header-nav md-grid">
+<div class="md-flex">
+<!-- Link to home -->
+<div class="md-flex__cell md-flex__cell--shrink">
+<a aria-label="QuickStart Guides" class="md-header-nav__button md-logo" href="../../.." title="QuickStart Guides">
+<img alt="logo" height="24" src="../../../images/wide_logo.png" width="24"/>
+</a>
+</div>
+<!-- Button to toggle drawer -->
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+</div>
+<!-- Header title -->
+<div class="md-flex__cell md-flex__cell--stretch">
+<div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+<span class="md-header-nav__topic">
+                QuickStart Guides
+              </span>
+<span class="md-header-nav__topic">
+                
+                  Branch Application To Cloud Application Connectivity
+                
+              </span>
+</div>
+<span class="md-footer-meta md-typeset">
+<div class="md-footer-social">
+<link href="../../../assets/fonts/font-awesome.css" rel="stylesheet"/>
+<a class="md-footer-social__link fa fa-github" href="https://github.com/netfoundry" rel="noopener" target="_blank" title="github"></a>
+<a class="md-footer-social__link fa fa-twitter" href="https://twitter.com/netfoundry" rel="noopener" target="_blank" title="twitter"></a>
+<a class="md-footer-social__link fa fa-linkedin" href="https://linkedin.com/company/netfoundry" rel="noopener" target="_blank" title="linkedin"></a>
+</div>
+</span>
+</div>
+<!-- Button to open search dialogue -->
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+<!-- Search interface -->
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="query" data-md-state="active" name="query" placeholder="Search" spellcheck="false" type="text"/>
+<label class="md-icon md-search__icon" for="__search"></label>
+<button class="md-icon md-search__icon" data-md-component="reset" tabindex="-1" type="reset">
+        
+      </button>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="result">
+<div class="md-search-result__meta">
+            Type to start searching
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Repository containing source -->
+</div>
+</nav>
+</header>
+<div class="md-container">
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
+<div class="md-tabs__inner md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+        Home
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../netfoundry/intro/">
+          NetFoundry Basics
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link md-tabs__link--active" href="../../overview/">
+          Cloud Providers
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../hypervisor/overview/">
+          HyperVisors
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../api/overview/">
+          API
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" role="main">
+<div class="md-main__inner md-grid" data-md-component="container">
+<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title md-nav__title--site" for="__drawer">
+<a class="md-nav__button md-logo" href="../../.." title="QuickStart Guides">
+<img alt="logo" height="48" src="../../../images/wide_logo.png" width="48"/>
+</a>
+    QuickStart Guides
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../.." title="Home">
+      Home
+    </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" id="nav-2" type="checkbox"/>
+<label class="md-nav__link" for="nav-2">
+      NetFoundry Basics
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+<label class="md-nav__title" for="nav-2">
+        NetFoundry Basics
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../netfoundry/intro/" title="Overview">
+      Overview
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../netfoundry/fabric/" title="NF Fabric">
+      NF Fabric
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../netfoundry/client/" title="NF Clients">
+      NF Clients
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../netfoundry/gateway/" title="NF Gateways">
+      NF Gateways
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-toggle md-nav__toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
+<label class="md-nav__link" for="nav-3">
+      Cloud Providers
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+<label class="md-nav__title" for="nav-3">
+        Cloud Providers
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../overview/" title="Overview">
+      Overview
+    </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2" id="nav-3-2" type="checkbox"/>
+<label class="md-nav__link" for="nav-3-2">
+      AliCloud
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-3-2">
+        AliCloud
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../alicloud/getting-started/" title="Getting Started Guide">
+      Getting Started Guide
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../alicloud/user-guild/" title="User Guide">
+      User Guide
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" id="nav-3-3" type="checkbox"/>
+<label class="md-nav__link" for="nav-3-3">
+      AWS
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-3-3">
+        AWS
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../aws/aws-bastion/" title="Bastion Replacement Removal">
+      Bastion Replacement Removal
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4" id="nav-3-4" type="checkbox"/>
+<label class="md-nav__link" for="nav-3-4">
+      Azure
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-3-4">
+        Azure
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../intro/" title="Use Cases Overview">
+      Use Cases Overview
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../accessing-azure-stack/" title="Accessing Azure Stack">
+      Accessing Azure Stack
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../azure-bastion/" title="Bastion Replacement Removal">
+      Bastion Replacement Removal
+    </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-toggle md-nav__toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+        Branch Application To Cloud Application Connectivity
+      </label>
+<a class="md-nav__link md-nav__link--active" href="./" title="Branch Application To Cloud Application Connectivity">
+      Branch Application To Cloud Application Connectivity
+    </a>
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">Table of contents</label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+    Overview
+  </a>
+<nav class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#through_nf_web_console_ui">
+    Through NF Web Console UI
+  </a>
+<nav class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_and_deploy_nf_gateway_in_branch_datacenter">
+    Create and Deploy NF Gateway in Branch Datacenter
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_and_deploy_nf_azure_gateway">
+    Create and Deploy NF Azure Gateway
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_ip_host_service">
+    Create IP Host Service
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_appwan">
+    Create AppWan
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test_connectivity_to_application_server">
+    Test Connectivity to Application Server
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#programmatically">
+    Programmatically
+  </a>
+<nav class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#via_python_and_terraform">
+    via Python and Terraform
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#via_jenkins">
+    via Jenkins
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_ip_host_service_1">
+    Create IP Host Service
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_appwan_1">
+    Create AppWan
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../connectUser2App/" title="Mobile User To Cloud Application Connectivity">
+      Mobile User To Cloud Application Connectivity
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../o365-optimization/" title="MS Office 365 Optimize">
+      MS Office 365 Optimize
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-5" id="nav-3-5" type="checkbox"/>
+<label class="md-nav__link" for="nav-3-5">
+      GCP
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-3-5">
+        GCP
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../gcp/getting-started/" title="Getting Started Guide">
+      Getting Started Guide
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-6" id="nav-3-6" type="checkbox"/>
+<label class="md-nav__link" for="nav-3-6">
+      OCP
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-3-6">
+        OCP
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ocp/getting-started/" title="Getting Started Guide">
+      Getting Started Guide
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ocp/image-import/" title="Importing an image">
+      Importing an image
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-7" id="nav-3-7" type="checkbox"/>
+<label class="md-nav__link" for="nav-3-7">
+      VCPE
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-3-7">
+        VCPE
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../vcpe/cpe-automation/" title="CPE Automation">
+      CPE Automation
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" id="nav-4" type="checkbox"/>
+<label class="md-nav__link" for="nav-4">
+      HyperVisors
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+<label class="md-nav__title" for="nav-4">
+        HyperVisors
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../hypervisor/overview/" title="Overview">
+      Overview
+    </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-2" id="nav-4-2" type="checkbox"/>
+<label class="md-nav__link" for="nav-4-2">
+      Hyper-V
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-4-2">
+        Hyper-V
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../hypervisor/hyper-v/getting-started/" title="Getting Started">
+      Getting Started
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-3" id="nav-4-3" type="checkbox"/>
+<label class="md-nav__link" for="nav-4-3">
+      KVM
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-4-3">
+        KVM
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../hypervisor/kvm/getting-started/" title="Getting Started">
+      Getting Started
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-4" id="nav-4-4" type="checkbox"/>
+<label class="md-nav__link" for="nav-4-4">
+      VMware
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-4-4">
+        VMware
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../hypervisor/vmware/getting-started/" title="Getting Started">
+      Getting Started
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-5" id="nav-4-5" type="checkbox"/>
+<label class="md-nav__link" for="nav-4-5">
+      VirtualBox
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-4-5">
+        VirtualBox
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../hypervisor/virtualbox/getting-started/" title="Getting Started">
+      Getting Started
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" id="nav-5" type="checkbox"/>
+<label class="md-nav__link" for="nav-5">
+      API
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+<label class="md-nav__title" for="nav-5">
+        API
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../api/overview/" title="Overview">
+      Overview
+    </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-2" id="nav-5-2" type="checkbox"/>
+<label class="md-nav__link" for="nav-5-2">
+      Bash
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-5-2">
+        Bash
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../api/bash/overview/" title="Overview">
+      Overview
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-3" id="nav-5-3" type="checkbox"/>
+<label class="md-nav__link" for="nav-5-3">
+      Powershell
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-5-3">
+        Powershell
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../api/powershell/overview/" title="Overview">
+      Overview
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../api/powershell/getting-started/" title="Getting Started">
+      Getting Started
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-4" id="nav-5-4" type="checkbox"/>
+<label class="md-nav__link" for="nav-5-4">
+      Python
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-5-4">
+        Python
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../api/python/overview/" title="Overview">
+      Overview
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">Table of contents</label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+    Overview
+  </a>
+<nav class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#through_nf_web_console_ui">
+    Through NF Web Console UI
+  </a>
+<nav class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_and_deploy_nf_gateway_in_branch_datacenter">
+    Create and Deploy NF Gateway in Branch Datacenter
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_and_deploy_nf_azure_gateway">
+    Create and Deploy NF Azure Gateway
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_ip_host_service">
+    Create IP Host Service
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_appwan">
+    Create AppWan
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test_connectivity_to_application_server">
+    Test Connectivity to Application Server
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#programmatically">
+    Programmatically
+  </a>
+<nav class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#via_python_and_terraform">
+    via Python and Terraform
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#via_jenkins">
+    via Jenkins
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_ip_host_service_1">
+    Create IP Host Service
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create_appwan_1">
+    Create AppWan
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content">
+<article class="md-content__inner md-typeset"><a class="md-icon md-content__icon" download href="connectApp2App.pdf" title="PDF Export"></a>
+<h1>Branch Application To Cloud Application Connectivity</h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">@</a></h2>
+<p>This quickstart guide will provide all the steps to create a secure service between a branch application and/or user and an application hosted in Azure Cloud using NetFoundry Overlay Fabric (NFOF).</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Assumption is that the <a href="../netfoundry/fabric.md">NF Fabric</a> is already up.</p>
+</div>
+<h3 id="through_nf_web_console_ui">Through NF Web Console UI<a class="headerlink" href="#through_nf_web_console_ui" title="Permanent link">@</a></h3>
+<h4 id="create_and_deploy_nf_gateway_in_branch_datacenter">Create and Deploy NF Gateway in Branch Datacenter<a class="headerlink" href="#create_and_deploy_nf_gateway_in_branch_datacenter" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to create a NF Manage Gateway in the NF Console UI and install it in the Branch Datacenter.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage Gateways Page</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../images/CreateManagedGatewayAzure01.png"/></li>
+<li>Click on "Create Gateway" on the VCPE Gateway Card
+<img alt="Image" src="../images/GatewayTiles.png"/></li>
+<li>Fill in the required information and click on "Create"
+<img alt="Image" src="../images/CreateBranchGatewayDetails.png"/></li>
+<li>Copy the Client Registration Key
+<img alt="Image" src="../images/RegKeyBranchGatewayDetails.png"/></li>
+<li>Click on "Download" button on the Installation Package Card
+<img alt="Image" src="../images/DownloadBranchGatewayDetails.png"/></li>
+<li>Download the correct image for the desired Hypervisor.</li>
+<li>Follow the installation procedure linked in the description of each image type (i.e. "Click Here").</li>
+<li>Once installed, login into it locally with ssh and register it using the key copied in the previous step. Run the following command <code>sudo nfnreg "reg key"</code>
+<img alt="Image" src="../images/RegistrationBranchGatewayDetails.png"/></li>
+<li>Once registered, one should see the gateway status turn to green in NF Console UI
+<img alt="Image" src="../images/GreenStatusBranchGatewayDetails.png"/></li>
+<li>Done</li>
+</ol>
+</div>
+<h4 id="create_and_deploy_nf_azure_gateway">Create and Deploy NF Azure Gateway<a class="headerlink" href="#create_and_deploy_nf_azure_gateway" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to create a NF Manage Gateway in the NF Console UI and install it in the Azure vNet.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage Gateways Page</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../images/CreateManagedGatewayAzure01.png"/></li>
+<li>Click on "Create Gateway" on the Azure Cloud Gateway Card
+<img alt="Image" src="../images/CreateManagedGatewayAzure02.png"/></li>
+<li>Fill in the required information and click on "Create"
+<img alt="Image" src="../images/CreateManagedGatewayAzure03.png"/></li>
+<li>Copy the Client Registration Key
+<img alt="Image" src="../images/CreateManagedGatewayAzure04.png"/></li>
+<li>Click on "Deploy to Microsoft Azure". It will take you to the Azure Portal and ask you for your login credentials.</li>
+<li>You will be presented with the template that needs to be filled. The first section is the Basics regarding your Subscription and Resource Group this gateway will be deployed in.
+<img alt="Image" src="../images/CreateManagedGatewayAzure05.png"/></li>
+<li>The second section related to resources associated with this gateway. e.g. vm name, ip address space, security groups, etc. you will paste the registration key copied in step 5. You will also need the public ssh key to use for access to this gateway remotely.
+<img alt="Image" src="../images/CreateManagedGatewayAzure06.png"/></li>
+<li>You will need to agree to Azure Marketplace Terms and Conditions and click to "Purchase" to continue.
+<img alt="Image" src="../images/CreateManagedGatewayAzure07.png"/></li>
+<li>If the NF Gateway was deployed successfully. Here is the view of the Resource Group and NF Conole UI.
+<img alt="Image" src="../images/CreateManagedGatewayAzure08.png"/>
+<img alt="Image" src="../images/CreateManagedGatewayAzure09.png"/></li>
+<li>Done</li>
+</ol>
+</div>
+<h4 id="create_ip_host_service">Create IP Host Service<a class="headerlink" href="#create_ip_host_service" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to create a NF Service.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage Services Page under Manage Appwans</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../images/CreateService01.png"/></li>
+<li>Click on "Create an IP Host Service"
+<img alt="Image" src="../images/CreateService03.png"/></li>
+<li>Fill in the required information for SSH and click on "Create"
+<img alt="Image" src="../images/CreateService04.png"/></li>
+<li>If successfully, the service is green.
+<img alt="Image" src="../images/CreateService05.png"/></li>
+<li>Done</li>
+</ol>
+</div>
+<h4 id="create_appwan">Create AppWan<a class="headerlink" href="#create_appwan" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to enable service connectivity to users by creating an appwan.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage AppWANS Page under Manage Appwans</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../images/CreateAppWan01.png"/></li>
+<li>Click on "Component Builder Appwan"
+<img alt="Image" src="../images/CreateAppWan02.png"/></li>
+<li>Move the desired gateway (e.g. DemoGateway01) from "Available" Gateways to "Selected" Endpoints. Move the desired service (e.g. DemoServiceSsh) from "Available" to "Selected" Services.
+<img alt="Image" src="../images/BranchGW2AzureGWappWanServiceSsh.png"/></li>
+<li>Click on "Create".
+<img alt="Image" src="../images/BranchGW2AzureGWappWanServiceSshResult.png"/></li>
+<li>Done</li>
+</ol>
+</div>
+<h4 id="test_connectivity_to_application_server">Test Connectivity to Application Server<a class="headerlink" href="#test_connectivity_to_application_server" title="Permanent link">@</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Route to vNet</p>
+<p>The private IP of NF Gateway (e.g. YourBranchGatewayName) needs to be the next hop to reach the vNet in Azure (e.g. 10.0.8.0/24).
+Thus, a static route will need to be configured in one of the branch routers. NF Gateway can support dynamic routing if needed (e.g.bgp, ospf)</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Steps</p>
+<ol>
+<li>Log in to a Client App Host in Branch DataCenter</li>
+<li>Run ssh username@privateIpOfServerAppHostInAzure
+<img alt="Image" src="../../../images/CreateService06.png"/></li>
+</ol>
+</div>
+<h3 id="programmatically">Programmatically<a class="headerlink" href="#programmatically" title="Permanent link">@</a></h3>
+<h4 id="via_python_and_terraform">via Python and Terraform<a class="headerlink" href="#via_python_and_terraform" title="Permanent link">@</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Python Modules</p>
+<p>For the code clarity, we have broken down the code into multiple Python modules  </p>
+<ol>
+<li><a href="../api/python/source/netfoundry/nf_requests.py">NF REST CRUD (Create,Read, Update and Delete) operations</a></li>
+<li><a href="../api/python/source/netfoundry/nf_token.py">Get MOP Session Token</a></li>
+<li><a href="../api/python/source/netfoundry/nf_network.py">Create NF Network</a></li>
+<li><a href="../api/python/source/netfoundry/nf_gateway.py">Create NF Gateway(s)</a></li>
+<li><a href="../api/python/source/netfoundry/nf_service.py">Create NF Service(s)</a></li>
+<li><a href="../api/python/source/netfoundry/nf_appwan.py">Create NF AppWan(s)</a></li>
+<li><a href="../api/python/source/netfoundry/nf_resources.py">Wrapper Script to Create NF Resources based on Resource yaml file</a></li>
+</ol>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Environment Setup Requirements</p>
+<ol>
+<li>
+<p><a href="../../api/python/etc/env">~/.env</a> to store NF Credentials in (e.g. <code>clientId, clientSecret</code>) to obtain a session token for NF API</p>
+</li>
+<li>
+<p>Export Azure Credentials (e.g, <code>export ARM_TENANT_ID, ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID</code>) to enable resource gateway creation in Azure Resource Group via Terraform.</p>
+</li>
+<li>Terraform and Python3 installed in path.</li>
+</ol>
+<p>Additional Information:</p>
+<ol>
+<li>The new Resource Group in Azure is created based on then name provided in <a href="../api/python/etc/nf_resources.yml">Resource yml</a>, if one does not exist already in the same region (e.g. centralus). The action delete gateway will delete the RG as well even if it was an existing RG. If one does not want to delete the RG, the command <code>terraform state rm "{tf resource name for RG}"</code> needs to be run before running the gateway delete step. This will ensure that the RG is not deleted.</li>
+<li>A new vNet will be created and NF Gateway will be placed in it.</li>
+<li>Environment means the NF Console Environment used (e.g. production), not Azure.</li>
+</ol>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Steps</p>
+<ol>
+<li>Clone this repo (git clone https://github.com/netfoundry/mop.git)</li>
+<li>Update <a href="../api/python/etc/nf_resources.yml">Resource yaml</a> file with the desired options to feed into the wrapper script as described
+in the following code snippet.
+<a href="../">All Resource.yml Options</a></li>
+<li>Run this from the root folder to create GW in NF Console UI and Azure.
+<div class="highlight"><pre><span></span><code><span class="n">python3</span> <span class="n">quickstarts</span><span class="o">/</span><span class="n">docs</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">netfoundry</span><span class="o">/</span><span class="n">nf_resources</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">file</span> <span class="n">quickstarts</span><span class="o">/</span><span class="n">docs</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nf_resources</span><span class="o">.</span><span class="n">yml</span>
+</code></pre></div>
+Required Configuration Parameters for Gateway Creation
+<div class="highlight"><pre><span></span><code><span class="nt">environment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="nt">network_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
+<span class="nt">gateway_list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+  <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">names</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
+  <span class="nt">regionalCidr</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">10.20.10.0/24</span><span class="p p-Indicator">]</span>
+  <span class="nt">regkeys</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+  <span class="nt">resourceGroup</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">demoPythonTerraform01</span>
+    <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centralus</span>
+  <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TerraformDemo</span>
+<span class="nt">terraform</span><span class="p">:</span>
+  <span class="nt">bin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">terraform</span>
+  <span class="nt">output</span><span class="p">:</span> <span class="s">'no'</span>
+  <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./quickstarts/docs/terraform</span>
+  <span class="nt">work_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
+</code></pre></div></li>
+<li>After the script is run successfully, one can see that the gateway name and registration key were saved in Resource.yml file. The name is created automatically based on region and gateway type joined with x and gateway count (AZCPEGW means an azure type gateway in NF console). One can create more than one gateway in the same region by increasing the count to more than 1.
+<div class="highlight"><pre><span></span><code><span class="nt">environment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="nt">gateway_list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+  <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">names</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
+  <span class="nt">regionalCidr</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.0/24</span>
+  <span class="nt">regkeys</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">21DB86724EC3F31C11C1C9D68CE5ECD6A06F057E</span>
+  <span class="nt">resourceGroup</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">demoPythonTerraform01</span>
+    <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centralus</span>
+  <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TerraformDemo</span>
+<span class="nt">network_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
+<span class="nt">terraform</span><span class="p">:</span>
+  <span class="nt">bin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">terraform</span>
+  <span class="nt">output</span><span class="p">:</span> <span class="s">'no'</span>
+  <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./quickstarts/docs/terraform</span>
+  <span class="nt">work_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
+</code></pre></div>
+<img alt="Image" src="../images/CreateManagedGatewayAzure11.png"/>
+<img alt="Image" src="../images/CreateManagedGatewayAzure12.png"/></li>
+<li>Create a test server vm on the same vNet if not already present.
+<img alt="Image" src="../../../images/CreateManagedGatewayAzure13.png"/></li>
+<li>Update the Resoure.yaml file to include the Service option to create the NF service on the gateway create in the previous step. Don't forget to change the action on the gateway to "get".
+<div class="highlight"><pre><span></span><code><span class="nt">environment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="nt">gateway_list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+  <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">names</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
+  <span class="nt">regionalCidr</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.0/24</span>
+  <span class="nt">regkeys</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">21DB86724EC3F31C11C1C9D68CE5ECD6A06F057E</span>
+  <span class="nt">resourceGroup</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">demoPythonTerraform01</span>
+    <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centralus</span>
+  <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TerraformDemo</span>
+<span class="nt">network_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
+<span class="nt">terraform</span><span class="p">:</span>
+  <span class="nt">bin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">terraform</span>
+  <span class="nt">output</span><span class="p">:</span> <span class="s">'no'</span>
+  <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./quickstarts/docs/terraform</span>
+  <span class="nt">work_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
+  <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
+  <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+  <span class="nt">name</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+</code></pre></div></li>
+<li>After the script run again successfully, the service section should have been populated with the service name as so.
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
+  <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS--10.20.10.5--22</span>
+  <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+</code></pre></div>
+<img alt="Image" src="../images/CreateService07.png"/></li>
+<li>Create a gateway in the branch as the steps in <a href="#create_and_deploy_nf_gateway_in_branch_datacenter">the UI section indicated</a>.
+We will provide code snippets for private hypervisors deployment through python in later releases (e.g. vSphere)
+<img alt="Image" src="../../../images/GreenStatusBranchGatewayDetails.png"/></li>
+<li>Update the Resoure.yaml file to include the AppWan option to create the NF AppWan tying the gateway, client and service created in the previous steps. Don't forget to change the action on the service option to "get".
+<div class="highlight"><pre><span></span><code><span class="nt">environment</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="nt">gateway_list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+  <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">names</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
+  <span class="nt">regionalCidr</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.0/24</span>
+  <span class="nt">regkeys</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">21DB86724EC3F31C11C1C9D68CE5ECD6A06F057E</span>
+  <span class="nt">resourceGroup</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">demoPythonTerraform01</span>
+    <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centralus</span>
+  <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TerraformDemo</span>
+<span class="nt">network_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
+  <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS--10.20.10.5--22</span>
+  <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+<span class="nt">terraform</span><span class="p">:</span>
+  <span class="nt">bin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">terraform</span>
+  <span class="nt">output</span><span class="p">:</span> <span class="s">'no'</span>
+  <span class="nt">source</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./quickstarts/docs/terraform</span>
+  <span class="nt">work_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="nt">appwans</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create</span>
+  <span class="nt">endpoints</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BranchGatewayName</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ClientName</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">appwan-ssh-22</span>
+  <span class="nt">services</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS--10.20.10.5--22</span>
+</code></pre></div></li>
+<li>After the script ran again successfully, the connectivity should have been up.
+<img alt="Image" src="../images/CreateAppWan06.png"/></li>
+<li>To test connectivity, log in to the Remote Client or Branch App Server and run ssh "username"@"privateIp"
+<img alt="Image" src="../../../images/DemoClientTestSsh01.png"/></li>
+<li>To delete resources created, just follow the reverse order. Change the action to delete for AppWans first, then other resources as indicated in the code snippets.
+<div class="highlight"><pre><span></span><code><span class="nt">appwans</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
+  <span class="nt">endpoints</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BranchGatewayName</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ClientName</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">null</span>
+  <span class="nt">services</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS--10.20.10.5--22</span>
+</code></pre></div></li>
+<li>Services
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
+  <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AZCPEGWx0xWESTUS</span>
+  <span class="nt">ip</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.5</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">null</span>
+  <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">host</span>
+</code></pre></div></li>
+<li>Endpoints - will delete all resources in Azure as well.<ol>
+<li><code>terraform state rm "{tf resource name for RG}" // run this before the python script if Resource Group needs to be preserved</code>
+1.
+<div class="highlight"><pre><span></span><code><span class="nt">gateway_list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
+  <span class="nt">cloud</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azure</span>
+  <span class="nt">count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">names</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">westus</span>
+  <span class="nt">regionalCidr</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">10.20.10.0/24</span>
+  <span class="nt">regkeys</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+  <span class="nt">resourceGroup</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">demoPythonTerraform01</span>
+    <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">centralus</span>
+  <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TerraformDemo</span>
+</code></pre></div></li>
+</ol>
+</li>
+<li>Network
+<div class="highlight"><pre><span></span><code><span class="nt">environment</span><span class="p">:</span>  <span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="nt">network_action</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">delete</span>
+<span class="nt">network_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DemoNet01</span>
+</code></pre></div></li>
+<li>Done</li>
+</ol>
+</div>
+<h4 id="via_jenkins">via Jenkins<a class="headerlink" href="#via_jenkins" title="Permanent link">@</a></h4>
+<p>In this section, we will use <a href="../api/python/etc/nf_resources.yml">Resource yaml</a> along with Jenkinsfile to show how to automate the steps further by creating the Jenkins Job</p>
+<div class="admonition info">
+<p class="admonition-title">Jenkins Requirements</p>
+<ol>
+<li><a href="https://jenkins.io/doc/administration/requirements/java/">java</a></li>
+<li><a href="https://docs.docker.com/get-docker/">docker</a></li>
+</ol>
+<p>Then follow <a href="https://jenkins.io/doc/book/installing/#installing-docker">jenkins installation using docker</a> to install Jenkins on the localhost and choose "Install suggested plugins". After successful installation, one should be able to reach the <a href="http://localhost:8080">Jenkins Dashboard</a> (8080 is default port).
+<img alt="Image" src="../images/jenkins-ui.png"/></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If one wants to add the gateway deployed in the Private DataCenter and/or NF Client, it must be created prior to running the next steps.
+Otherwise the options of APPWAN_PRIVATE_GATEWAY and APPWAN_PRIVATE_CLIENT can be left blank and added after the appwan is created using
+the steps described in the Console UI section above. GATEWAY_NAME and SERVICE_NAME are automatically generated by the scripts in this version.
+GATEWAY_NAME = "GW TYPE"+x0x+"LOCATION OF AZURE GW", e.g. AZCPEGWx0xWESTUS; SERVICE_NAME = "GW NAME"--"SERVICE IP"--"SERVICE PORT",
+e.g. AZCPEGWx0xWESTUS--10.20.10.5--22.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Setting Up Jenkins Pipeline</p>
+<ol>
+<li>Login to Jenkins</li>
+<li>Click on " New Item"
+<img alt="Image" src="../images/jenkins-new-item.png"/></li>
+<li>Name you Project, select pipeline option and click "Ok"
+<img alt="Image" src="../images/jenkins-pipeline-name.png"/></li>
+<li>In the pipeline details, fill in the scm details as seen in the image below and click "Save".
+Everything default apart from:<ol>
+<li>Repository Url: https://github.com/netfoundry/mop.git</li>
+<li>Script Path: pipeline/netfoundrydeploy2cloud.jenkinsfile
+<img alt="Image" src="../images/jenkins-pipeline-option.png"/></li>
+</ol>
+</li>
+<li>Set up users for Azure API and NF MOP API access --
+<a href="https://jenkins.io/doc/book/using/using-credentials/">More on Credentials setup</a>
+<img alt="Image" src="../images/jenkins-creds.png"/></li>
+<li>Run Jenkinsjob by selecting on the pipeline created in the previous step. Click on "Build with Parameters"
+<img alt="Image" src="../images/jenkins-pipeline-build-with-parameters.png"/></li>
+</ol>
+</div>
+<div class="admonition example">
+<p class="admonition-title">To create the resources</p>
+<ol>
+<li>
+<p>Fill in the Azure Details (e.g. RG, Tenant Id, etc) and select the following:</p>
+<ol>
+<li>NF Environment, e.g. production</li>
+<li>NETWORK_ACTION - create</li>
+<li>NETWORK_NAME, e.g. DEMONET</li>
+<li>GATEWAY_ACTION - create</li>
+<li>If Azure RG needs to be preserved, then KEEP_RG option must be left checked.</li>
+<li>LOCATION, e.g. westus - location where the Azure GW will be deployed in</li>
+<li>SUBNET_PREFIX, e.g. 10.20.10.0/24 - the subnet used for the vNet in the location of the Azure GW deployment.
+<img alt="Image" src="../images/jenkins-pipeline-create-network-gateway.png"/></li>
+</ol>
+</li>
+<li>
+<p>Run Jenkins job again by selecting on the pipeline created in the previous step. Click on "Build with Parameters"</p>
+</li>
+<li>Fill in service and appwan details by selecting the following:<ol>
+<li>KEEP_RG - not selected</li>
+<li>NF Environment, e.g. production</li>
+<li>SERVICE_ACTION - create</li>
+<li>APPWAN_ACTION - create</li>
+<li>GATEWAY_NAME, e.g. AZCPEGWx0xWESTUS (this is created in the previous step automatically)</li>
+<li>SERVICE_NAME, e.g. AZCPEGWx0xWESTUS--10.20.10.5--22 (this is created automatically during this step)</li>
+<li>SERVICE_IP, e.g. 10.20.10.5</li>
+<li>SERVICE_PORT, e.g. 22</li>
+<li>APPWAN_NAME, e.g. appwan-ssh-22</li>
+<li>APPWAN_PRIVATE_GATEWAY, e.g. private-gateway-name (this is created outside of the jenkins job, prior to running this step)</li>
+<li>APPWAN_PRIVATE_CLIENT, e.g. client-name (this is created outside of the jenkins job, prior to running this step)</li>
+<li>APPWAN_SERVICE, e.g. AZCPEGWx0xWESTUS--10.20.10.5--22
+<img alt="Image" src="../images/jenkins-pipeline-create-service-appwan.png"/></li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="admonition example">
+<p class="admonition-title">To delete the resources</p>
+<ol>
+<li>Run Jenkins job again by selecting on the pipeline created in the previous step. Click on "Build with Parameters"</li>
+<li>
+<p>Fill in the Azure Details (e.g. RG, Tenant Id, etc) and select the following:</p>
+<ol>
+<li>NF Environment, e.g. production</li>
+<li>NETWORK_ACTION - delete</li>
+<li>NETWORK_NAME, e.g. DEMONET</li>
+<li>GATEWAY_ACTION - delete</li>
+</ol>
+<p>Pipeline View
+<img alt="Image" src="../images/jenkins-pipeline-delete-resources.png"/></p>
+</li>
+<li>
+<p>Done</p>
+</li>
+</ol>
+</div>
+<h4 id="create_ip_host_service_1">Create IP Host Service<a class="headerlink" href="#create_ip_host_service_1" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to create a NF Service.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage Services Page under Manage Appwans</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../images/CreateService01.png"/></li>
+<li>Click on "Create an IP Host Service"
+<img alt="Image" src="../images/CreateService03.png"/></li>
+<li>Fill in the required information for SSH and click on "Create"
+<img alt="Image" src="../images/CreateService04.png"/></li>
+<li>If successfully, the service is green.
+<img alt="Image" src="../images/CreateService05.png"/></li>
+<li>Done</li>
+</ol>
+</div>
+<h4 id="create_appwan_1">Create AppWan<a class="headerlink" href="#create_appwan_1" title="Permanent link">@</a></h4>
+<p>This section will guide a user through the steps on how to enable service connectivity to users by creating an appwan.</p>
+<div class="admonition example">
+<p class="admonition-title">Console UI</p>
+<ol>
+<li>Navigate to Manage AppWANS Page under Manage Appwans</li>
+<li>Click on + sign in the top right corner.
+<img alt="Image" src="../images/CreateAppWan01.png"/></li>
+<li>Click on "Component Builder Appwan"
+<img alt="Image" src="../images/CreateAppWan02.png"/></li>
+<li>Move the desired gateway (e.g. DemoGateway01) from "Available" Gateways to "Selected" Endpoints. Move the desired service (e.g. DemoServiceSsh) from "Available" to "Selected" Services.
+<img alt="Image" src="../images/BranchGW2AzureGWappWanServiceSsh.png"/></li>
+<li>Click on "Create".
+<img alt="Image" src="../images/BranchGW2AzureGWappWanServiceSshResult.png"/></li>
+<li>Done</li>
+</ol>
+</div>
+</article>
+</div>
+</div>
+</main>
+<!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+<!-- Application footer -->
+<footer class="md-footer">
+<!-- Link to previous and/or next page -->
+<div class="md-footer-nav">
+<nav class="md-footer-nav__inner md-grid">
+<!-- Link to previous page -->
+<a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../azure-bastion/" rel="prev" title="Bastion Replacement Removal">
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Bastion Replacement Removal
+              </span>
+</div>
+</a>
+<!-- Link to next page -->
+<a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../connectUser2App/" rel="next" title="Mobile User To Cloud Application Connectivity">
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Mobile User To Cloud Application Connectivity
+              </span>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+</div>
+</a>
+</nav>
+</div>
+<!-- Further information -->
+</footer></div>
+</body></html>
+
+<script src="../../../assets/javascripts/application.c33a9706.js"></script>
+<script>app.initialize({version:"1.1",url:{base:"../../.."}})</script>
+

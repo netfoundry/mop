@@ -11,6 +11,7 @@
 
 * Username Allowed: root
 * Root Allowed: Yes - only user allowed.
+* Password Authentication: Console only.
 
 The only way to access the digital ocean droplet is to ssh with the root user.  In order to access this remotely
 you **must use ssh keys**.  If you choose to use a password instead of ssh keys, you will only be able to access this via the Digital Ocean console connection.

@@ -22,6 +22,10 @@ nav:
         - MS Office 365 Optimize: cloud/azure/o365-optimization.md        
       - GCP:
         - Getting Started Guide: cloud/gcp/getting-started.md
+        - Remote Access Guide: cloud/gcp/remote-access.md
+      - Digital Ocean:
+        - Getting Stared Guide: cloud/digitalocean/getting-started.md
+        - Remote Access Guide: cloud/digitalocean/remote-access.md
       - OCP:
         - Getting Started Guide: cloud/ocp/getting-started.md
         - Importing an image: cloud/ocp/image-import.md    

@@ -1,5 +1,5 @@
 # Overview
-This getting started guide will explain how to launch a NetFoundry application gateway in the GCP compute engine.
+This getting started guide will explain how to launch a NetFoundry Zero Trust Networking into the GCP compute engine.
 
 
 ## Launching an instance in GCP
@@ -13,7 +13,7 @@ This getting started guide will explain how to launch a NetFoundry application g
 ### Deployment of Appliance
 
 To get started, visit the GCP Marketplace site by clicking [here](https://console.cloud.google.com/marketplace/details/netfoundry/netfoundry-cloud-gateway). 
-If the marketplace doesn't come up, you can go to the search bar that appears, enter NetFoundry Application Gateway and click the resulting solution that appears.
+If the marketplace doesn't come up, you can go to the search bar that appears, enter NetFoundry Zero Trust Networking and click the resulting solution that appears.
 
 To launch the instance **Click on "Launch On Compute Engine"**
 ![Image](../../images/GCPLaunch.png)

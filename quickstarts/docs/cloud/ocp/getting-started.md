@@ -1,5 +1,5 @@
 # Overview
-This getting started guide will explain how to launch a NetFoundry application gateway in OCP(Oracle Cloud Platform) Compute
+This getting started guide will explain how to launch a NetFoundry Zero Trust Networking into OCP(Oracle Cloud Platform) Compute
 
 
 ## Launching an instance in OCP
@@ -13,7 +13,7 @@ This getting started guide will explain how to launch a NetFoundry application g
 ### Deployment of Appliance
 
 To get started, visit the OCP Marketplace site by clicking [here](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/82445301). 
-If the marketplace doesn't come up, you can go to the search bar that appears, enter NetFoundry Application Gateway and click the resulting solution that appears.
+If the marketplace doesn't come up, you can go to the search bar that appears, enter NetFoundry Zero Trust Networking and click the resulting solution that appears.
 
 To launch the instance **Click on "Get App"**
 ![Image](../../images/OCPLaunch.png)

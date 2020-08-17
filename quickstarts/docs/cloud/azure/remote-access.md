@@ -12,7 +12,7 @@
 
 * Username Allowed: Any
 * Root Allowed: No
-* Password Authentication: No - unless you go through the password reset.
+* Password Authentication: Yes
 
 Azure allows you to choose a username when launching an instance.  
 

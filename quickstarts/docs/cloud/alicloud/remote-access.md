@@ -15,6 +15,9 @@
 
 The AliCloud image username is "nfadmin". Please assign an ssh key when launching the instance, if you wish to access this machine post deployment.
 
+!!! Note
+    **Password Reset**: In order for the password reset function to work, you must reboot the machine afterward the procedure is complete for the password to take effect.
+
 
 Read more on the AliCloud documentation [Here](https://www.alibabacloud.com/help/doc-detail/71529.htm)
 

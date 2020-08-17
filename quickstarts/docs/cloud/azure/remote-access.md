@@ -7,6 +7,7 @@
 
 {!common/root-ssh-disabled-important.md!}
 
+{!common/nfadmin-ssh.md!}
 
 # Azure Specifics
 
@@ -15,8 +16,6 @@
 * Password Authentication: Yes
 
 Azure allows you to choose a username when launching an instance.  
-
-We disable password authentication by default, but Azure will **override** this when you go through the password reset procedure.
 
 Please assign an ssh key when launching the instance, if you wish to access this machine post deployment.
 

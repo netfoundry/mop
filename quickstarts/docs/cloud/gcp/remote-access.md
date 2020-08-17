@@ -7,6 +7,7 @@
 
 {!common/root-ssh-disabled-important.md!}
 
+{!common/nfadmin-ssh.md!}
 
 # GCP Specifics
 

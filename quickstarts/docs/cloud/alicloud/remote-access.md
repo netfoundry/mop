@@ -13,7 +13,7 @@
 
 * Username Allowed: nfadmin
 * Root Allowed: No
-* Password Authentication: No
+* Password Authentication: Yes
 
 The AliCloud image username is "nfadmin". Please assign an ssh key when launching the instance, if you wish to access this machine post deployment.
 

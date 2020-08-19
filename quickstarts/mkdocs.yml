@@ -11,22 +11,31 @@ nav:
       - AliCloud:
         - Getting Started Guide: cloud/alicloud/getting-started.md
         - User Guide: cloud/alicloud/user-guild.md
+        - Remote Access Guide: cloud/alicloud/remote-access.md 
       - AWS:
-        - Bastion Replacement Removal: cloud/aws/aws-bastion.md        
+        - Bastion Replacement Removal: cloud/aws/aws-bastion.md
+        - Remote Access Guide: cloud/aws/remote-access.md      
       - Azure:
         - Use Cases Overview: cloud/azure/intro.md
         - Accessing Azure Stack: cloud/azure/accessing-azure-stack.md
         - Bastion Replacement Removal: cloud/azure/azure-bastion.md
         - Branch Application To Cloud Application Connectivity: cloud/azure/connectApp2App.md
         - Mobile User To Cloud Application Connectivity: cloud/azure/connectUser2App.md
-        - MS Office 365 Optimize: cloud/azure/o365-optimization.md        
+        - MS Office 365 Optimize: cloud/azure/o365-optimization.md
+        - Remote Access Guide: cloud/azure/remote-access.md       
       - GCP:
         - Getting Started Guide: cloud/gcp/getting-started.md
+        - Remote Access Guide: cloud/gcp/remote-access.md
+      - Digital Ocean:
+        - Getting Stared Guide: cloud/digitalocean/getting-started.md
+        - Remote Access Guide: cloud/digitalocean/remote-access.md
       - OCP:
         - Getting Started Guide: cloud/ocp/getting-started.md
-        - Importing an image: cloud/ocp/image-import.md    
+        - Importing an image: cloud/ocp/image-import.md
+        - Remote Access Guide: cloud/ocp/remote-access.md    
       - VCPE:
         - CPE Automation: cloud/vcpe/cpe-automation.md
+        - Remote Access Guide: cloud/vcpe/remote-access.md
     - HyperVisors:
       - Overview: hypervisor/overview.md
       - Hyper-V:

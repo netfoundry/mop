@@ -243,6 +243,11 @@
       User Guide
     </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../alicloud/remote-access/" title="Remote Access Guide">
+      Remote Access Guide
+    </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -259,6 +264,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../aws/aws-bastion/" title="Bastion Replacement Removal">
       Bastion Replacement Removal
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../aws/remote-access/" title="Remote Access Guide">
+      Remote Access Guide
     </a>
 </li>
 </ul>
@@ -302,6 +312,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../azure/o365-optimization/" title="MS Office 365 Optimize">
       MS Office 365 Optimize
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../azure/remote-access/" title="Remote Access Guide">
+      Remote Access Guide
     </a>
 </li>
 </ul>
@@ -373,16 +388,44 @@
 </ul>
 </nav>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../remote-access/" title="Remote Access Guide">
+      Remote Access Guide
+    </a>
+</li>
 </ul>
 </nav>
 </li>
 <li class="md-nav__item md-nav__item--nested">
 <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-6" id="nav-3-6" type="checkbox"/>
 <label class="md-nav__link" for="nav-3-6">
-      OCP
+      Digital Ocean
     </label>
 <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
 <label class="md-nav__title" for="nav-3-6">
+        Digital Ocean
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../digitalocean/getting-started/" title="Getting Stared Guide">
+      Getting Stared Guide
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../digitalocean/remote-access/" title="Remote Access Guide">
+      Remote Access Guide
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-7" id="nav-3-7" type="checkbox"/>
+<label class="md-nav__link" for="nav-3-7">
+      OCP
+    </label>
+<nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+<label class="md-nav__title" for="nav-3-7">
         OCP
       </label>
 <ul class="md-nav__list" data-md-scrollfix="">
@@ -396,22 +439,32 @@
       Importing an image
     </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ocp/remote-access/" title="Remote Access Guide">
+      Remote Access Guide
+    </a>
+</li>
 </ul>
 </nav>
 </li>
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-7" id="nav-3-7" type="checkbox"/>
-<label class="md-nav__link" for="nav-3-7">
+<input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-8" id="nav-3-8" type="checkbox"/>
+<label class="md-nav__link" for="nav-3-8">
       VCPE
     </label>
 <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-<label class="md-nav__title" for="nav-3-7">
+<label class="md-nav__title" for="nav-3-8">
         VCPE
       </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../vcpe/cpe-automation/" title="CPE Automation">
       CPE Automation
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../vcpe/remote-access/" title="Remote Access Guide">
+      Remote Access Guide
     </a>
 </li>
 </ul>
@@ -649,7 +702,7 @@
 <article class="md-content__inner md-typeset"><a class="md-icon md-content__icon" download href="getting-started.pdf" title="PDF Export"></a>
 <h1>Getting Started Guide</h1>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">@</a></h2>
-<p>This getting started guide will explain how to launch a NetFoundry application gateway in the GCP compute engine.</p>
+<p>This getting started guide will explain how to launch a NetFoundry Zero Trust Networking into the GCP compute engine.</p>
 <h3 id="launching_an_instance_in_gcp">Launching an instance in GCP<a class="headerlink" href="#launching_an_instance_in_gcp" title="Permanent link">@</a></h3>
 <h4 id="pre_deployment">Pre Deployment<a class="headerlink" href="#pre_deployment" title="Permanent link">@</a></h4>
 <div class="admonition important">
@@ -662,7 +715,7 @@
 </div>
 <h4 id="deployment_of_appliance">Deployment of Appliance<a class="headerlink" href="#deployment_of_appliance" title="Permanent link">@</a></h4>
 <p>To get started, visit the GCP Marketplace site by clicking <a href="https://console.cloud.google.com/marketplace/details/netfoundry/netfoundry-cloud-gateway">here</a>. 
-If the marketplace doesn't come up, you can go to the search bar that appears, enter NetFoundry Application Gateway and click the resulting solution that appears.</p>
+If the marketplace doesn't come up, you can go to the search bar that appears, enter NetFoundry Zero Trust Networking and click the resulting solution that appears.</p>
 <p>To launch the instance <strong>Click on "Launch On Compute Engine"</strong>
 <img alt="Image" src="../../../images/GCPLaunch.png"/></p>
 <p>Supply the information needed
@@ -719,7 +772,7 @@ Use the following command to register the gateway with your network:</p>
 <div class="md-footer-nav">
 <nav class="md-footer-nav__inner md-grid">
 <!-- Link to previous page -->
-<a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../../azure/o365-optimization/" rel="prev" title="MS Office 365 Optimize">
+<a class="md-flex md-footer-nav__link md-footer-nav__link--prev" href="../../azure/remote-access/" rel="prev" title="Remote Access Guide">
 <div class="md-flex__cell md-flex__cell--shrink">
 <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
 </div>
@@ -728,18 +781,18 @@ Use the following command to register the gateway with your network:</p>
 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                MS Office 365 Optimize
+                Remote Access Guide
               </span>
 </div>
 </a>
 <!-- Link to next page -->
-<a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../../ocp/getting-started/" rel="next" title="Getting Started Guide">
+<a class="md-flex md-footer-nav__link md-footer-nav__link--next" href="../remote-access/" rel="next" title="Remote Access Guide">
 <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
 <span class="md-flex__ellipsis">
 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Getting Started Guide
+                Remote Access Guide
               </span>
 </div>
 <div class="md-flex__cell md-flex__cell--shrink">

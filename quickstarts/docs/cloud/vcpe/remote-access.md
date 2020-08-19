@@ -16,4 +16,4 @@
 * Password Authentication: Yes
 * Default Password: nfadmin
 
-The best practice is to enable ssh key access after first boot and disable password authentication. If password option is desirable, it must be changed after the first login.  
+The best practice is to enable ssh key access after first boot and disable password authentication. If the password option is desirable, the default password must be changed after the first login.  

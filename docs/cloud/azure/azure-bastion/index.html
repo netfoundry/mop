@@ -766,7 +766,7 @@
 <p><img alt="image" src="../../../images/netfoundry-bastion-private.png"/></p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Assumption is that the <a href="../netfoundry/fabric.md">NF Fabric</a> is already up and the <a href="../netfoundry/client.md">NF Client</a> is installed.</p>
+<p>Assumption is that the <a href="../../netfoundry/fabric/">NF Fabric</a> is already up and the <a href="../../netfoundry/client/">NF Client</a> is installed.</p>
 </div>
 <h2 id="implement_through_nf_web_console_ui">Implement Through NF Web Console UI<a class="headerlink" href="#implement_through_nf_web_console_ui" title="Permanent link">@</a></h2>
 <h4 id="create_and_install_nf_client">Create and install NF Client<a class="headerlink" href="#create_and_install_nf_client" title="Permanent link">@</a></h4>
@@ -775,12 +775,12 @@
 <p class="admonition-title">Console UI</p>
 <ol>
 <li>Navigate to Manage Clients Page
-<img alt="Image" src="../images/CreateManagedClient01.png"/></li>
+<img alt="Image" src="../../images/CreateManagedClient01.png"/></li>
 <li>Click on + sign in the top right corner.</li>
 <li>Fill in the required information and click on "Create"
-<img alt="Image" src="../images/CreateManagedClient02.png"/></li>
+<img alt="Image" src="../../images/CreateManagedClient02.png"/></li>
 <li>Copy the Client Registration Key
-<img alt="Image" src="../images/CreateManagedClient03.png"/></li>
+<img alt="Image" src="../../images/CreateManagedClient03.png"/></li>
 <li>Install the NF Client Software by following the directions at the appropriate OS link<ol>
 <li><a href="https://support.netfoundry.io/hc/en-us/articles/360017535332-Install-a-NetFoundry-Client-on-Windows">Window</a></li>
 <li><a href="https://support.netfoundry.io/hc/en-us/articles/360016128692-Install-a-NetFoundry-Client-on-MacOS">Mac</a></li>
@@ -795,23 +795,23 @@
 <ol>
 <li>Navigate to Manage Gateways Page</li>
 <li>Click on + sign in the top right corner.
-<img alt="Image" src="../images/CreateManagedGatewayAzure01.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure01.png"/></li>
 <li>Click on "Create Gateway" on the Azure Cloud Gateway Card
-<img alt="Image" src="../images/CreateManagedGatewayAzure02.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure02.png"/></li>
 <li>Fill in the required information and click on "Create"
-<img alt="Image" src="../images/CreateManagedGatewayAzure03.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure03.png"/></li>
 <li>Copy the Client Registration Key
-<img alt="Image" src="../images/CreateManagedGatewayAzure04.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure04.png"/></li>
 <li>Click on "Deploy to Microsoft Azure". It will take you to the Azure Portal and ask you for your login credentials.</li>
 <li>You will be presented with the template that needs to be filled. The first section is the Basics regarding your Subscription and Resource Group this gateway will be deployed in.
-<img alt="Image" src="../images/CreateManagedGatewayAzure05.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure05.png"/></li>
 <li>The second section related to resources associated with this gateway. e.g. vm name, ip address space, security groups, etc. you will paste the registration key copied in step 5. You will also need the public ssh key to use for access to this gateway remotely.
-<img alt="Image" src="../images/CreateManagedGatewayAzure06.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure06.png"/></li>
 <li>You will need to agree to Azure Marketplace Terms and Conditions and click to "Purchase" to continue.
-<img alt="Image" src="../images/CreateManagedGatewayAzure07.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure07.png"/></li>
 <li>If the NF Gateway was deployed successfully. Here is the view of the Resource Group and NF Conole UI.
-<img alt="Image" src="../images/CreateManagedGatewayAzure08.png"/>
-<img alt="Image" src="../images/CreateManagedGatewayAzure09.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure08.png"/>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure09.png"/></li>
 <li>Done</li>
 </ol>
 </div>
@@ -822,12 +822,12 @@
 <ol>
 <li>Navigate to Manage Services Page under Manage Appwans</li>
 <li>Click on + sign in the top right corner.
-<img alt="Image" src="../images/CreateService01.png"/></li>
+<img alt="Image" src="../../images/CreateService01.png"/></li>
 <li>Click on "Create an IP Network Service"
-<img alt="Image" src="../images/CreateService03.png"/></li>
+<img alt="Image" src="../../images/CreateService03.png"/></li>
 <li>
 <p>Fill in the required information for the Network your wanting to access.
-<img alt="Image" src="../images/CreateIpNetworkService.png"/></p>
+<img alt="Image" src="../../images/CreateIpNetworkService.png"/></p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Please make sure the service you want to access is behind the gateway you specify here.</p>
@@ -835,7 +835,7 @@
 </li>
 <li>
 <p>If successfully, the service is green.
-<img alt="Image" src="../images/CreateService05.png"/></p>
+<img alt="Image" src="../../images/CreateService05.png"/></p>
 </li>
 <li>Done</li>
 </ol>
@@ -847,13 +847,13 @@
 <ol>
 <li>Navigate to Manage AppWANS Page under Manage Appwans</li>
 <li>Click on + sign in the top right corner.
-<img alt="Image" src="../images/CreateAppWan01.png"/></li>
+<img alt="Image" src="../../images/CreateAppWan01.png"/></li>
 <li>Click on "Component Builder Appwan"
-<img alt="Image" src="../images/CreateAppWan02.png"/></li>
+<img alt="Image" src="../../images/CreateAppWan02.png"/></li>
 <li>Move the desired client (e.g. DemoClient01) from "Available" Clients to "Selected" Endpoints. Move the desired service (e.g. DemoServiceSsh) from "Available" to "Selected" Services.
-<img alt="Image" src="../images/CreateAppWan03.png"/></li>
+<img alt="Image" src="../../images/CreateAppWan03.png"/></li>
 <li>Click on "Create".
-<img alt="Image" src="../images/CreateAppWan04.png"/></li>
+<img alt="Image" src="../../images/CreateAppWan04.png"/></li>
 <li>Done</li>
 </ol>
 </div>

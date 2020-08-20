@@ -807,23 +807,23 @@ We will test if that is the case. We continuously update our optimization algori
 <ol>
 <li>Navigate to Manage Gateways Page</li>
 <li>Click on + sign in the top right corner.
-<img alt="Image" src="../images/CreateManagedGatewayAzure01.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure01.png"/></li>
 <li>Click on "Create Gateway" on the Azure Cloud Gateway Card
-<img alt="Image" src="../images/CreateManagedGatewayAzure02.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure02.png"/></li>
 <li>Fill in the required information and click on "Create"
-<img alt="Image" src="../images/CreateManagedGatewayAzure03.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure03.png"/></li>
 <li>Copy the Client Registration Key
-<img alt="Image" src="../images/CreateManagedGatewayAzure04.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure04.png"/></li>
 <li>Click on "Deploy to Microsoft Azure". It will take you to the Azure Portal and ask you for your login credentials.</li>
 <li>You will be presented with the template that needs to be filled. The first section is the Basics regarding your Subscription and Resource Group this gateway will be deployed in.
-<img alt="Image" src="../images/CreateManagedGatewayAzure05.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure05.png"/></li>
 <li>The second section related to resources associated with this gateway. e.g. vm name, ip address space, security groups, etc. you will paste the registration key copied in step 5. You will also need the public ssh key to use for access to this gateway remotely.
-<img alt="Image" src="../images/CreateManagedGatewayAzure06.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure06.png"/></li>
 <li>You will need to agree to Azure Marketplace Terms and Conditions and click to "Purchase" to continue.
-<img alt="Image" src="../images/CreateManagedGatewayAzure07.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure07.png"/></li>
 <li>If the NF Gateway was deployed successfully. Here is the view of the Resource Group and NF Conole UI.
-<img alt="Image" src="../images/CreateManagedGatewayAzure08.png"/>
-<img alt="Image" src="../images/CreateManagedGatewayAzure09.png"/></li>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure08.png"/>
+<img alt="Image" src="../../images/CreateManagedGatewayAzure09.png"/></li>
 <li>Done</li>
 </ol>
 </div>
@@ -841,12 +841,12 @@ Create 5 services by repeating the next section for each of them. Replace Networ
 <ol>
 <li>Navigate to Manage Services Page under Manage Appwans</li>
 <li>Click on + sign in the top right corner.
-<img alt="Image" src="../images/CreateService01.png"/></li>
+<img alt="Image" src="../../images/CreateService01.png"/></li>
 <li>Click on "Create an IP Network Service"
-<img alt="Image" src="../images/CreateService03.png"/></li>
+<img alt="Image" src="../../images/CreateService03.png"/></li>
 <li>
 <p>Fill in the required information for the Network your wanting to access.
-<img alt="Image" src="../images/CreateIpNetworkService.png"/></p>
+<img alt="Image" src="../../images/CreateIpNetworkService.png"/></p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Please make sure the service you want to access is behind the gateway you specify here.</p>
@@ -854,7 +854,7 @@ Create 5 services by repeating the next section for each of them. Replace Networ
 </li>
 <li>
 <p>If successfully, the service is green.
-<img alt="Image" src="../images/CreateService05.png"/></p>
+<img alt="Image" src="../../images/CreateService05.png"/></p>
 </li>
 <li>Done</li>
 </ol>
@@ -868,13 +868,13 @@ Create 5 services by repeating the next section for each of them. Replace Networ
 <ol>
 <li>Navigate to Manage AppWANS Page under Manage Appwans</li>
 <li>Click on + sign in the top right corner.
-<img alt="Image" src="../images/CreateAppWan01.png"/></li>
+<img alt="Image" src="../../images/CreateAppWan01.png"/></li>
 <li>Click on "Component Builder Appwan"
-<img alt="Image" src="../images/CreateAppWan02.png"/></li>
+<img alt="Image" src="../../images/CreateAppWan02.png"/></li>
 <li>Move the desired gateway (e.g. DemoGateway01) from "Available" Gateways to "Selected" Endpoints. Move the desired service (e.g. DemoServiceSsh) from "Available" to "Selected" Services.
-<img alt="Image" src="../images/BranchGW2AzureGWappWanServiceSsh.png"/></li>
+<img alt="Image" src="../../images/BranchGW2AzureGWappWanServiceSsh.png"/></li>
 <li>Click on "Create".
-<img alt="Image" src="../images/BranchGW2AzureGWappWanServiceSshResult.png"/></li>
+<img alt="Image" src="../../images/BranchGW2AzureGWappWanServiceSshResult.png"/></li>
 <li>Done</li>
 </ol>
 </div>
@@ -886,12 +886,12 @@ Create 5 services by repeating the next section for each of them. Replace Networ
 <p class="admonition-title">Console UI</p>
 <ol>
 <li>Navigate to Manage Clients Page
-<img alt="Image" src="../images/CreateManagedClient01.png"/></li>
+<img alt="Image" src="../../images/CreateManagedClient01.png"/></li>
 <li>Click on + sign in the top right corner.</li>
 <li>Fill in the required information and click on "Create"
-<img alt="Image" src="../images/CreateManagedClient02.png"/></li>
+<img alt="Image" src="../../images/CreateManagedClient02.png"/></li>
 <li>Copy the Client Registration Key
-<img alt="Image" src="../images/CreateManagedClient03.png"/></li>
+<img alt="Image" src="../../images/CreateManagedClient03.png"/></li>
 <li>Install the NF Client Software by following the directions at the appropriate OS link<ol>
 <li><a href="https://support.netfoundry.io/hc/en-us/articles/360017535332-Install-a-NetFoundry-Client-on-Windows">Window</a></li>
 <li><a href="https://support.netfoundry.io/hc/en-us/articles/360016128692-Install-a-NetFoundry-Client-on-MacOS">Mac</a></li>
@@ -908,13 +908,13 @@ Create 5 services by repeating the next section for each of them. Replace Networ
 <p class="admonition-title">Python Modules</p>
 <p>For the code clarity, we have broken down the code into multiple Python modules  </p>
 <ol>
-<li><a href="../api/python/source/netfoundry/nf_requests.py">NF REST CRUD (Create,Read, Update and Delete) operations</a></li>
-<li><a href="../api/python/source/netfoundry/nf_token.py">Get MOP Session Token</a></li>
-<li><a href="../api/python/source/netfoundry/nf_network.py">Create NF Network</a></li>
-<li><a href="../api/python/source/netfoundry/nf_gateway.py">Create NF Gateway(s)</a></li>
-<li><a href="../api/python/source/netfoundry/nf_service.py">Create NF Service(s)</a></li>
-<li><a href="../api/python/source/netfoundry/nf_appwan.py">Create NF AppWan(s)</a></li>
-<li><a href="../api/python/source/netfoundry/nf_resources.py">Wrapper Script to Create NF Resources based on Resource yaml file</a></li>
+<li><a href="../../api/python/source/netfoundry/nf_requests.py">NF REST CRUD (Create,Read, Update and Delete) operations</a></li>
+<li><a href="../../api/python/source/netfoundry/nf_token.py">Get MOP Session Token</a></li>
+<li><a href="../../api/python/source/netfoundry/nf_network.py">Create NF Network</a></li>
+<li><a href="../../api/python/source/netfoundry/nf_gateway.py">Create NF Gateway(s)</a></li>
+<li><a href="../../api/python/source/netfoundry/nf_service.py">Create NF Service(s)</a></li>
+<li><a href="../../api/python/source/netfoundry/nf_appwan.py">Create NF AppWan(s)</a></li>
+<li><a href="../../api/python/source/netfoundry/nf_resources.py">Wrapper Script to Create NF Resources based on Resource yaml file</a></li>
 </ol>
 </div>
 <div class="admonition note">
@@ -930,7 +930,7 @@ Create 5 services by repeating the next section for each of them. Replace Networ
 </ol>
 <p>Additional Information:</p>
 <ol>
-<li>The new Resource Group in Azure is created based on then name provided in <a href="../api/python/etc/nf_resources.yml">Resource yml</a>, if one does not exist already in the same region (e.g. centralus). The action delete gateway will delete the RG as well even if it was an existing RG. If one does not want to delete the RG, the command <code>terraform state rm "{tf resource name for RG}"</code> needs to be run before running the gateway delete step. This will ensure that the RG is not deleted.</li>
+<li>The new Resource Group in Azure is created based on then name provided in <a href="../../api/python/etc/nf_resources.yml">Resource yml</a>, if one does not exist already in the same region (e.g. centralus). The action delete gateway will delete the RG as well even if it was an existing RG. If one does not want to delete the RG, the command <code>terraform state rm "{tf resource name for RG}"</code> needs to be run before running the gateway delete step. This will ensure that the RG is not deleted.</li>
 <li>A new vNet will be created and NF Gateway will be placed in it.</li>
 <li>Environment means the NF Console Environment used (e.g. production), not Azure.</li>
 </ol>
@@ -1096,7 +1096,7 @@ This information will be used to create client later.
 <div class="highlight"><pre><span></span><code><span class="c"># Run registration script</span>
 <span class="nb">Start-Process</span> <span class="n">-FilePath</span> <span class="n">C</span><span class="err">:</span><span class="p">\</span><span class="s2">"Program Files"</span><span class="p">\</span><span class="n">DVN</span><span class="p">\</span><span class="n">vtc_app</span><span class="p">\</span><span class="n">nfnreg</span> <span class="nv">$endpoint_registration_key</span>
 </code></pre></div></li>
-<li>Once you download <a href="../api/powershell/source-code/NF-pwrshell.ps1">PS script</a> onto your laptop and update it with your network details, run the following in the directory containing the script:
+<li>Once you download <a href="../../api/powershell/source-code/NF-pwrshell.ps1">PS script</a> onto your laptop and update it with your network details, run the following in the directory containing the script:
 <div class="highlight"><pre><span></span><code>.\NF-pwrshell.ps1
 </code></pre></div></li>
 <li>Update the following section of the resources.yaml file referenced at the beginning of the last section.

@@ -766,7 +766,7 @@
 <p><img alt="image" src="../../../images/netfoundry-bastion-private.png"/></p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Assumption is that the <a href="../netfoundry/fabric.md">NF Fabric</a> is already up and the <a href="../netfoundry/client.md">NF Client</a> is installed.</p>
+<p>Assumption is that the <a href="../../netfoundry/fabric/">NF Fabric</a> is already up and the <a href="../../netfoundry/client/">NF Client</a> is installed.</p>
 </div>
 <h2 id="implement_through_nf_web_console_ui">Implement Through NF Web Console UI<a class="headerlink" href="#implement_through_nf_web_console_ui" title="Permanent link">@</a></h2>
 <h4 id="create_and_install_nf_client">Create and install NF Client<a class="headerlink" href="#create_and_install_nf_client" title="Permanent link">@</a></h4>
@@ -775,12 +775,12 @@
 <p class="admonition-title">Console UI</p>
 <ol>
 <li>Navigate to Manage Clients Page
-<img alt="Image" src="../images/CreateManagedClient01.png"/></li>
+<img alt="Image" src="../../images/CreateManagedClient01.png"/></li>
 <li>Click on + sign in the top right corner.</li>
 <li>Fill in the required information and click on "Create"
-<img alt="Image" src="../images/CreateManagedClient02.png"/></li>
+<img alt="Image" src="../../images/CreateManagedClient02.png"/></li>
 <li>Copy the Client Registration Key
-<img alt="Image" src="../images/CreateManagedClient03.png"/></li>
+<img alt="Image" src="../../images/CreateManagedClient03.png"/></li>
 <li>Install the NF Client Software by following the directions at the appropriate OS link<ol>
 <li><a href="https://support.netfoundry.io/hc/en-us/articles/360017535332-Install-a-NetFoundry-Client-on-Windows">Window</a></li>
 <li><a href="https://support.netfoundry.io/hc/en-us/articles/360016128692-Install-a-NetFoundry-Client-on-MacOS">Mac</a></li>
@@ -795,12 +795,12 @@
 <ol>
 <li>Navigate to Manage Gateways Page</li>
 <li>Click on + sign in the top right corner.
-<img alt="Image" src="../images/ManageGateways.png"/></li>
+<img alt="Image" src="../../images/ManageGateways.png"/></li>
 <li>Click on "Create Gateway" on the AWS Cloud Gateway Card
-<img alt="Image" src="../images/GatewayTiles.png"/></li>
+<img alt="Image" src="../../images/GatewayTiles.png"/></li>
 <li>
 <p>Fill in the required information and click on "Create"
-<img alt="Image" src="../images/AWSGatewaySetup.png"/></p>
+<img alt="Image" src="../../images/AWSGatewaySetup.png"/></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If this is the first time you've ever launched an AWS NetFoundry Gateway
@@ -809,13 +809,13 @@ You must accept the AWS license before launching the gateway, please click here:
 </li>
 <li>
 <p>Click on "Launch Gateway Using CloudFormation Script". It will take you to the AWS console, if you're not already logged in it will ask you for your login credentials.
-<img alt="Image" src="../images/AWSGatewayLaunch.png"/></p>
+<img alt="Image" src="../../images/AWSGatewayLaunch.png"/></p>
 </li>
 <li>You will be presented with the template parameters that needs to be filled. 
-<img alt="Image" src="../images/AWSCloudFormation.png"/></li>
+<img alt="Image" src="../../images/AWSCloudFormation.png"/></li>
 <li>Fill in the AWS Parameters Section with you're VPC &amp; ssh keyname &amp; Click Create Stack.</li>
 <li>If the NF Gateway was deployed successfully. Here is the view of the NF Conole UI.
-<img alt="Image" src="../images/AWSGatwayLaunchSuccessful.png"/></li>
+<img alt="Image" src="../../images/AWSGatwayLaunchSuccessful.png"/></li>
 <li>Done</li>
 </ol>
 </div>
@@ -826,12 +826,12 @@ You must accept the AWS license before launching the gateway, please click here:
 <ol>
 <li>Navigate to Manage Services Page under Manage Appwans</li>
 <li>Click on + sign in the top right corner.
-<img alt="Image" src="../images/CreateService01.png"/></li>
+<img alt="Image" src="../../images/CreateService01.png"/></li>
 <li>Click on "Create an IP Network Service"
-<img alt="Image" src="../images/CreateService03.png"/></li>
+<img alt="Image" src="../../images/CreateService03.png"/></li>
 <li>
 <p>Fill in the required information for the Network your wanting to access.
-<img alt="Image" src="../images/CreateIpNetworkService.png"/></p>
+<img alt="Image" src="../../images/CreateIpNetworkService.png"/></p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Please make sure the service you want to access is behind the gateway you specify here.</p>
@@ -839,7 +839,7 @@ You must accept the AWS license before launching the gateway, please click here:
 </li>
 <li>
 <p>If successfully, the service is green.
-<img alt="Image" src="../images/CreateService05.png"/></p>
+<img alt="Image" src="../../images/CreateService05.png"/></p>
 </li>
 <li>Done</li>
 </ol>
@@ -851,13 +851,13 @@ You must accept the AWS license before launching the gateway, please click here:
 <ol>
 <li>Navigate to Manage AppWANS Page under Manage Appwans</li>
 <li>Click on + sign in the top right corner.
-<img alt="Image" src="../images/CreateAppWan01.png"/></li>
+<img alt="Image" src="../../images/CreateAppWan01.png"/></li>
 <li>Click on "Component Builder Appwan"
-<img alt="Image" src="../images/CreateAppWan02.png"/></li>
+<img alt="Image" src="../../images/CreateAppWan02.png"/></li>
 <li>Move the desired client (e.g. DemoClient01) from "Available" Clients to "Selected" Endpoints. Move the desired service (e.g. DemoServiceSsh) from "Available" to "Selected" Services.
-<img alt="Image" src="../images/CreateAppWan03.png"/></li>
+<img alt="Image" src="../../images/CreateAppWan03.png"/></li>
 <li>Click on "Create".
-<img alt="Image" src="../images/CreateAppWan04.png"/></li>
+<img alt="Image" src="../../images/CreateAppWan04.png"/></li>
 <li>Done</li>
 </ol>
 </div>

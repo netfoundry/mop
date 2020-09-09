@@ -370,7 +370,7 @@ pipeline {
           az extension add --name virtual-wan
           az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
           az account set --subscription $ARM_SUBSCRIPTION_ID
-          eval az network vhub connection delete --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet
+          eval az network vhub connection delete --resource-group $GROUP_NAME --vhub-name $VHUB_NAME --name westus2-vNet --yes
           eval az network route-table route delete -g $GROUP_NAME --route-table-name centralus-routeTable -n $ROUTE_NAME
           '''
           // Delete NF AVW Site Gateway from NF Network

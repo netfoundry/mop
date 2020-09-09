@@ -306,9 +306,6 @@ pipeline {
       steps {
         //Configure Client and Server between the network under test for the packet connectivity test
         sh '''
-        eval sleep 20m
-        '''
-        sh '''
         set -Eeuxo pipefail
         SERVER_LOC=$(echo $LOCATION | tr '[:lower:]' '[:upper:]')
         echo $SERVER_LOC
@@ -340,9 +337,6 @@ pipeline {
         script {
           catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
             //Run test Cases to pass packet across the AVW Network
-            sh '''
-            eval sleep 10m
-            '''
             sh '''
             set -Eeuxo pipefail
             serverIp=`eval terraform output -json | jq -j .AZCPEGWx0xWESTUS2_private_ips.value[][]`

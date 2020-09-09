@@ -341,7 +341,7 @@ pipeline {
           catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
             //Run test Cases to pass packet across the AVW Network
             sh '''
-            eval sleep 5m
+            eval sleep 10m
             '''
             sh '''
             set -Eeuxo pipefail

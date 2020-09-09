@@ -27,15 +27,18 @@ def writelog(message):
     logfile.close()
 
 
+def get_credentials():
+    return ServicePrincipalCredentials(
+                                      client_id=os.environ.get('ARM_CLIENT_ID'),
+                                      secret=os.environ.get('ARM_CLIENT_SECRET'),
+                                      tenant=os.environ.get('ARM_TENANT_ID')
+                                      )
+
+
 def vpn_site_connection_creation(siteName):
     """Connect AVW gateway site from AVW Hub."""
     # setup Azure Login Credentials from Environmental Variables
-    credentials = ServicePrincipalCredentials(
-        client_id=os.environ.get('ARM_CLIENT_ID'),
-        secret=os.environ.get('ARM_CLIENT_SECRET'),
-        tenant=os.environ.get('ARM_TENANT_ID')
-    )
-
+    credentials = get_credentials()
     # declaire Test Input Variables
     CONNECTION_PARAMS = {
         'enable_bgp': True,
@@ -44,13 +47,8 @@ def vpn_site_connection_creation(siteName):
           (os.environ.get('ARM_SUBSCRIPTION_ID'), os.environ.get('GROUP_NAME'), siteName)
         }
     }
-
     # Connect to Azure APIs and get session details
     network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
-
-    # Delay for 120 seconds before creating resources
-    time.sleep(120)
-
     # Create VPN Site Connection to VPNG
     async_vpn_site_connection_creation = network_client.vpn_connections.create_or_update(
         os.environ.get('GROUP_NAME'),
@@ -68,25 +66,11 @@ def vpn_site_connection_creation(siteName):
 def vpn_site_connection_deletion(siteName):
     """Disconnect AVW gateway site from AVW Hub."""
     # setup Azure Login Credentials from Environmental Variables
-    credentials = ServicePrincipalCredentials(
-        client_id=os.environ.get('ARM_CLIENT_ID'),
-        secret=os.environ.get('ARM_CLIENT_SECRET'),
-        tenant=os.environ.get('ARM_TENANT_ID')
-    )
-
+    credentials = get_credentials()
     # Connect to Azure APIs and get session details
     network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
-
     # Show VPN Site Connection to VPNG
-    async_vpn_site_connection_show = network_client.vpn_connections.get(
-        os.environ.get('GROUP_NAME'),
-        os.environ.get('VPNG_NAME'),
-        'CONNECTION_' + siteName,
-        custom_headers=None,
-        raw=False
-    )
-    print(async_vpn_site_connection_show)
-
+    print(vpn_site_connection_get(siteName, credentials))
     # Delete VPN Site Connection to VPNG
     async_vpn_site_connection_deletion = network_client.vpn_connections.delete(
         os.environ.get('GROUP_NAME'),
@@ -98,6 +82,23 @@ def vpn_site_connection_deletion(siteName):
     )
     print(async_vpn_site_connection_deletion.result())
     print('VPN Site Connection to VPNG Deleted')
+
+
+def vpn_site_connection_get(siteName, credentials=None):
+    """Disconnect AVW gateway site from AVW Hub."""
+    # setup Azure Login Credentials from Environmental Variables
+    if not credentials:
+        credentials = get_credentials()
+    # Connect to Azure APIs and get session details
+    network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
+    # Show VPN Site Connection to VPNG
+    return network_client.vpn_connections.get(
+                                             os.environ.get('GROUP_NAME'),
+                                             os.environ.get('VPNG_NAME'),
+                                             'CONNECTION_' + siteName,
+                                             custom_headers=None,
+                                             raw=False
+                                             )
 
 
 def create_avw_site(filename):
@@ -192,7 +193,12 @@ def create_avw_site(filename):
     deployData = nfreq.nf_req((url, {}), "put", token)
     # Connect the newly created site to the Azure VPN Gateway
     vpn_site_connection_creation(gwName)
-    return createData, deployData
+    while True:
+        status = vpn_site_connection_get(gwName)
+        if status['connection_status'] == 'Connected'
+            break
+        time.sleep(60)
+    return status
 
 
 def delete_avw_site():

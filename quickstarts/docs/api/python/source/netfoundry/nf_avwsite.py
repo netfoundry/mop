@@ -193,11 +193,17 @@ def create_avw_site(filename):
     deployData = nfreq.nf_req((url, {}), "put", token)
     # Connect the newly created site to the Azure VPN Gateway
     vpn_site_connection_creation(gwName)
+    # keep checking until status changes to 'Connected'
+    x=0
     while True:
         status = vpn_site_connection_get(gwName)
-        if status['connection_status'] == 'Connected'
+        if status.connection_status == 'Connected':
+            print(status.connection_status)
             break
-        time.sleep(60)
+        else:
+            time.sleep(60)
+            print(status.connection_status + ", %s min passed" % x)
+            x=x+1
     return status
 
 

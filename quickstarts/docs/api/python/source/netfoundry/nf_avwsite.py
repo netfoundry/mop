@@ -204,7 +204,9 @@ def create_avw_site(filename):
             time.sleep(60)
             print(status.connection_status + ", %s min passed" % x)
             x=x+1
-    return status
+        if x == 60:
+            break
+    return createData, deployData, status
 
 
 def delete_avw_site():

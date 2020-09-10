@@ -202,7 +202,10 @@ def create_avw_site(filename):
             break
         else:
             time.sleep(60)
-            print(status.connection_status + ", %s min passed" % x)
+            if status.connection_status:
+                print(status.connection_status + ", %s min passed" % x)
+            else:
+                print("None, %s min passed" % x)
             x=x+1
         if x == 60:
             break

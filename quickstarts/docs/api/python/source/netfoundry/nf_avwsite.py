@@ -85,13 +85,13 @@ def vpn_site_connection_deletion(siteName):
 
 
 def vpn_site_connection_get(siteName, credentials=None):
-    """Disconnect AVW gateway site from AVW Hub."""
+    """Get AVW gateway site connection status to AVW Hub."""
     # setup Azure Login Credentials from Environmental Variables
     if not credentials:
         credentials = get_credentials()
     # Connect to Azure APIs and get session details
     network_client = NetworkManagementClient(credentials, os.environ.get('ARM_SUBSCRIPTION_ID'))
-    # Show VPN Site Connection to VPNG
+    # Show VPN Site Connection Status to VPNG
     return network_client.vpn_connections.get(
                                              os.environ.get('GROUP_NAME'),
                                              os.environ.get('VPNG_NAME'),

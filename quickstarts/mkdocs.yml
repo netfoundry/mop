@@ -6,6 +6,7 @@ nav:
       - NF Fabric: netfoundry/fabric.md
       - NF Clients: netfoundry/client.md
       - NF Gateways: netfoundry/gateway.md
+      - Ziti Probe: netfoundry/zitiprobe.md
     - Cloud Providers:
       - Overview: cloud/overview.md
       - AliCloud:

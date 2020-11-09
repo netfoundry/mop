@@ -101,12 +101,14 @@ def find_appwan(netUrl, appwanName, token):
     """
     appwansUrl = netUrl + '/appWans'
     appwans = nfreq(appwansUrl, "get", token)
-    if appwans.get('_embedded'):
+    if not appwans.get('_embedded'):
+        appwanUrl = None
+    else:
         for appwan in appwans['_embedded']['appWans']:
             if appwan['name'] == appwanName:
                 appwanUrl = appwan['_links']['self']['href']
-    else:
-        appwanUrl = None
+                break
+            appwanUrl = None
     return appwanUrl
 
 

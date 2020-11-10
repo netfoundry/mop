@@ -58,11 +58,11 @@ def create_service(netUrl, gwUrl, attributes, token):
             serviceName = attributes['name']
         else:
             serviceName = attributes['gateway']+'--'+str(attributes['netIp'])+'--'+str(attributes['netCidr'])
-        if not attributes['portIntMode']:
+        if not attributes.get('portIntMode'):
             attributes['portIntMode'] = None
-        if not attributes['intIncPorts']:
+        if not attributes.get('intIncPorts'):
             attributes['intIncPorts'] = None
-        if not attributes['intExlPorts']:
+        if not attributes.get('intExlPorts'):
             attributes['intExlPorts'] = None
         data = {
                   "serviceClass": "GW",

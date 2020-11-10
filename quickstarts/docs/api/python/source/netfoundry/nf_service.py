@@ -58,6 +58,12 @@ def create_service(netUrl, gwUrl, attributes, token):
             serviceName = attributes['name']
         else:
             serviceName = attributes['gateway']+'--'+str(attributes['netIp'])+'--'+str(attributes['netCidr'])
+        if not attributes['portIntMode']:
+            attributes['portIntMode'] = None
+        if not attributes['intIncPorts']:
+            attributes['intIncPorts'] = None
+        if not attributes['intExlPorts']:
+            attributes['intExlPorts'] = None
         data = {
                   "serviceClass": "GW",
                   "name": serviceName,
@@ -79,6 +85,9 @@ def create_service(netUrl, gwUrl, attributes, token):
                   "interceptIp": attributes['netIp'],
                   "gatewayIp": attributes['netIp'],
                   "gatewayCidrBlock": attributes['netCidr'],
+                  "portInterceptMode": attributes['portIntMode'],
+                  "interceptIncludePorts": attributes['intIncPorts'],
+                  "interceptExcludePorts": attributes['intExlPorts'],
                   "localNetworkGateway": "YES"
                 }
     returnData = nfreq((url, data), "post", token)

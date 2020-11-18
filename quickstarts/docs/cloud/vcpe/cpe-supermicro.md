@@ -141,168 +141,97 @@ Hit Next on Cubic window and generate the installation image.
 
 #3 Create Ansible playbook for integrator
 
-Running ansible playbook vm is similar to the uCPE for v6.  
+Follow section 2.3 to install Ubuntu 20.04 on the system.
 
+Then copy the ansible playbook to the system.
+```
+> scp supermicro_playbook.tgz ziggy@192.168.1.63:
+```
 
-<li> This guide will <b>only</b> cover deployment of OVA with VMWare6.7, it will not cover all hypervisor out there. However, the provided OVA will work with VM Workstation 12 or EXSi 6.5 or later and VirtualBox.
-<li> This guide will not cover how to setup installation media of Cent7 OS. At the end of guide, it will describe where to find the OS image and some tools.
+Login to the system.
+```
+> ssh ziggy@192.168.1.63
+```
 
-# 2. Create Automation VM
+Perform the following command to run the playbook.
+```
+> tar xf supermicro_playbook.tgz 
+> cd supermicro_playbook/
+> sudo apt install ansible
+> sudo su
+> ansible-playbook -i hostfile ubbox.yml 
+```
 
 !!! NOTE
-    This procedure only needs to execute once for all CPE boxes. It is recommended to create this VM using VMWare hypervisor. 
+    If the default username (ziggy) changes, we will need to update the ansible-playbook accordingly.
 
-## Obtain the CPE-Automation OVA
+#4 Create an golden image for the integrator
 
-!!! Todo
-    We will need to put the OVA somewhere customer can download.
+Follow steps in section 3 to setup the box.
 
-## Create the VM with the OVA
+Use a live CD (for example Fedora LiveCD) to bootup the system.  This ensures the Ubuntu 20.04 installation disk is not the running disk of the OS. We also need another USB stick to save the image (the live CD most likely will have a READ only system).  
 
-From your hypervisor, create a VM and use the <b>Deploy from OVA</b> option
-![image](../../images/cpe-automation-01.png)
-
-Hit "<b>Next</b>", and you can choose your OVA image and give a name to the VM you are creating
-![image](../../images/cpe-automation-02.png)
-
-Hit "<b>Next</b>", it will ask you which storage (Disk) you want to put your VM.  Choose one that suits you.
-![image](../../images/cpe-automation-03.png)
-
-Hit "<b>Next</b>“ and choose your Network. (Hint, "VM Network" is your default network, that usually is a good choice). For "Disk provisioning", you can leave it at the default choice of "Thin".
-![image](../../images/cpe-automation-04.png)
-
-Hit "<b>Next</b>", and you are ready to deploy the OVA. Review the content carefully and hit "<b>Finish</b>" to deploy it.
-![image](../../images/cpe-automation-05.png)
-
-After you hit "<b>Finish</b>", on the Task window, you should notice the VM been created. Once the it reaches 100%, your VM is created.  And it should automatically start after the deployment is done.
-![image](../../images/cpe-automation-06.png)
-
-## Login and Check the automation VM
-
-Once the VM is completely deployed, we need to make sure the VM is setup correctly.<br>
-Go to the main VM window, right click on your VM,<br>
-on the popup menu, choose "<b>Console</b>"->"<b>Open browser console</b>".
-![image](../../images/cpe-automation-07.png)
-
-You will see a console window pop up like this:
-![image](../../images/cpe-automation-08.png)
-
-
-Login to the console by using credential <br>
-Username: <b>nfadmin</b><br>
-Password: <b>nfadmin</b><br>
-Check the IP setting by issuing "<b>ip a</b>" command. If you see a valid IP address, then your VM is on a network.
-![image](../../images/cpe-automation-09.png)
-
-You can verify ssh access to the VM by using a ssh enabled terminal:
-
-    > ssh nfadmin@[ip_address_of_the_automation_vm]
-
-!!! Conclusion
-    This is the end of deploying the automation VM.
-
-
-# 3. Installing CentOS 7 on the CPE
-
-!!! Note
-     <b>Have this ready before you start:</b> You will need a CentOS 7 installation media before you start.
-     
-
-Insert an Ethernet Cable into your CPE and bootup your CPE via the installation media, you will encounter the first screen:
-![image](../../images/cpe-automation-10.png)
-
-Choose "<b>Install CentOS 7</b>" to continue.<br>
-
-On the next screen, Choose your Language. And hit "<b>Continue</b>"
-![image](../../images/cpe-automation-11.png)
-
-The "<b>INSTALLATION SUMMARY</b>" screen will appear.<br>
-Check to make sure the step (1) "<b>SOFTWARE SELECTION</b>" is set to "<b>Minimal Install</b>".<br>
-Then Click on step (2) "<b>INSTALLATION DESTINATION</b>" to setup the Disk.
-![image](../../images/cpe-automation-12.png)
-
-Once in the "<b>INSTALLATION DESTINATION</b>" screen<br>
-Choose your Disk (NOT the USB installation media)<br>
-Click on "<b>Automatically configure partitioning</b>"
-Then hit "<b>Done</b>" at the top left screen to continue.  
-![image](../../images/cpe-automation-13.png)
-
-Once you are back to the "INSTALLATION SUMMARY" screen<br>
-Choose step (3) "NETWORK & HOST NAME". The following screen should appear.<br>
-Turn on the Ethernet by hitting the button marked (1).<br>
-And then observe the IP Address appears below it (at area Marked (2)). (We will need that IP address when we run the automation).<br>
-Then hit "<b>Done</b>" at the top left screen to continue.
-![image](../../images/cpe-automation-14.png)
-
-
-You should be back to the "INSTALLATION SUMAMRY" screen again, and you can hit "<b>Begin Installation"</b>" to start the Installation.
-
-![image](../../images/cpe-automation-15.png)
-
-During the installation, you need to create a user account. For our deployment, you do not need to create root Password. So, press on "<b>USER CREATION</b>" to create an Admin user.
-![image](../../images/cpe-automation-16.png)
-
-On the "<b>CREATE USER</b>" screen, you need to fill the following:<br>
-Username: <b>nfadmin</b><br>
-click on "<b>Make this user administrator</b>"<br>
-Password: <b>nfadmin</b><br>
-You then need to click "<b>Done</b>" twice to exit this screen.  
-![image](../../images/cpe-automation-17.png)
-
-You will be sent back to the installation screen, wait for it to complete installation, and the "<b>Reboot</b>" button will appear for you to restart the CPE with the CentOS installed.
-![image](../../images/cpe-automation-18.png)
-
-!!! Conclusion
-    This is the end of installing CentOS 7 on the CPE box.
-
-
-# 4. Run Automation to setup the CPE box
-
-!!! Note
-     You will need the IP address of your automation VM and the IP address of your CPE to continue this step
-
-Connect to your automation VM via ssh from a terminal
-
-    > ssh nfadmin@[ip_address_of_the_automation_vm]
-
-Login to the VM by using password: <b>nfadmin</b>
-
-Start the automation by issuing the following command:
-
-    > ./setup-nfnbox.bash [ip_address_of_cpe]
-
-The automation will prompt you to enter<br>
-"<b>SSH password</b>" to login to the CPE box (<b>nfadmin</b>)<br>
-"<b>BECOME password</b>" (hit <ENTER\> key)
-![image](../../images/cpe-automation-19.png)
-
-The automation will take a few minutes to complete. At the end of automation, you will see message like this:
+After boot up the system with the live CD, open a terminal windows and check what disks are on the system.
 
 ```
-PLAY RECAP ******************************************************************************************************************
-10.111.111.1               : ok=6    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-192.168.1.184              : ok=35   changed=28   unreachable=0    failed=0    skipped=2    rescued=0    ignored=0
+$ lsblk
+NAME                  MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sda                     8:0    1  14.5G  0 disk 
+└─sda1                  8:1    1  14.5G  0 part /run/initramfs/live
+sdb                     8:16   1  28.9G  0 disk 
+└─sdb1                  8:17   1  28.9G  0 part /run/media/liveuser/ADATA UFD
+loop0                   7:0    0    12K  1 loop 
+loop1                   7:1    0   1.8M  1 loop 
+└─live-osimg-min      253:3    0     6G  1 dm   
+loop2                   7:2    0   1.3G  1 loop 
+loop3                   7:3    0     6G  1 loop 
+├─live-rw             253:1    0     6G  0 dm   /
+├─live-base           253:2    0     6G  1 dm   
+└─live-osimg-min      253:3    0     6G  1 dm   
+loop4                   7:4    0   512M  0 loop 
+└─live-rw             253:1    0     6G  0 dm   /
+nvme0n1               259:0    0 238.5G  0 disk 
+├─nvme0n1p1           259:1    0   512M  0 part 
+├─nvme0n1p2           259:2    0     1G  0 part 
+└─nvme0n1p3           259:3    0   237G  0 part
+  └─ubuntu--vg-ubuntu--lv  
+                      253:0    0 118.5G  0 lvm 
 ```
 
-!!! Conclusion
-    The CPE is now setup and ready.
+As you can see, the "sda1" is the liveCD.  "sdb1" is the USB disk for image.  And "nvme0n1" is the internal disk that has our Ubuntu20.04 installed on.
 
-
-# 5. CentOS 7 Installation Media
-
-!!! Disclaimer
-    There are many ways to obtain and setup the installation media. If you never set one up before, the quickest and easiest way to create one is by downloading the OS image and burn it to a USB by using disk utility.
-
-## CentOS 7 image
-
-You can obtain a copy of OS image by visiting centos.org. But since you need to get a CentOS 7 image (not the latest CentOS 8), here is a quick link to Cent7OS mirror sites: <br>
+Now, let's mount the "sdb1" and dump image into it. (Note, the image will be compressed to save disk storage.
 
 ```
-http://isoredirect.centos.org/centos/7/isos/x86_64/
+$ mkdir outdisk
+$ sudo mount /dev/sdb1 outdisk
+$ cd outdisk/
+$ sudo dd if=/dev/nvme0n1 |bzip2 --best >image.bz2
+500118192+0 records in
+500118192+0 records out
+256060514304 bytes (256 GB) copied, 2268.42 s, 113 MB/s
+$ ls -l
+total 1942912
+-rw-r--r--. 1 liveuser liveuser 1989533754 Nov 18 12:47 image.bz2
 ```
 
-Recommend download the "CentOS-7-x86_64-DVD-xxxx.iso" (around 4.5G). This is the image tested.  Since we use minimal installation from CentOS 7, so the minimal image should work also "CentOS-7-x86_64-Minimal-xxxx.iso" (around 1G)<br>
+!!! Summary
+    The "image.bz2" will be shipped to the integrator to burn into their units.
 
-## Burn Image to a USB stick
+#4 Procedure for burning the produced image
+This section describe a way to burn the UCPE with the image produced in section 3.
 
-You can burn the image to a USB stick by using Rufus (if you are on a PC). You can find many tutorials on the internet if you have trouble
+Bootup the liveCD with the image USB inserted into the unit.
+
+Open a terminal. And perform the follwing.  (Please note, the "status=progress" is optional, but it does give good indication where the process is at the moment you monitor the action.
+
+
+```
+$ mkdir imagedisk
+$ sudo mount /dev/sdb1 imagedisk
+$ bunzip2 -c image.bz2 | sudo dd of=/dev/nvme0n1 status=progress
+256045675008 bytes (256 GB) copied, 4797.524047 s, 53.4 MB/s
+500118192+0 records in
+500118192+0 records out
+256060514304 bytes (256 GB) copied, 4798.08 s, 53.4 MB/s
+```

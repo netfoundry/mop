@@ -7,21 +7,21 @@ Follow this guild to setup the SuperMicro box for use with V7 network. The OS fo
 We have not decided how to deliver our installation media to the customer yet.  That will be determined later on based on the system integrator we pick.
 
 There are three approaches on how to deliver the image.
-<li>Build a installation media with Cubic. Ship the installation media to the integrtor.
+<li>Build a installation media with Cubic. Ship the installation media to the integrator.
 <li>Create an ansible image for the integrator.
-<li>Create an golden image for the integrator.
+<li>Create a golden image for the integrator.
 
 #2. Cubic Approach
 
 ##2.1 General info
 
-With the Cubic approach, the customer get a modified Ubuntu 20.04 installation image. This section is going to cover how to create that image. The image will not be CIS hardened.  The CIS hardening script renders the installation image useless.  The CIS hardening will need to be called via cloudinit after the installation, which makes the installation process much longer. So this approach is not desireable. 
+With the Cubic approach, the customer get a modified Ubuntu 20.04 installation image. This section is going to cover how to create that image. The image will not be CIS hardened.  The CIS hardening script renders the installation image useless.  The CIS hardening will need to be called via cloud-init after the installation, which makes the installation process much longer. So this approach is not desirable. 
 
 ##2.2 Obtain the installation media and create installation USB
 
 The Cubic requires GUI to run, so the installation ISO can be the desktop version of the Ubuntu20.04.  But the installation ISO we going to create is based on the server version, so we going to cover the steps based on Ubuntu 20.04 server installation.
 
-This document is not going to cover how to create USB installtion stick.
+This document is not going to cover how to create USB installation stick.
 
 ##2.3 Install Ubuntu 20.04 server on Supermicro
 
@@ -39,7 +39,7 @@ Boot up the installation media and start the installation.
 <br>Keep the default keyboard layout or choose your keyboard layout (for different language)
 
 ![image](../../images/super-micro-04.png)
-<br>On the Network interface page, if the interface is connected, you should see an IP address assigned automatically.  If you need to assign an manual IP, you can do so now.  Please write down the IP address, you will need that for the later steps.
+<br>On the Network interface page, if the interface is connected, you should see an IP address assigned automatically.  If you need to assign a manual IP, you can do so now.  Please write down the IP address, you will need that for the later steps.
 
 ![image](../../images/super-micro-05.png)
 <br>Skip the Proxy address if you don't use proxy.
@@ -48,7 +48,7 @@ Boot up the installation media and start the installation.
 <br>Keep the default Mirror address and continue
 
 ![image](../../images/super-micro-07.png)
-<br>Use the entire disk (the dafault) for installation.
+<br>Use the entire disk (the default) for installation.
 
 ![image](../../images/super-micro-08.png)
 
@@ -56,7 +56,7 @@ Boot up the installation media and start the installation.
 <br>Hit continue to confirm the selection
 
 ![image](../../images/super-micro-10.png)
-<br>Choose your username and server name. Write down the user name. We will need the user name to login to the system to do future configuration.
+<br>Choose your username and server name. Write down the username. We will need the username to login to the system to do future configuration.
 
 ![image](../../images/super-micro-11.png)
 <br>Enable "Install OpenSSH server" for remote access to the server.
@@ -117,7 +117,7 @@ Create a directory (cubic1) to save the custom image
 Choose the Ubuntu 20.04 server image. (Rest of the fields will fill themselves)
 ![image](../../images/super-micro-18.png)
 
-Once the image is decompress, you will see a "Custome Ubuntu ISO Creator" window.
+Once the image is decompressed, you will see a "Custom Ubuntu ISO Creator" window.
 Copy the supermicro ansible tarball into the that window.
 then do the following commands:
 
@@ -128,7 +128,7 @@ then do the following commands:
 > ansible-playbook -i hostfile ubbox.yml 
 ```
 
-Once the ansible succesfully ran (if it is not successful, you can rerun it again), you can delete the playbook.
+Once the ansible successfully ran (if it is not successful, you can rerun it again), you can delete the playbook.
 
 ```
 > cd
@@ -219,11 +219,11 @@ total 1942912
     The "image.bz2" will be shipped to the integrator to burn into their units.
 
 #4 Procedure for burning the produced image
-This section describe a way to burn the UCPE with the image produced in section 3.
+This section describes a way to burn the UCPE with the image produced in section 3.
 
 Bootup the liveCD with the image USB inserted into the unit.
 
-Open a terminal. And perform the follwing.  (Please note, the "status=progress" is optional, but it does give good indication where the process is at the moment you monitor the action.
+Open a terminal. And perform the following.  (Please note, the "status=progress" is optional, but it does give good indication where the process is at the moment you monitor the action.
 
 
 ```

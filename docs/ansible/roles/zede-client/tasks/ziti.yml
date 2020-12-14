@@ -125,7 +125,7 @@
 - name: config | Configuring ziti-tunnel
   copy:
     src: ziti-tunnel.service
-    dest: /usr/lib/systemd/system/ziti-tunnel.service
+    dest: /etc/systemd/system/ziti-tunnel.service
     owner: root
     group: root
     mode: 0644

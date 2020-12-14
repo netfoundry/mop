@@ -156,10 +156,12 @@ Login to the system.
 Perform the following command to run the playbook.
 ```
 > tar xf supermicro_playbook.tgz 
-> cd supermicro_playbook/
+> mkdir supermicro_playbook
+> cd supermicro_playbook
+> tar xf ../supermicro_playbook.tgz
 > sudo apt install ansible
 > sudo su
-> ansible-playbook -i hostfile ubbox.yml 
+> ansible-playbook -i hostfile image-build.yml
 ```
 
 !!! NOTE

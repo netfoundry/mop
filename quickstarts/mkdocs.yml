@@ -12,6 +12,7 @@ nav:
       - AliCloud:
         - Getting Started Guide: cloud/alicloud/getting-started.md
         - User Guide: cloud/alicloud/user-guild.md
+        - User Guide (Edge Router): cloud/alicloud/user-guild-ub.md
         - Remote Access Guide: cloud/alicloud/remote-access.md 
       - AWS:
         - Bastion Replacement Removal: cloud/aws/aws-bastion.md

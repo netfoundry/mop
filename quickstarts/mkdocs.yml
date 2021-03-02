@@ -36,6 +36,7 @@ nav:
         - Remote Access Guide: cloud/ocp/remote-access.md    
       - VCPE:
         - CPE Automation: cloud/vcpe/cpe-automation.md
+        - CPE Automation (Ubuntu): cloud/vcpe/cpe-automation-ub.md
         - Remote Access Guide: cloud/vcpe/remote-access.md
     - HyperVisors:
       - Overview: hypervisor/overview.md

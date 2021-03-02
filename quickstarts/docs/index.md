@@ -19,6 +19,7 @@ We will provide series of quickstart guides on how to quickly deploy and configu
     1. [Getting Started Guide](cloud/ocp/getting-started.md)
     1. [Import Oracle Cloud Public Image](cloud/ocp/image-import.md)
 1. VCPE
+    1. [CPE Automation (Ubuntu)](cloud/vcpe/cpe-automation-ub.md)
     1. [CPE Automation](cloud/vcpe/cpe-automation.md)
     1. [CPE Automation Supplement](cloud/vcpe/cpe-automation-supplement.md)
     1. [Super Micro](cloud/vcpe/cpe-supermicro.md)

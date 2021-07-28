@@ -21,6 +21,7 @@ We will provide series of quickstart guides on how to quickly deploy and configu
 1. VCPE
     1. [CPE Automation](cloud/vcpe/cpe-automation.md)
     1. [CPE Automation Supplement](cloud/vcpe/cpe-automation-supplement.md)
+    1. [Super Micro](cloud/vcpe/cpe-supermicro.md)
 
 ### Supported HyperVisor Providers
 1. Hyper-V
